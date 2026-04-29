@@ -422,6 +422,10 @@ body {
       <span class="search-icon">🔍</span>
       <input class="search-input" id="gSearch" placeholder="חיפוש משימות..." oninput="onSearch(this.value)">
     </div>
+    <div id="syncBadge" style="display:flex;align-items:center;gap:5px;font-size:12px;color:rgba(255,255,255,.5);">
+      <span id="syncDot" style="width:7px;height:7px;border-radius:50%;background:#64748b;flex-shrink:0;"></span>
+      <span id="syncTxt">מתחבר...</span>
+    </div>
     <button class="hdr-btn" onclick="exportData()" title="ייצוא נתונים">⬇️ <span>ייצוא</span></button>
     <label class="hdr-btn" title="ייבוא נתונים" style="cursor:pointer;">
       ⬆️ <span>ייבוא</span>
@@ -588,20 +592,105 @@ const S = {
   selEmoji: '📁', openDetailId: null,
 };
 
-function load() {
+// ── Cloud sync (Cloudflare Workers + KV) ──
+const API_URL    = 'https://mission-control-api.idan-nevet.workers.dev/';
+const API_SECRET = '2f6c1b430633a87bc4535620faf68829ab727bf52c5f29db';
+let   _lastRemoteHash = '';
+let   _pollTimer = null;
+
+function _apiHeaders() {
+  return { 'Content-Type': 'application/json', 'X-Secret': API_SECRET };
+}
+
+// Strip base64 file data before sending to cloud (files stay local)
+function _missionsForCloud() {
+  return S.missions.map(m => ({
+    ...m,
+    files: (m.files || []).map(({ data, ...meta }) => meta),
+  }));
+}
+
+// Merge cloud missions with local file data
+function _mergeMissions(cloudMissions) {
+  return cloudMissions.map(cm => {
+    const local = S.missions.find(lm => lm.id === cm.id);
+    return { ...cm, files: (cm.files || []).map(cf => {
+      const lf = (local?.files || []).find(f => f.id === cf.id);
+      return lf ? { ...cf, data: lf.data } : cf;
+    })};
+  });
+}
+
+function _setSyncStatus(ok) {
+  const dot = document.getElementById('syncDot');
+  const txt = document.getElementById('syncTxt');
+  if (!dot) return;
+  dot.style.background = ok ? '#22c55e' : '#ef4444';
+  txt.textContent = ok ? 'מסונכרן ☁️' : 'לא מחובר';
+  txt.style.color  = ok ? 'rgba(255,255,255,.7)' : '#fca5a5';
+}
+
+async function cloudLoad() {
+  try {
+    const res  = await fetch(API_URL, { headers: _apiHeaders() });
+    const data = await res.json();
+    _lastRemoteHash = JSON.stringify(data);
+    S.sections = data.sections || [];
+    S.missions = _mergeMissions(data.missions || []);
+    _saveLocal();
+    _setSyncStatus(true);
+  } catch(e) {
+    _loadLocal();
+    _setSyncStatus(false);
+  }
+}
+
+async function cloudSave() {
+  const payload = { sections: S.sections, missions: _missionsForCloud() };
+  _lastRemoteHash = JSON.stringify(payload);
+  _saveLocal();
+  try {
+    await fetch(API_URL, { method:'POST', headers: _apiHeaders(), body: JSON.stringify(payload) });
+    _setSyncStatus(true);
+  } catch(e) { _setSyncStatus(false); }
+}
+
+async function _pollRemote() {
+  try {
+    const res  = await fetch(API_URL, { headers: _apiHeaders() });
+    const data = await res.json();
+    const hash = JSON.stringify(data);
+    if (hash !== _lastRemoteHash) {
+      _lastRemoteHash = hash;
+      S.sections = data.sections || [];
+      S.missions = _mergeMissions(data.missions || []);
+      _saveLocal();
+      render();
+      if (S.openDetailId) refreshDetail();
+    }
+  } catch(e) {}
+}
+
+function startPolling() {
+  clearInterval(_pollTimer);
+  _pollTimer = setInterval(_pollRemote, 15000); // every 15 s
+}
+
+function _saveLocal() {
+  try { localStorage.setItem('mc_v1', JSON.stringify({ sections: S.sections, missions: S.missions })); } catch(e) {}
+}
+function _loadLocal() {
   try {
     const d = JSON.parse(localStorage.getItem('mc_v1') || '{}');
     S.sections = d.sections || [];
     S.missions = d.missions || [];
   } catch(e) {}
 }
-function save() {
-  try {
-    localStorage.setItem('mc_v1', JSON.stringify({ sections: S.sections, missions: S.missions }));
-  } catch(e) {
-    toast('שגיאה: האחסון מלא. מחק קבצים ישנים.','error');
-  }
-}
+
+// Legacy aliases used throughout the app
+function load() { _loadLocal(); }
+function save()  { cloudSave(); }
+
 function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2,7); }
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -1121,8 +1210,10 @@ document.addEventListener('keydown', e => {
   });
 });
 
-load();
+// Boot: load local instantly so the UI appears, then fetch cloud data
+_loadLocal();
 render();
+cloudLoad().then(() => { render(); startPolling(); });
 </script>
 </body>
 </html>
