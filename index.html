@@ -11,7 +11,6 @@
 :root {
   --navy:       #0d1240;
   --navy-light: #1a2060;
-  --navy-mid:   #252d73;
   --pink:       #e91e8c;
   --pink-light: #ff4db3;
   --pink-bg:    #fce4f1;
@@ -52,115 +51,73 @@ body {
 .header {
   background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
   color: #fff;
-  padding: 0 24px;
+  padding: 0 20px;
   height: 62px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   box-shadow: var(--shadow-md);
-  position: sticky;
-  top: 0;
-  z-index: 200;
+  position: sticky; top: 0; z-index: 200;
   gap: 12px;
 }
 .header-logo {
-  display: flex;
-  align-items: center;
-  gap: 11px;
-  font-weight: 800;
-  font-size: 19px;
-  flex-shrink: 0;
+  display: flex; align-items: center; gap: 11px;
+  font-weight: 800; font-size: 19px; flex-shrink: 0;
 }
 .header-logo .dot {
-  width: 34px;
-  height: 34px;
-  background: var(--pink);
-  border-radius: 9px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  width: 34px; height: 34px;
+  background: var(--pink); border-radius: 9px;
+  display: flex; align-items: center; justify-content: center;
   font-size: 17px;
   box-shadow: 0 3px 10px rgba(233,30,140,.4);
 }
-.header-right {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.search-wrap {
-  position: relative;
-}
+.header-right { display: flex; align-items: center; gap: 8px; }
+.search-wrap { position: relative; }
 .search-icon {
-  position: absolute;
-  right: 11px;
-  top: 50%;
+  position: absolute; right: 11px; top: 50%;
   transform: translateY(-50%);
-  font-size: 13px;
-  color: var(--gray-500);
-  pointer-events: none;
+  font-size: 13px; color: rgba(255,255,255,.5); pointer-events: none;
 }
 .search-input {
   padding: 8px 34px 8px 14px;
-  border: 1.5px solid rgba(255,255,255,.15);
-  border-radius: var(--rs);
-  font-size: 13px;
-  font-family: 'Heebo', sans-serif;
-  background: rgba(255,255,255,.08);
-  color: #fff;
-  width: 220px;
-  outline: none;
-  transition: all .15s;
-  text-align: right;
+  border: 1.5px solid rgba(255,255,255,.15); border-radius: var(--rs);
+  font-size: 13px; font-family: 'Heebo', sans-serif;
+  background: rgba(255,255,255,.08); color: #fff;
+  width: 200px; outline: none; transition: all .15s; text-align: right;
 }
-.search-input::placeholder { color: rgba(255,255,255,.45); }
+.search-input::placeholder { color: rgba(255,255,255,.4); }
 .search-input:focus {
-  border-color: var(--pink);
-  background: rgba(255,255,255,.13);
+  border-color: var(--pink); background: rgba(255,255,255,.13);
   box-shadow: 0 0 0 3px rgba(233,30,140,.15);
 }
+.hdr-btn {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 7px 12px; border-radius: var(--rx);
+  font-size: 12.5px; font-weight: 600; cursor: pointer;
+  border: 1.5px solid rgba(255,255,255,.2);
+  background: rgba(255,255,255,.08); color: #fff;
+  transition: all .15s; font-family: 'Heebo', sans-serif;
+  white-space: nowrap;
+}
+.hdr-btn:hover { background: rgba(255,255,255,.16); border-color: rgba(255,255,255,.35); }
 
 /* ─── Layout ─── */
-.layout {
-  display: flex;
-  flex: 1;
-  height: calc(100vh - 62px);
-  overflow: hidden;
-}
+.layout { display: flex; flex: 1; height: calc(100vh - 62px); overflow: hidden; }
 
 /* ─── Sidebar ─── */
 .sidebar {
-  width: 255px;
-  min-width: 255px;
+  width: 255px; min-width: 255px;
   background: var(--white);
   border-left: 1px solid var(--gray-200);
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
+  display: flex; flex-direction: column; overflow: hidden;
 }
-.sidebar-top {
-  padding: 18px 14px 10px;
-  border-bottom: 1px solid var(--gray-100);
-}
-.sidebar-label {
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--gray-500);
-}
-.sidebar-list {
-  flex: 1;
-  overflow-y: auto;
-  padding: 8px;
-}
+.sidebar-top { padding: 18px 14px 10px; border-bottom: 1px solid var(--gray-100); }
+.sidebar-label { font-size: 11px; font-weight: 700; color: var(--gray-500); }
+.sidebar-list { flex: 1; overflow-y: auto; padding: 8px; }
 .sec-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 9px 11px;
-  border-radius: var(--rs);
-  cursor: pointer;
-  transition: all .13s;
-  margin-bottom: 2px;
-  position: relative;
+  display: flex; align-items: center; gap: 8px;
+  padding: 9px 11px; border-radius: var(--rs);
+  cursor: pointer; transition: all .13s; margin-bottom: 2px;
 }
 .sec-item:hover { background: var(--gray-100); }
 .sec-item.active {
@@ -168,60 +125,34 @@ body {
   color: #fff;
 }
 .sec-emoji { font-size: 17px; width: 24px; text-align: center; flex-shrink: 0; }
-.sec-name {
-  font-size: 13.5px;
-  font-weight: 500;
-  flex: 1;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
+.sec-name { font-size: 13.5px; font-weight: 500; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .sec-count {
-  font-size: 11px;
-  font-weight: 700;
-  padding: 1px 7px;
-  border-radius: 20px;
-  background: var(--gray-200);
-  color: var(--gray-500);
-  flex-shrink: 0;
+  font-size: 11px; font-weight: 700; padding: 1px 7px; border-radius: 20px;
+  background: var(--gray-200); color: var(--gray-500); flex-shrink: 0;
 }
 .sec-item.active .sec-count { background: rgba(255,255,255,.2); color: #fff; }
 .sec-btns { display: none; gap: 2px; }
-.sec-item:hover .sec-btns,
-.sec-item.active .sec-btns { display: flex; }
+.sec-item:hover .sec-btns, .sec-item.active .sec-btns { display: flex; }
 .icon-btn {
-  width: 25px; height: 25px;
-  border-radius: 5px;
-  border: none;
-  background: transparent;
-  cursor: pointer;
+  width: 25px; height: 25px; border-radius: 5px; border: none;
+  background: transparent; cursor: pointer;
   display: flex; align-items: center; justify-content: center;
-  font-size: 13px;
-  opacity: .55;
-  transition: all .13s;
+  font-size: 13px; opacity: .55; transition: all .13s;
 }
 .icon-btn:hover { opacity: 1; background: rgba(0,0,0,.08); }
 .sec-item.active .icon-btn:hover { background: rgba(255,255,255,.18); }
-.sidebar-foot {
-  padding: 12px;
-  border-top: 1px solid var(--gray-100);
-}
+.sidebar-foot { padding: 12px; border-top: 1px solid var(--gray-100); }
 
 /* ─── Buttons ─── */
 .btn {
   display: inline-flex; align-items: center; gap: 6px;
-  padding: 9px 16px;
-  border-radius: var(--rx);
+  padding: 9px 16px; border-radius: var(--rx);
   font-size: 13.5px; font-weight: 600;
-  cursor: pointer; border: none;
-  transition: all .15s;
-  white-space: nowrap;
-  font-family: 'Heebo', sans-serif;
+  cursor: pointer; border: none; transition: all .15s;
+  white-space: nowrap; font-family: 'Heebo', sans-serif;
 }
 .btn-primary { background: var(--pink); color: #fff; }
 .btn-primary:hover { background: var(--pink-light); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(233,30,140,.3); }
-.btn-navy { background: var(--navy); color: #fff; }
-.btn-navy:hover { background: var(--navy-light); }
 .btn-ghost { background: transparent; color: var(--gray-700); border: 1.5px solid var(--gray-200); }
 .btn-ghost:hover { background: var(--gray-100); border-color: var(--gray-300); }
 .btn-danger { background: var(--red-bg); color: var(--red); }
@@ -230,24 +161,14 @@ body {
 .btn-full { width: 100%; justify-content: center; }
 
 /* ─── Main ─── */
-.main {
-  flex: 1;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-}
+.main { flex: 1; overflow-y: auto; display: flex; flex-direction: column; min-width: 0; }
 .main-header {
   padding: 22px 26px 14px;
   display: flex; align-items: flex-start; justify-content: space-between; gap: 16px;
-  background: var(--white);
-  border-bottom: 1px solid var(--gray-200);
+  background: var(--white); border-bottom: 1px solid var(--gray-200);
   position: sticky; top: 0; z-index: 50;
 }
-.main-h1 {
-  font-size: 21px; font-weight: 800; color: var(--navy);
-  display: flex; align-items: center; gap: 9px;
-}
+.main-h1 { font-size: 21px; font-weight: 800; color: var(--navy); display: flex; align-items: center; gap: 9px; }
 .main-sub { font-size: 13px; color: var(--gray-500); margin-top: 3px; }
 .main-header-right { display: flex; align-items: center; gap: 9px; flex-shrink: 0; }
 
@@ -255,8 +176,7 @@ body {
 .filter-bar {
   display: flex; gap: 10px; flex-wrap: wrap;
   padding: 13px 26px;
-  background: var(--gray-50);
-  border-bottom: 1px solid var(--gray-200);
+  background: var(--gray-50); border-bottom: 1px solid var(--gray-200);
 }
 .fpill {
   display: inline-flex; align-items: center; gap: 5px;
@@ -267,23 +187,17 @@ body {
 }
 .fpill:hover { transform: translateY(-1px); }
 .fpill.active { border-color: currentColor; }
-.fpill.f-all    { background: var(--navy);        color: #fff; }
-.fpill.f-todo   { background: var(--blue-bg);     color: var(--blue); }
-.fpill.f-prog   { background: var(--orange-bg);   color: var(--orange); }
-.fpill.f-done   { background: var(--green-bg);    color: var(--green); }
-.fpill.f-block  { background: var(--red-bg);      color: var(--red); }
-.fpill .cnt {
-  background: rgba(0,0,0,.1); padding: 1px 7px; border-radius: 10px; font-size: 11.5px;
-}
+.fpill.f-all   { background: var(--navy);      color: #fff; }
+.fpill.f-todo  { background: var(--blue-bg);   color: var(--blue); }
+.fpill.f-prog  { background: var(--orange-bg); color: var(--orange); }
+.fpill.f-done  { background: var(--green-bg);  color: var(--green); }
+.fpill.f-block { background: var(--red-bg);    color: var(--red); }
+.fpill .cnt { background: rgba(0,0,0,.1); padding: 1px 7px; border-radius: 10px; font-size: 11.5px; }
 .fpill.f-all .cnt { background: rgba(255,255,255,.2); }
 
 /* ─── Mission Grid ─── */
 .missions-wrap { padding: 20px 26px; flex: 1; }
-.missions-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 15px;
-}
+.missions-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 15px; }
 
 /* ─── Mission Card ─── */
 @keyframes cardIn {
@@ -292,40 +206,24 @@ body {
 }
 .mcard {
   background: var(--white);
-  border-radius: var(--r);
-  border: 1.5px solid var(--gray-200);
-  padding: 16px;
-  cursor: pointer;
-  transition: all .18s;
-  position: relative;
-  overflow: hidden;
+  border-radius: var(--r); border: 1.5px solid var(--gray-200);
+  padding: 16px; cursor: pointer; transition: all .18s;
+  position: relative; overflow: hidden;
   animation: cardIn .2s ease both;
 }
-.mcard::before {
-  content: '';
-  position: absolute; top: 0; left: 0; right: 0; height: 3px;
-}
-.mcard.s-todo::before    { background: var(--blue); }
-.mcard.s-prog::before    { background: var(--orange); }
-.mcard.s-done::before    { background: var(--green); }
-.mcard.s-block::before   { background: var(--red); }
+.mcard::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+.mcard.s-todo::before  { background: var(--blue); }
+.mcard.s-prog::before  { background: var(--orange); }
+.mcard.s-done::before  { background: var(--green); }
+.mcard.s-block::before { background: var(--red); }
 .mcard:hover { border-color: var(--gray-300); box-shadow: var(--shadow-md); transform: translateY(-2px); }
-.mcard-head {
-  display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; margin-bottom: 9px;
-}
+.mcard-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; margin-bottom: 9px; }
 .mcard-title { font-size: 14.5px; font-weight: 700; color: var(--gray-900); line-height: 1.5; flex: 1; }
 .mcard-actions { display: flex; gap: 3px; opacity: 0; transition: opacity .13s; }
 .mcard:hover .mcard-actions { opacity: 1; }
-.mcard-desc {
-  font-size: 12.5px; color: var(--gray-500); line-height: 1.6; margin-bottom: 13px;
-  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
-}
+.mcard-desc { font-size: 12.5px; color: var(--gray-500); line-height: 1.6; margin-bottom: 13px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 .mcard-meta { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
-.sbadge {
-  display: inline-flex; align-items: center; gap: 3px;
-  padding: 3px 9px; border-radius: 20px;
-  font-size: 11px; font-weight: 700;
-}
+.sbadge { display: inline-flex; align-items: center; gap: 3px; padding: 3px 9px; border-radius: 20px; font-size: 11px; font-weight: 700; }
 .sbadge.s-todo  { background: var(--blue-bg);   color: var(--blue); }
 .sbadge.s-prog  { background: var(--orange-bg); color: var(--orange); }
 .sbadge.s-done  { background: var(--green-bg);  color: var(--green); }
@@ -340,46 +238,34 @@ body {
 .ccount { display: inline-flex; align-items: center; gap: 3px; font-size: 11.5px; color: var(--gray-500); margin-right: auto; }
 
 /* ─── Empty / Welcome ─── */
-.empty, .welcome {
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  text-align: center; padding: 80px 30px;
-}
+.empty, .welcome { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 80px 30px; }
 .empty-ico, .welcome-ico { font-size: 64px; margin-bottom: 16px; }
 .empty-t, .welcome-t { font-size: 19px; font-weight: 800; color: var(--gray-700); margin-bottom: 8px; }
-.empty-sub, .welcome-sub { font-size: 13.5px; color: var(--gray-500); margin-bottom: 24px; line-height: 1.7; max-width: 340px; }
+.empty-sub, .welcome-sub { font-size: 13.5px; color: var(--gray-500); margin-bottom: 24px; line-height: 1.7; max-width: 360px; }
 
 /* ─── Modal ─── */
 .overlay {
   position: fixed; inset: 0;
-  background: rgba(13,18,64,.5);
-  backdrop-filter: blur(4px);
+  background: rgba(13,18,64,.5); backdrop-filter: blur(4px);
   z-index: 1000;
   display: flex; align-items: center; justify-content: center; padding: 20px;
-  opacity: 0; pointer-events: none;
-  transition: opacity .2s;
+  opacity: 0; pointer-events: none; transition: opacity .2s;
 }
 .overlay.open { opacity: 1; pointer-events: all; }
 .modal {
-  background: var(--white);
-  border-radius: 16px;
+  background: var(--white); border-radius: 16px;
   width: 100%; max-width: 560px; max-height: 90vh;
-  overflow-y: auto;
-  box-shadow: var(--shadow-lg);
-  transform: translateY(20px) scale(.98);
-  transition: transform .2s;
+  overflow-y: auto; box-shadow: var(--shadow-lg);
+  transform: translateY(20px) scale(.98); transition: transform .2s;
 }
 .overlay.open .modal { transform: translateY(0) scale(1); }
-.modal-head {
-  padding: 22px 22px 0;
-  display: flex; align-items: center; justify-content: space-between;
-}
+.modal-head { padding: 22px 22px 0; display: flex; align-items: center; justify-content: space-between; }
 .modal-title { font-size: 17px; font-weight: 800; color: var(--navy); }
 .modal-close {
   width: 30px; height: 30px; border-radius: 7px; border: none;
   background: var(--gray-100); cursor: pointer;
   display: flex; align-items: center; justify-content: center;
-  font-size: 16px; color: var(--gray-500);
-  transition: all .13s;
+  font-size: 16px; color: var(--gray-500); transition: all .13s;
 }
 .modal-close:hover { background: var(--gray-200); color: var(--gray-900); }
 .modal-body { padding: 20px 22px; }
@@ -387,51 +273,30 @@ body {
 
 /* ─── Form ─── */
 .fg { margin-bottom: 16px; }
-.fl {
-  display: block; font-size: 12.5px; font-weight: 600;
-  color: var(--gray-700); margin-bottom: 5px;
-}
+.fl { display: block; font-size: 12.5px; font-weight: 600; color: var(--gray-700); margin-bottom: 5px; }
 .fi, .fs, .fta {
   width: 100%; padding: 9px 13px;
   border: 1.5px solid var(--gray-200); border-radius: var(--rs);
   font-size: 13.5px; font-family: 'Heebo', sans-serif;
   color: var(--gray-900); background: var(--white);
-  transition: border-color .15s, box-shadow .15s; outline: none;
-  text-align: right;
+  transition: border-color .15s, box-shadow .15s; outline: none; text-align: right;
 }
-.fi:focus, .fs:focus, .fta:focus {
-  border-color: var(--pink);
-  box-shadow: 0 0 0 3px rgba(233,30,140,.1);
-}
+.fi:focus, .fs:focus, .fta:focus { border-color: var(--pink); box-shadow: 0 0 0 3px rgba(233,30,140,.1); }
 .fta { resize: vertical; min-height: 80px; }
 .frow { display: grid; grid-template-columns: 1fr 1fr; gap: 13px; }
 
 /* Emoji picker */
-.eg {
-  display: grid; grid-template-columns: repeat(8,1fr); gap: 5px; margin-top: 7px;
-}
-.eo {
-  font-size: 21px; width: 36px; height: 36px; border-radius: 7px;
-  display: flex; align-items: center; justify-content: center;
-  cursor: pointer; transition: all .13s; border: 2px solid transparent;
-}
+.eg { display: grid; grid-template-columns: repeat(8,1fr); gap: 5px; margin-top: 7px; }
+.eo { font-size: 21px; width: 36px; height: 36px; border-radius: 7px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all .13s; border: 2px solid transparent; }
 .eo:hover { background: var(--gray-100); }
 .eo.sel { background: var(--pink-bg); border-color: var(--pink); }
 
-/* ─── Detail Slide-over (from left in RTL) ─── */
-.detail-bg {
-  position: fixed; inset: 0;
-  background: rgba(13,18,64,.3);
-  backdrop-filter: blur(2px);
-  z-index: 900;
-  opacity: 0; pointer-events: none;
-  transition: opacity .25s;
-}
+/* ─── Detail Slide-over ─── */
+.detail-bg { position: fixed; inset: 0; background: rgba(13,18,64,.3); backdrop-filter: blur(2px); z-index: 900; opacity: 0; pointer-events: none; transition: opacity .25s; }
 .detail-bg.open { opacity: 1; pointer-events: all; }
 .detail-panel {
   position: fixed; left: 0; top: 62px; bottom: 0;
-  width: 480px;
-  background: var(--white);
+  width: 500px; background: var(--white);
   border-right: 1px solid var(--gray-200);
   box-shadow: 8px 0 32px rgba(0,0,0,.1);
   display: flex; flex-direction: column;
@@ -441,84 +306,88 @@ body {
 }
 .detail-panel.open { transform: translateX(0); }
 .detail-head {
-  padding: 18px 18px 14px;
-  border-bottom: 1px solid var(--gray-200);
-  display: flex; align-items: flex-start; gap: 10px;
+  padding: 18px 18px 14px; border-bottom: 1px solid var(--gray-200);
+  display: flex; align-items: flex-start; gap: 10px; flex-shrink: 0;
 }
 .detail-info { flex: 1; }
 .detail-title { font-size: 17px; font-weight: 800; color: var(--navy); line-height: 1.4; }
 .detail-sectag { font-size: 12px; color: var(--gray-500); margin-top: 3px; }
-.detail-body { flex: 1; overflow-y: auto; padding: 18px; }
+.detail-scroll { flex: 1; overflow-y: auto; display: flex; flex-direction: column; }
+.detail-body { padding: 18px; }
 .df { margin-bottom: 18px; }
-.df-label {
-  font-size: 11px; font-weight: 700;
-  color: var(--gray-500); margin-bottom: 6px;
-}
+.df-label { font-size: 11px; font-weight: 700; color: var(--gray-500); margin-bottom: 6px; }
 .df-val { font-size: 13.5px; color: var(--gray-700); line-height: 1.6; }
 .df-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 .status-opts { display: flex; gap: 7px; flex-wrap: wrap; }
-.sopt {
-  padding: 5px 12px; border-radius: 20px;
-  font-size: 12px; font-weight: 700;
-  cursor: pointer; border: 2px solid transparent;
-  transition: all .13s;
-  user-select: none;
-}
+.sopt { padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; cursor: pointer; border: 2px solid transparent; transition: all .13s; user-select: none; }
 .sopt.s-todo  { background: var(--blue-bg);   color: var(--blue); }
 .sopt.s-prog  { background: var(--orange-bg); color: var(--orange); }
 .sopt.s-done  { background: var(--green-bg);  color: var(--green); }
 .sopt.s-block { background: var(--red-bg);    color: var(--red); }
 .sopt.sel { border-color: currentColor; box-shadow: 0 0 0 2px rgba(0,0,0,.04); }
 
-/* ─── Comments ─── */
-.comments-wrap {
-  border-top: 1px solid var(--gray-200);
-  padding: 18px;
-}
-.comments-title {
+/* ─── Files section ─── */
+.files-section { border-top: 1px solid var(--gray-200); padding: 18px; }
+.section-heading {
   font-size: 13px; font-weight: 700; color: var(--gray-700);
-  margin-bottom: 13px; display: flex; align-items: center; gap: 6px;
+  margin-bottom: 12px; display: flex; align-items: center; gap: 6px;
 }
+.section-heading .badge {
+  background: var(--gray-200); padding: 1px 8px; border-radius: 10px; font-size: 11px; font-weight: 600;
+}
+.file-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
+.file-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 12px; border-radius: var(--rs);
+  background: var(--gray-50); border: 1.5px solid var(--gray-200);
+  transition: border-color .13s;
+}
+.file-item:hover { border-color: var(--gray-300); }
+.file-thumb {
+  width: 42px; height: 42px; border-radius: 6px;
+  object-fit: cover; flex-shrink: 0; background: var(--gray-200);
+}
+.file-ico {
+  width: 42px; height: 42px; border-radius: 6px;
+  background: var(--gray-200); display: flex; align-items: center; justify-content: center;
+  font-size: 22px; flex-shrink: 0;
+}
+.file-info { flex: 1; min-width: 0; }
+.file-name { font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--gray-900); }
+.file-size { font-size: 11px; color: var(--gray-500); margin-top: 2px; }
+.file-actions { display: flex; gap: 3px; flex-shrink: 0; }
+.upload-label {
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  padding: 8px 14px; border-radius: var(--rx);
+  border: 1.5px dashed var(--gray-300); color: var(--gray-500);
+  font-size: 13px; font-weight: 600; cursor: pointer;
+  transition: all .15s; font-family: 'Heebo', sans-serif;
+  background: transparent;
+}
+.upload-label:hover { border-color: var(--pink); color: var(--pink); background: var(--pink-bg); }
+
+/* ─── Comments ─── */
+.comments-wrap { border-top: 1px solid var(--gray-200); padding: 18px; }
 .comment-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 13px; }
-.citem {
-  background: var(--gray-50); border-radius: var(--rs); padding: 11px;
-  position: relative;
-}
+.citem { background: var(--gray-50); border-radius: var(--rs); padding: 11px; position: relative; }
 .citem-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 5px; }
 .citem-date { font-size: 11px; color: var(--gray-500); }
-.citem-del {
-  opacity: 0; background: none; border: none; cursor: pointer;
-  color: var(--red); font-size: 13px; padding: 2px; border-radius: 4px;
-  transition: opacity .13s;
-}
+.citem-del { opacity: 0; background: none; border: none; cursor: pointer; color: var(--red); font-size: 13px; padding: 2px; border-radius: 4px; transition: opacity .13s; }
 .citem:hover .citem-del { opacity: 1; }
 .citem-text { font-size: 12.5px; color: var(--gray-700); line-height: 1.6; }
 .c-row { display: flex; gap: 7px; }
-.c-input {
-  flex: 1; padding: 8px 11px;
-  border: 1.5px solid var(--gray-200); border-radius: var(--rs);
-  font-size: 13px; font-family: 'Heebo', sans-serif; outline: none;
-  transition: border-color .15s; text-align: right;
-}
+.c-input { flex: 1; padding: 8px 11px; border: 1.5px solid var(--gray-200); border-radius: var(--rs); font-size: 13px; font-family: 'Heebo', sans-serif; outline: none; transition: border-color .15s; text-align: right; }
 .c-input:focus { border-color: var(--pink); box-shadow: 0 0 0 3px rgba(233,30,140,.1); }
 
 /* ─── Toast ─── */
-.toast-wrap {
-  position: fixed; bottom: 22px; left: 22px; z-index: 2000;
-  display: flex; flex-direction: column; gap: 7px;
-}
-@keyframes toastIn {
-  from { opacity: 0; transform: translateY(8px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
+.toast-wrap { position: fixed; bottom: 22px; left: 22px; z-index: 2000; display: flex; flex-direction: column; gap: 7px; }
+@keyframes toastIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 .toast {
   background: var(--navy); color: #fff;
   padding: 11px 16px; border-radius: 10px;
-  font-size: 13px; font-weight: 500;
-  box-shadow: var(--shadow-md);
+  font-size: 13px; font-weight: 500; box-shadow: var(--shadow-md);
   display: flex; align-items: center; gap: 9px;
-  animation: toastIn .2s ease;
-  max-width: 300px;
+  animation: toastIn .2s ease; max-width: 300px;
   transition: opacity .25s, transform .25s;
 }
 .toast.success { background: #16a34a; }
@@ -535,6 +404,8 @@ body {
   .sec-name, .sec-count, .sec-btns, .sidebar-label { display: none; }
   .sidebar-foot .btn span { display: none; }
   .detail-panel { width: 100%; }
+  .search-input { width: 140px; }
+  .hdr-btn span { display: none; }
 }
 </style>
 </head>
@@ -551,16 +422,17 @@ body {
       <span class="search-icon">🔍</span>
       <input class="search-input" id="gSearch" placeholder="חיפוש משימות..." oninput="onSearch(this.value)">
     </div>
+    <button class="hdr-btn" onclick="exportData()" title="ייצוא נתונים">⬇️ <span>ייצוא</span></button>
+    <label class="hdr-btn" title="ייבוא נתונים" style="cursor:pointer;">
+      ⬆️ <span>ייבוא</span>
+      <input type="file" accept=".json" style="display:none" onchange="importData(this)">
+    </label>
   </div>
 </header>
 
 <!-- ═══ Layout ═══ -->
 <div class="layout">
-
-  <!-- Main -->
   <main class="main" id="main"></main>
-
-  <!-- Sidebar (right side in RTL) -->
   <aside class="sidebar">
     <div class="sidebar-top">
       <div class="sidebar-label">קטגוריות</div>
@@ -587,8 +459,11 @@ body {
       <div class="detail-sectag" id="dSectag"></div>
     </div>
   </div>
-  <div class="detail-body" id="dBody"></div>
-  <div class="comments-wrap" id="dComments"></div>
+  <div class="detail-scroll">
+    <div class="detail-body" id="dBody"></div>
+    <div class="files-section" id="dFiles"></div>
+    <div class="comments-wrap" id="dComments"></div>
+  </div>
 </div>
 
 <!-- ═══ Mission Modal ═══ -->
@@ -685,7 +560,6 @@ body {
   </div>
 </div>
 
-<!-- ═══ Toast Container ═══ -->
 <div class="toast-wrap" id="toasts"></div>
 
 <script>
@@ -698,36 +572,20 @@ const EMOJIS = [
   '🎪','🔧','📝','🎭','🌈','🦋','🤖','💎',
   '🏗️','📌','🎸','🚂','🌊','🔑','🧩','🎮',
 ];
-
-const STATUS_CSS = {
-  'todo':        's-todo',
-  'in-progress': 's-prog',
-  'done':        's-done',
-  'blocked':     's-block',
-};
-const STATUS_LABEL = {
-  'todo': 'ממתין', 'in-progress': 'בתהליך', 'done': 'הושלם', 'blocked': 'חסום',
-};
-const STATUS_ICON = {
-  'todo': '📋', 'in-progress': '⚡', 'done': '✅', 'blocked': '🚫',
-};
-const PRIORITY_LABEL = {
-  'high': '🔴 גבוהה', 'medium': '🟡 בינונית', 'low': '🟢 נמוכה',
-};
+const STATUS_CSS   = { 'todo':'s-todo','in-progress':'s-prog','done':'s-done','blocked':'s-block' };
+const STATUS_LABEL = { 'todo':'ממתין','in-progress':'בתהליך','done':'הושלם','blocked':'חסום' };
+const STATUS_ICON  = { 'todo':'📋','in-progress':'⚡','done':'✅','blocked':'🚫' };
+const PRIORITY_LBL = { high:'🔴 גבוהה', medium:'🟡 בינונית', low:'🟢 נמוכה' };
+const MAX_FILE_BYTES = 3 * 1024 * 1024; // 3 MB per file
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // State
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 const S = {
-  sections: [],
-  missions: [],
-  activeSecId: null,
-  filter: 'all',
-  search: '',
-  editMissionId: null,
-  editSecId: null,
-  selEmoji: '📁',
-  openDetailId: null,
+  sections: [], missions: [],
+  activeSecId: null, filter: 'all', search: '',
+  editMissionId: null, editSecId: null,
+  selEmoji: '📁', openDetailId: null,
 };
 
 function load() {
@@ -738,7 +596,11 @@ function load() {
   } catch(e) {}
 }
 function save() {
-  localStorage.setItem('mc_v1', JSON.stringify({ sections: S.sections, missions: S.missions }));
+  try {
+    localStorage.setItem('mc_v1', JSON.stringify({ sections: S.sections, missions: S.missions }));
+  } catch(e) {
+    toast('שגיאה: האחסון מלא. מחק קבצים ישנים.','error');
+  }
 }
 function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2,7); }
 
@@ -756,7 +618,7 @@ function renderSidebar() {
   el.innerHTML = S.sections.map(sec => {
     const n = S.missions.filter(m => m.secId === sec.id).length;
     const act = S.activeSecId === sec.id;
-    return `<div class="sec-item ${act ? 'active' : ''}" onclick="selectSec('${sec.id}')">
+    return `<div class="sec-item ${act?'active':''}" onclick="selectSec('${sec.id}')">
       <span class="sec-emoji">${sec.emoji}</span>
       <span class="sec-name">${esc(sec.name)}</span>
       <span class="sec-count">${n}</span>
@@ -770,17 +632,15 @@ function renderSidebar() {
 
 function renderMain() {
   const el = document.getElementById('main');
-
   if (!S.activeSecId) {
     el.innerHTML = `<div class="welcome">
       <div class="welcome-ico">🚀</div>
       <div class="welcome-t">ברוכים הבאים למרכז המשימות</div>
-      <div class="welcome-sub">צור קטגוריה כדי להתחיל לארגן את המשימות שלך. קטגוריות עוזרות לקבץ משימות קשורות יחד.</div>
+      <div class="welcome-sub">צור קטגוריה כדי להתחיל לארגן את המשימות שלך.</div>
       <button class="btn btn-primary" onclick="openSecModal()">+ צור קטגוריה ראשונה</button>
     </div>`;
     return;
   }
-
   const sec = S.sections.find(s => s.id === S.activeSecId);
   if (!sec) return;
 
@@ -791,15 +651,13 @@ function renderMain() {
     const q = S.search.toLowerCase();
     shown = shown.filter(m => m.name.toLowerCase().includes(q) || (m.desc||'').toLowerCase().includes(q));
   }
-
   const counts = {
     all: all.length,
-    todo: all.filter(m => m.status==='todo').length,
-    'in-progress': all.filter(m => m.status==='in-progress').length,
-    done: all.filter(m => m.status==='done').length,
-    blocked: all.filter(m => m.status==='blocked').length,
+    todo: all.filter(m=>m.status==='todo').length,
+    'in-progress': all.filter(m=>m.status==='in-progress').length,
+    done: all.filter(m=>m.status==='done').length,
+    blocked: all.filter(m=>m.status==='blocked').length,
   };
-
   el.innerHTML = `
   <div class="main-header">
     <div>
@@ -823,15 +681,15 @@ function renderMain() {
 }
 
 function fpill(f, label, n) {
-  const fc = f === 'all' ? 'f-all' : f === 'in-progress' ? 'f-prog' : f === 'done' ? 'f-done' : f === 'blocked' ? 'f-block' : 'f-todo';
-  const act = S.filter === f ? 'active' : '';
-  return `<div class="fpill ${fc} ${act}" onclick="setFilter('${f}')">${label} <span class="cnt">${n}</span></div>`;
+  const fc = f==='all'?'f-all':f==='in-progress'?'f-prog':f==='done'?'f-done':f==='blocked'?'f-block':'f-todo';
+  return `<div class="fpill ${fc} ${S.filter===f?'active':''}" onclick="setFilter('${f}')">${label} <span class="cnt">${n}</span></div>`;
 }
 
 function mcard(m) {
-  const css = STATUS_CSS[m.status] || 's-todo';
+  const css = STATUS_CSS[m.status]||'s-todo';
   const dl  = deadlineInfo(m.deadline);
   const nc  = (m.comments||[]).length;
+  const nf  = (m.files||[]).length;
   return `<div class="mcard ${css}" onclick="openDetail('${m.id}')">
     <div class="mcard-head">
       <div class="mcard-title">${esc(m.name)}</div>
@@ -840,31 +698,20 @@ function mcard(m) {
         <button class="icon-btn" onclick="event.stopPropagation();confirmDelMission('${m.id}')" title="מחיקה" style="color:var(--red)">🗑️</button>
       </div>
     </div>
-    ${m.desc ? `<div class="mcard-desc">${esc(m.desc)}</div>` : ''}
+    ${m.desc?`<div class="mcard-desc">${esc(m.desc)}</div>`:''}
     <div class="mcard-meta">
       <span class="sbadge ${css}">${STATUS_ICON[m.status]} ${STATUS_LABEL[m.status]}</span>
-      ${dl ? `<span class="dline ${dl.cls}">📅 ${dl.txt}</span>` : ''}
-      ${m.priority ? `<span class="pdot ${m.priority}" title="עדיפות: ${PRIORITY_LABEL[m.priority]}"></span>` : ''}
-      ${nc ? `<span class="ccount">💬 ${nc}</span>` : ''}
+      ${dl?`<span class="dline ${dl.cls}">📅 ${dl.txt}</span>`:''}
+      ${m.priority?`<span class="pdot ${m.priority}" title="${PRIORITY_LBL[m.priority]}"></span>`:''}
+      ${nf?`<span class="ccount">📎 ${nf}</span>`:''}
+      ${nc?`<span class="ccount">💬 ${nc}</span>`:''}
     </div>
   </div>`;
 }
 
 function emptyState() {
-  if (S.filter !== 'all' || S.search) {
-    return `<div class="empty">
-      <div class="empty-ico">🔍</div>
-      <div class="empty-t">לא נמצאו תוצאות</div>
-      <div class="empty-sub">שנה את הסינון או מונח החיפוש.</div>
-      <button class="btn btn-ghost btn-sm" onclick="clearFilters()">נקה סינון</button>
-    </div>`;
-  }
-  return `<div class="empty">
-    <div class="empty-ico">📋</div>
-    <div class="empty-t">אין משימות עדיין</div>
-    <div class="empty-sub">התחל להוסיף משימות לעקוב אחר העבודה שלך.</div>
-    <button class="btn btn-primary" onclick="openMModal()">+ הוסף משימה</button>
-  </div>`;
+  if (S.filter!=='all'||S.search) return `<div class="empty"><div class="empty-ico">🔍</div><div class="empty-t">לא נמצאו תוצאות</div><div class="empty-sub">שנה את הסינון או מונח החיפוש.</div><button class="btn btn-ghost btn-sm" onclick="clearFilters()">נקה סינון</button></div>`;
+  return `<div class="empty"><div class="empty-ico">📋</div><div class="empty-t">אין משימות עדיין</div><div class="empty-sub">התחל להוסיף משימות לעקוב אחר העבודה.</div><button class="btn btn-primary" onclick="openMModal()">+ הוסף משימה</button></div>`;
 }
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -876,7 +723,6 @@ function openDetail(id) {
   document.getElementById('detailBg').classList.add('open');
   document.getElementById('detailPanel').classList.add('open');
 }
-
 function refreshDetail() {
   const m = S.missions.find(x => x.id === S.openDetailId);
   if (!m) return;
@@ -890,8 +736,7 @@ function refreshDetail() {
     <div class="df-label">סטטוס</div>
     <div class="status-opts">
       ${['todo','in-progress','done','blocked'].map(st => {
-        const css = STATUS_CSS[st];
-        const sel = m.status === st ? 'sel' : '';
+        const css = STATUS_CSS[st], sel = m.status===st?'sel':'';
         return `<div class="sopt ${css} ${sel}" onclick="setStatus('${m.id}','${st}')">${STATUS_ICON[st]} ${STATUS_LABEL[st]}</div>`;
       }).join('')}
     </div>
@@ -899,32 +744,46 @@ function refreshDetail() {
   <div class="df-row">
     <div class="df">
       <div class="df-label">עדיפות</div>
-      <div class="df-val">${PRIORITY_LABEL[m.priority] || PRIORITY_LABEL['medium']}</div>
+      <div class="df-val">${PRIORITY_LBL[m.priority]||PRIORITY_LBL.medium}</div>
     </div>
     <div class="df">
       <div class="df-label">תאריך יעד</div>
-      <div class="df-val ${dl?.cls||''}">${m.deadline ? `📅 ${fmtDate(m.deadline)}${dl ? ` — ${dl.txt}` : ''}` : '—'}</div>
+      <div class="df-val ${dl?.cls||''}">${m.deadline?`📅 ${fmtDate(m.deadline)}${dl?` — ${dl.txt}`:''}` : '—'}</div>
     </div>
   </div>
-  ${m.desc ? `<div class="df">
-    <div class="df-label">תיאור</div>
-    <div class="df-val">${esc(m.desc).replace(/\n/g,'<br>')}</div>
-  </div>` : ''}`;
+  ${m.desc?`<div class="df"><div class="df-label">תיאור</div><div class="df-val">${esc(m.desc).replace(/\n/g,'<br>')}</div></div>`:''}`;
 
+  // Files section
+  const files = m.files || [];
+  document.getElementById('dFiles').innerHTML = `
+  <div class="section-heading">📎 קבצים <span class="badge">${files.length}</span></div>
+  ${files.length ? `<div class="file-list">${files.map(f => fileItemHtml(m.id, f)).join('')}</div>` : ''}
+  <label class="upload-label">
+    📎 העלה קובץ (עד 3MB)
+    <input type="file" multiple style="display:none" onchange="handleFileUpload('${m.id}',this)">
+  </label>`;
+
+  // Lazy-load image thumbnails (avoid putting base64 in innerHTML)
+  files.forEach(f => {
+    if (f.type.startsWith('image/')) {
+      const img = document.getElementById('fthumb-' + f.id);
+      if (img) img.src = f.data;
+    }
+  });
+
+  // Comments
   const comments = m.comments || [];
   document.getElementById('dComments').innerHTML = `
-  <div class="comments-title">💬 הערות
-    <span style="background:var(--gray-200);padding:1px 8px;border-radius:10px;font-size:11px;">${comments.length}</span>
-  </div>
+  <div class="section-heading">💬 הערות <span class="badge">${comments.length}</span></div>
   <div class="comment-list">
-    ${comments.length ? comments.map((c,i) => `
+    ${comments.length ? comments.map((c,i)=>`
     <div class="citem">
       <div class="citem-head">
         <span class="citem-date">${fmtDate(c.date)}</span>
         <button class="citem-del" onclick="delComment('${m.id}',${i})" title="מחק">✕</button>
       </div>
       <div class="citem-text">${esc(c.text)}</div>
-    </div>`).join('') : '<div style="font-size:12.5px;color:var(--gray-500);text-align:center;padding:14px 0;">אין הערות עדיין</div>'}
+    </div>`).join('') : '<div style="font-size:12.5px;color:var(--gray-500);text-align:center;padding:12px 0;">אין הערות עדיין</div>'}
   </div>
   <div class="c-row">
     <input class="c-input" id="cInput" placeholder="הוסף הערה..." onkeydown="if(event.key==='Enter')addComment('${m.id}')">
@@ -932,14 +791,40 @@ function refreshDetail() {
   </div>`;
 }
 
+function fileItemHtml(missionId, f) {
+  const isImg = f.type.startsWith('image/');
+  return `<div class="file-item">
+    ${isImg
+      ? `<img id="fthumb-${f.id}" class="file-thumb" alt="${esc(f.name)}">`
+      : `<div class="file-ico">${fileIcon(f.type)}</div>`}
+    <div class="file-info">
+      <div class="file-name">${esc(f.name)}</div>
+      <div class="file-size">${fmtSize(f.size)}</div>
+    </div>
+    <div class="file-actions">
+      <button class="icon-btn" onclick="downloadFile('${missionId}','${f.id}')" title="הורדה" style="opacity:.7;font-size:15px;">⬇️</button>
+      <button class="icon-btn" onclick="removeFile('${missionId}','${f.id}')" title="מחק" style="color:var(--red);opacity:.7">🗑️</button>
+    </div>
+  </div>`;
+}
+
+function fileIcon(type) {
+  if (type.includes('pdf'))   return '📄';
+  if (type.includes('word') || type.includes('document')) return '📝';
+  if (type.includes('sheet') || type.includes('excel'))   return '📊';
+  if (type.includes('zip') || type.includes('rar') || type.includes('7z')) return '🗜️';
+  if (type.includes('video')) return '🎬';
+  if (type.includes('audio')) return '🎵';
+  if (type.includes('text'))  return '📃';
+  return '📎';
+}
+
 function closeDetail() {
   S.openDetailId = null;
   document.getElementById('detailBg').classList.remove('open');
   document.getElementById('detailPanel').classList.remove('open');
 }
-
 function editCurrent() { if (S.openDetailId) openMModal(S.openDetailId); }
-
 function setStatus(id, status) {
   const m = S.missions.find(x => x.id === id);
   if (!m) return;
@@ -949,40 +834,124 @@ function setStatus(id, status) {
 }
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// File Upload
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+async function handleFileUpload(missionId, input) {
+  const files = Array.from(input.files);
+  if (!files.length) return;
+  const m = S.missions.find(x => x.id === missionId);
+  if (!m) return;
+  if (!m.files) m.files = [];
+
+  let added = 0;
+  for (const file of files) {
+    if (file.size > MAX_FILE_BYTES) {
+      toast(`"${file.name}" גדול מדי (מקסימום 3MB)`, 'error');
+      continue;
+    }
+    const data = await fileToBase64(file);
+    m.files.push({ id: uid(), name: file.name, type: file.type, size: file.size, data });
+    added++;
+  }
+  input.value = '';
+  if (added) { save(); refreshDetail(); render(); toast(`${added} קובץ הועלה בהצלחה`, 'success'); }
+}
+
+function fileToBase64(file) {
+  return new Promise((resolve, reject) => {
+    const r = new FileReader();
+    r.onload = e => resolve(e.target.result);
+    r.onerror = reject;
+    r.readAsDataURL(file);
+  });
+}
+
+function downloadFile(missionId, fileId) {
+  const m = S.missions.find(x => x.id === missionId);
+  const f = (m?.files||[]).find(x => x.id === fileId);
+  if (!f) return;
+  const a = document.createElement('a');
+  a.href = f.data;
+  a.download = f.name;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+}
+
+function removeFile(missionId, fileId) {
+  const m = S.missions.find(x => x.id === missionId);
+  if (!m) return;
+  m.files = (m.files||[]).filter(f => f.id !== fileId);
+  save(); refreshDetail(); render(); toast('קובץ נמחק');
+}
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// Export / Import  (solves cross-browser issue)
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+function exportData() {
+  const json = JSON.stringify({ sections: S.sections, missions: S.missions }, null, 2);
+  const blob = new Blob([json], { type: 'application/json' });
+  const url  = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `mission-control-${new Date().toISOString().split('T')[0]}.json`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  toast('הנתונים יוצאו בהצלחה (כולל קבצים)', 'success');
+}
+
+async function importData(input) {
+  const file = input.files[0];
+  if (!file) return;
+  try {
+    const text = await file.text();
+    const data = JSON.parse(text);
+    if (!Array.isArray(data.sections) || !Array.isArray(data.missions)) throw new Error();
+    S.sections = data.sections;
+    S.missions = data.missions;
+    S.activeSecId = S.sections[0]?.id || null;
+    save(); render();
+    toast(`יובאו ${S.sections.length} קטגוריות ו-${S.missions.length} משימות`, 'success');
+  } catch(e) {
+    toast('קובץ לא תקין — ייבוא נכשל', 'error');
+  }
+  input.value = '';
+}
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // Section Modal
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-function openSecModal(editId = null) {
+function openSecModal(editId=null) {
   S.editSecId = editId;
-  const existing = editId ? S.sections.find(s => s.id === editId) : null;
-  S.selEmoji = existing?.emoji || '📁';
+  const ex = editId ? S.sections.find(s=>s.id===editId) : null;
+  S.selEmoji = ex?.emoji || '📁';
   document.getElementById('sTitle').textContent = editId ? 'עריכת קטגוריה' : 'קטגוריה חדשה';
-  document.getElementById('sName').value = existing?.name || '';
+  document.getElementById('sName').value = ex?.name || '';
   renderEmojiGrid();
   document.getElementById('sOverlay').classList.add('open');
-  setTimeout(() => document.getElementById('sName').focus(), 80);
+  setTimeout(()=>document.getElementById('sName').focus(), 80);
 }
-function closeSModal() {
-  document.getElementById('sOverlay').classList.remove('open');
-  S.editSecId = null;
-}
+function closeSModal() { document.getElementById('sOverlay').classList.remove('open'); S.editSecId=null; }
 function renderEmojiGrid() {
   document.getElementById('emojiGrid').innerHTML = EMOJIS.map(e =>
     `<div class="eo ${e===S.selEmoji?'sel':''}" onclick="pickEmoji('${e}')">${e}</div>`
   ).join('');
 }
-function pickEmoji(e) { S.selEmoji = e; renderEmojiGrid(); }
+function pickEmoji(e) { S.selEmoji=e; renderEmojiGrid(); }
 function saveSection() {
   const name = document.getElementById('sName').value.trim();
   if (!name) { toast('שם קטגוריה נדרש','error'); return; }
   if (S.editSecId) {
-    const sec = S.sections.find(s => s.id === S.editSecId);
-    if (sec) { sec.name = name; sec.emoji = S.selEmoji; }
+    const sec = S.sections.find(s=>s.id===S.editSecId);
+    if (sec) { sec.name=name; sec.emoji=S.selEmoji; }
     toast('קטגוריה עודכנה');
   } else {
-    const ns = { id: uid(), name, emoji: S.selEmoji };
+    const ns = { id:uid(), name, emoji:S.selEmoji };
     S.sections.push(ns);
     S.activeSecId = ns.id;
-    toast('קטגוריה נוצרה', 'success');
+    toast('קטגוריה נוצרה','success');
   }
   save(); closeSModal(); render();
 }
@@ -990,21 +959,19 @@ function saveSection() {
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // Mission Modal
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-function openMModal(editId = null) {
+function openMModal(editId=null) {
   S.editMissionId = editId;
-  const secSel = document.getElementById('mSection');
-  secSel.innerHTML = S.sections.map(s =>
+  document.getElementById('mSection').innerHTML = S.sections.map(s=>
     `<option value="${s.id}" ${s.id===S.activeSecId?'selected':''}>${s.emoji} ${esc(s.name)}</option>`
   ).join('');
-
   if (editId) {
-    const m = S.missions.find(x => x.id === editId);
+    const m = S.missions.find(x=>x.id===editId);
     document.getElementById('mTitle').textContent = 'עריכת משימה';
     document.getElementById('mName').value = m.name;
-    document.getElementById('mDesc').value = m.desc || '';
+    document.getElementById('mDesc').value = m.desc||'';
     document.getElementById('mStatus').value = m.status;
-    document.getElementById('mPriority').value = m.priority || 'medium';
-    document.getElementById('mDeadline').value = m.deadline || '';
+    document.getElementById('mPriority').value = m.priority||'medium';
+    document.getElementById('mDeadline').value = m.deadline||'';
     document.getElementById('mSection').value = m.secId;
   } else {
     document.getElementById('mTitle').textContent = 'משימה חדשה';
@@ -1015,12 +982,9 @@ function openMModal(editId = null) {
     document.getElementById('mDeadline').value = '';
   }
   document.getElementById('mOverlay').classList.add('open');
-  setTimeout(() => document.getElementById('mName').focus(), 80);
+  setTimeout(()=>document.getElementById('mName').focus(), 80);
 }
-function closeMModal() {
-  document.getElementById('mOverlay').classList.remove('open');
-  S.editMissionId = null;
-}
+function closeMModal() { document.getElementById('mOverlay').classList.remove('open'); S.editMissionId=null; }
 function saveMission() {
   const name = document.getElementById('mName').value.trim();
   if (!name) { toast('שם משימה נדרש','error'); return; }
@@ -1033,12 +997,12 @@ function saveMission() {
     secId:    document.getElementById('mSection').value,
   };
   if (S.editMissionId) {
-    const m = S.missions.find(x => x.id === S.editMissionId);
-    Object.assign(m, data);
-    if (S.openDetailId === S.editMissionId) refreshDetail();
+    const m = S.missions.find(x=>x.id===S.editMissionId);
+    Object.assign(m, data); // preserves m.files and m.comments
+    if (S.openDetailId===S.editMissionId) refreshDetail();
     toast('משימה עודכנה');
   } else {
-    S.missions.push({ id: uid(), ...data, comments: [], createdAt: new Date().toISOString() });
+    S.missions.push({ id:uid(), ...data, files:[], comments:[], createdAt:new Date().toISOString() });
     S.activeSecId = data.secId;
     toast('משימה נוצרה','success');
   }
@@ -1049,29 +1013,27 @@ function saveMission() {
 // Delete helpers
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 function confirmDelSec(id) {
-  const sec = S.sections.find(s => s.id === id);
-  const n   = S.missions.filter(m => m.secId === id).length;
-  document.getElementById('dText').textContent =
-    `האם למחוק את "${sec.name}"? פעולה זו תמחק גם ${n} משימות בקטגוריה זו. לא ניתן לבטל פעולה זו.`;
-  document.getElementById('dConfirm').onclick = () => { delSec(id); closeDModal(); };
+  const sec = S.sections.find(s=>s.id===id);
+  const n   = S.missions.filter(m=>m.secId===id).length;
+  document.getElementById('dText').textContent = `האם למחוק את "${sec.name}"? פעולה זו תמחק גם ${n} משימות. לא ניתן לבטל.`;
+  document.getElementById('dConfirm').onclick = ()=>{ delSec(id); closeDModal(); };
   document.getElementById('dOverlay').classList.add('open');
 }
 function delSec(id) {
-  S.sections = S.sections.filter(s => s.id !== id);
-  S.missions = S.missions.filter(m => m.secId !== id);
-  if (S.activeSecId === id) S.activeSecId = S.sections[0]?.id || null;
+  S.sections = S.sections.filter(s=>s.id!==id);
+  S.missions = S.missions.filter(m=>m.secId!==id);
+  if (S.activeSecId===id) S.activeSecId = S.sections[0]?.id||null;
   save(); render(); toast('קטגוריה נמחקה');
 }
-
 function confirmDelMission(id) {
-  const m = S.missions.find(x => x.id === id);
-  document.getElementById('dText').textContent = `האם למחוק את "${m.name}"? לא ניתן לבטל פעולה זו.`;
-  document.getElementById('dConfirm').onclick = () => { delMission(id); closeDModal(); };
+  const m = S.missions.find(x=>x.id===id);
+  document.getElementById('dText').textContent = `האם למחוק את "${m.name}"? לא ניתן לבטל.`;
+  document.getElementById('dConfirm').onclick = ()=>{ delMission(id); closeDModal(); };
   document.getElementById('dOverlay').classList.add('open');
 }
 function delMission(id) {
-  S.missions = S.missions.filter(m => m.id !== id);
-  if (S.openDetailId === id) closeDetail();
+  S.missions = S.missions.filter(m=>m.id!==id);
+  if (S.openDetailId===id) closeDetail();
   save(); render(); toast('משימה נמחקה');
 }
 function closeDModal() { document.getElementById('dOverlay').classList.remove('open'); }
@@ -1083,27 +1045,27 @@ function addComment(id) {
   const inp = document.getElementById('cInput');
   const text = inp.value.trim();
   if (!text) return;
-  const m = S.missions.find(x => x.id === id);
+  const m = S.missions.find(x=>x.id===id);
   if (!m) return;
-  if (!m.comments) m.comments = [];
+  if (!m.comments) m.comments=[];
   m.comments.push({ text, date: new Date().toISOString().split('T')[0] });
-  inp.value = '';
+  inp.value='';
   save(); refreshDetail(); render(); toast('הערה נוספה');
 }
 function delComment(id, idx) {
-  const m = S.missions.find(x => x.id === id);
+  const m = S.missions.find(x=>x.id===id);
   if (!m) return;
-  m.comments.splice(idx, 1);
+  m.comments.splice(idx,1);
   save(); refreshDetail(); render();
 }
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// Filter / Search / Section select
+// Filter / Search / Nav
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-function selectSec(id) { S.activeSecId = id; S.filter = 'all'; render(); renderSidebar(); }
-function setFilter(f)  { S.filter = f; renderMain(); }
-function onSearch(v)   { S.search = v; renderMain(); }
-function clearFilters(){ S.filter = 'all'; S.search = ''; document.getElementById('gSearch').value = ''; renderMain(); }
+function selectSec(id) { S.activeSecId=id; S.filter='all'; render(); }
+function setFilter(f)  { S.filter=f; renderMain(); }
+function onSearch(v)   { S.search=v; renderMain(); }
+function clearFilters(){ S.filter='all'; S.search=''; document.getElementById('gSearch').value=''; renderMain(); }
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // Helpers
@@ -1114,52 +1076,51 @@ function esc(s) {
 }
 function fmtDate(s) {
   if (!s) return '';
-  return new Date(s + 'T00:00:00').toLocaleDateString('he-IL',{day:'numeric',month:'long',year:'numeric'});
+  return new Date(s+'T00:00:00').toLocaleDateString('he-IL',{day:'numeric',month:'long',year:'numeric'});
+}
+function fmtSize(b) {
+  if (b<1024) return `${b} B`;
+  if (b<1048576) return `${(b/1024).toFixed(1)} KB`;
+  return `${(b/1048576).toFixed(1)} MB`;
 }
 function deadlineInfo(s) {
   if (!s) return null;
-  const today = new Date(); today.setHours(0,0,0,0);
-  const d     = new Date(s + 'T00:00:00');
-  const diff  = Math.round((d - today) / 86400000);
-  if (diff < 0)  return { txt: `באיחור של ${Math.abs(diff)} ימים`, cls: 'overdue' };
-  if (diff === 0) return { txt: 'היום!',                           cls: 'soon'    };
-  if (diff <= 3) return { txt: `נותרו ${diff} ימים`,              cls: 'soon'    };
-  return { txt: fmtDate(s), cls: '' };
+  const today=new Date(); today.setHours(0,0,0,0);
+  const d=new Date(s+'T00:00:00');
+  const diff=Math.round((d-today)/86400000);
+  if (diff<0)  return { txt:`באיחור של ${Math.abs(diff)} ימים`, cls:'overdue' };
+  if (diff===0) return { txt:'היום!',                            cls:'soon'    };
+  if (diff<=3) return { txt:`נותרו ${diff} ימים`,               cls:'soon'    };
+  return { txt:fmtDate(s), cls:'' };
 }
 function toast(msg, type='') {
-  const w = document.getElementById('toasts');
-  const t = document.createElement('div');
-  t.className = `toast ${type}`;
-  t.innerHTML = `${type==='success'?'✅':type==='error'?'❌':'ℹ️'} ${msg}`;
+  const w=document.getElementById('toasts');
+  const t=document.createElement('div');
+  t.className=`toast ${type}`;
+  t.innerHTML=`${type==='success'?'✅':type==='error'?'❌':'ℹ️'} ${msg}`;
   w.appendChild(t);
-  setTimeout(() => { t.style.opacity='0'; t.style.transform='translateY(8px)'; setTimeout(()=>t.remove(),280); }, 2400);
+  setTimeout(()=>{ t.style.opacity='0'; t.style.transform='translateY(8px)'; setTimeout(()=>t.remove(),280); },2400);
 }
 
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// Keyboard shortcuts
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// Keyboard
 document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') {
-    if (document.getElementById('mOverlay').classList.contains('open')) { closeMModal(); return; }
-    if (document.getElementById('sOverlay').classList.contains('open')) { closeSModal(); return; }
-    if (document.getElementById('dOverlay').classList.contains('open')) { closeDModal(); return; }
-    if (document.getElementById('detailPanel').classList.contains('open')) { closeDetail(); return; }
+  if (e.key==='Escape') {
+    if (document.getElementById('mOverlay').classList.contains('open'))   { closeMModal(); return; }
+    if (document.getElementById('sOverlay').classList.contains('open'))   { closeSModal(); return; }
+    if (document.getElementById('dOverlay').classList.contains('open'))   { closeDModal(); return; }
+    if (document.getElementById('detailPanel').classList.contains('open')){ closeDetail(); return; }
   }
 });
-
 ['mOverlay','sOverlay','dOverlay'].forEach(id => {
   document.getElementById(id).addEventListener('click', function(e) {
-    if (e.target === this) {
-      if (id === 'mOverlay') closeMModal();
-      if (id === 'sOverlay') closeSModal();
-      if (id === 'dOverlay') closeDModal();
+    if (e.target===this) {
+      if (id==='mOverlay') closeMModal();
+      if (id==='sOverlay') closeSModal();
+      if (id==='dOverlay') closeDModal();
     }
   });
 });
 
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// Boot
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 load();
 render();
 </script>
