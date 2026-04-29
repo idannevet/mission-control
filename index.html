@@ -1,0 +1,1174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mission Control</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --navy:       #0d1240;
+  --navy-light: #1a2060;
+  --navy-mid:   #252d73;
+  --pink:       #e91e8c;
+  --pink-light: #ff4db3;
+  --pink-bg:    #fce4f1;
+  --white:      #ffffff;
+  --gray-50:    #f8fafc;
+  --gray-100:   #f1f5f9;
+  --gray-200:   #e2e8f0;
+  --gray-300:   #cbd5e1;
+  --gray-500:   #64748b;
+  --gray-700:   #334155;
+  --gray-900:   #0f172a;
+  --green:      #22c55e;
+  --green-bg:   #dcfce7;
+  --orange:     #f97316;
+  --orange-bg:  #ffedd5;
+  --red:        #ef4444;
+  --red-bg:     #fee2e2;
+  --blue:       #3b82f6;
+  --blue-bg:    #dbeafe;
+  --shadow-sm:  0 1px 3px rgba(0,0,0,.08);
+  --shadow-md:  0 4px 16px rgba(0,0,0,.1);
+  --shadow-lg:  0 8px 32px rgba(0,0,0,.15);
+  --r:  12px;
+  --rs: 8px;
+  --rx: 6px;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--gray-100);
+  color: var(--gray-900);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ─── Header ─── */
+.header {
+  background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
+  color: #fff;
+  padding: 0 24px;
+  height: 62px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: var(--shadow-md);
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  gap: 12px;
+}
+.header-logo {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  font-weight: 800;
+  font-size: 19px;
+  letter-spacing: -.5px;
+  flex-shrink: 0;
+}
+.header-logo .dot {
+  width: 34px;
+  height: 34px;
+  background: var(--pink);
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 17px;
+  box-shadow: 0 3px 10px rgba(233,30,140,.4);
+}
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.search-wrap {
+  position: relative;
+}
+.search-icon {
+  position: absolute;
+  left: 11px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 13px;
+  color: var(--gray-500);
+  pointer-events: none;
+}
+.search-input {
+  padding: 8px 14px 8px 34px;
+  border: 1.5px solid rgba(255,255,255,.15);
+  border-radius: var(--rs);
+  font-size: 13px;
+  font-family: 'Inter', sans-serif;
+  background: rgba(255,255,255,.08);
+  color: #fff;
+  width: 220px;
+  outline: none;
+  transition: all .15s;
+}
+.search-input::placeholder { color: rgba(255,255,255,.45); }
+.search-input:focus {
+  border-color: var(--pink);
+  background: rgba(255,255,255,.13);
+  box-shadow: 0 0 0 3px rgba(233,30,140,.15);
+}
+
+/* ─── Layout ─── */
+.layout {
+  display: flex;
+  flex: 1;
+  height: calc(100vh - 62px);
+  overflow: hidden;
+}
+
+/* ─── Sidebar ─── */
+.sidebar {
+  width: 255px;
+  min-width: 255px;
+  background: var(--white);
+  border-right: 1px solid var(--gray-200);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.sidebar-top {
+  padding: 18px 14px 10px;
+  border-bottom: 1px solid var(--gray-100);
+}
+.sidebar-label {
+  font-size: 10.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.3px;
+  color: var(--gray-500);
+}
+.sidebar-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px;
+}
+.sec-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 11px;
+  border-radius: var(--rs);
+  cursor: pointer;
+  transition: all .13s;
+  margin-bottom: 2px;
+  position: relative;
+}
+.sec-item:hover { background: var(--gray-100); }
+.sec-item.active {
+  background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
+  color: #fff;
+}
+.sec-emoji { font-size: 17px; width: 24px; text-align: center; flex-shrink: 0; }
+.sec-name {
+  font-size: 13.5px;
+  font-weight: 500;
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.sec-count {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 1px 7px;
+  border-radius: 20px;
+  background: var(--gray-200);
+  color: var(--gray-500);
+  flex-shrink: 0;
+}
+.sec-item.active .sec-count { background: rgba(255,255,255,.2); color: #fff; }
+.sec-btns { display: none; gap: 2px; }
+.sec-item:hover .sec-btns,
+.sec-item.active .sec-btns { display: flex; }
+.icon-btn {
+  width: 25px; height: 25px;
+  border-radius: 5px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px;
+  opacity: .55;
+  transition: all .13s;
+}
+.icon-btn:hover { opacity: 1; background: rgba(0,0,0,.08); }
+.sec-item.active .icon-btn:hover { background: rgba(255,255,255,.18); }
+.sidebar-foot {
+  padding: 12px;
+  border-top: 1px solid var(--gray-100);
+}
+
+/* ─── Buttons ─── */
+.btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 9px 16px;
+  border-radius: var(--rx);
+  font-size: 13.5px; font-weight: 600;
+  cursor: pointer; border: none;
+  transition: all .15s;
+  white-space: nowrap;
+  font-family: 'Inter', sans-serif;
+}
+.btn-primary { background: var(--pink); color: #fff; }
+.btn-primary:hover { background: var(--pink-light); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(233,30,140,.3); }
+.btn-navy { background: var(--navy); color: #fff; }
+.btn-navy:hover { background: var(--navy-light); }
+.btn-ghost { background: transparent; color: var(--gray-700); border: 1.5px solid var(--gray-200); }
+.btn-ghost:hover { background: var(--gray-100); border-color: var(--gray-300); }
+.btn-danger { background: var(--red-bg); color: var(--red); }
+.btn-danger:hover { background: var(--red); color: #fff; }
+.btn-sm { padding: 6px 12px; font-size: 12.5px; }
+.btn-full { width: 100%; justify-content: center; }
+
+/* ─── Main ─── */
+.main {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.main-header {
+  padding: 22px 26px 14px;
+  display: flex; align-items: flex-start; justify-content: space-between; gap: 16px;
+  background: var(--white);
+  border-bottom: 1px solid var(--gray-200);
+  position: sticky; top: 0; z-index: 50;
+}
+.main-h1 {
+  font-size: 21px; font-weight: 800; color: var(--navy);
+  display: flex; align-items: center; gap: 9px;
+}
+.main-sub { font-size: 13px; color: var(--gray-500); margin-top: 3px; }
+.main-header-right { display: flex; align-items: center; gap: 9px; flex-shrink: 0; }
+
+/* ─── Filter bar ─── */
+.filter-bar {
+  display: flex; gap: 10px; flex-wrap: wrap;
+  padding: 13px 26px;
+  background: var(--gray-50);
+  border-bottom: 1px solid var(--gray-200);
+}
+.fpill {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 5px 13px; border-radius: 20px;
+  font-size: 12.5px; font-weight: 600;
+  cursor: pointer; border: 2px solid transparent;
+  transition: all .13s; user-select: none;
+}
+.fpill:hover { transform: translateY(-1px); }
+.fpill.active { border-color: currentColor; }
+.fpill.f-all    { background: var(--navy);        color: #fff; }
+.fpill.f-todo   { background: var(--blue-bg);     color: var(--blue); }
+.fpill.f-prog   { background: var(--orange-bg);   color: var(--orange); }
+.fpill.f-done   { background: var(--green-bg);    color: var(--green); }
+.fpill.f-block  { background: var(--red-bg);      color: var(--red); }
+.fpill .cnt {
+  background: rgba(0,0,0,.1); padding: 1px 7px; border-radius: 10px; font-size: 11.5px;
+}
+.fpill.f-all .cnt { background: rgba(255,255,255,.2); }
+
+/* ─── Mission Grid ─── */
+.missions-wrap { padding: 20px 26px; flex: 1; }
+.missions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 15px;
+}
+
+/* ─── Mission Card ─── */
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.mcard {
+  background: var(--white);
+  border-radius: var(--r);
+  border: 1.5px solid var(--gray-200);
+  padding: 16px;
+  cursor: pointer;
+  transition: all .18s;
+  position: relative;
+  overflow: hidden;
+  animation: cardIn .2s ease both;
+}
+.mcard::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 3px;
+}
+.mcard.s-todo::before    { background: var(--blue); }
+.mcard.s-prog::before    { background: var(--orange); }
+.mcard.s-done::before    { background: var(--green); }
+.mcard.s-block::before   { background: var(--red); }
+.mcard:hover { border-color: var(--gray-300); box-shadow: var(--shadow-md); transform: translateY(-2px); }
+.mcard-head {
+  display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; margin-bottom: 9px;
+}
+.mcard-title { font-size: 14.5px; font-weight: 700; color: var(--gray-900); line-height: 1.4; flex: 1; }
+.mcard-actions { display: flex; gap: 3px; opacity: 0; transition: opacity .13s; }
+.mcard:hover .mcard-actions { opacity: 1; }
+.mcard-desc {
+  font-size: 12.5px; color: var(--gray-500); line-height: 1.5; margin-bottom: 13px;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.mcard-meta { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
+.sbadge {
+  display: inline-flex; align-items: center; gap: 3px;
+  padding: 3px 9px; border-radius: 20px;
+  font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px;
+}
+.sbadge.s-todo  { background: var(--blue-bg);   color: var(--blue); }
+.sbadge.s-prog  { background: var(--orange-bg); color: var(--orange); }
+.sbadge.s-done  { background: var(--green-bg);  color: var(--green); }
+.sbadge.s-block { background: var(--red-bg);    color: var(--red); }
+.dline { display: inline-flex; align-items: center; gap: 3px; font-size: 11.5px; font-weight: 500; color: var(--gray-500); }
+.dline.overdue { color: var(--red); font-weight: 600; }
+.dline.soon    { color: var(--orange); font-weight: 600; }
+.pdot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+.pdot.high   { background: var(--red); }
+.pdot.medium { background: var(--orange); }
+.pdot.low    { background: var(--green); }
+.ccount { display: inline-flex; align-items: center; gap: 3px; font-size: 11.5px; color: var(--gray-500); margin-left: auto; }
+
+/* ─── Empty / Welcome ─── */
+.empty, .welcome {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-align: center; padding: 80px 30px;
+}
+.empty-ico, .welcome-ico { font-size: 64px; margin-bottom: 16px; }
+.empty-t, .welcome-t { font-size: 19px; font-weight: 800; color: var(--gray-700); margin-bottom: 8px; }
+.empty-sub, .welcome-sub { font-size: 13.5px; color: var(--gray-500); margin-bottom: 24px; line-height: 1.6; max-width: 340px; }
+
+/* ─── Modal ─── */
+.overlay {
+  position: fixed; inset: 0;
+  background: rgba(13,18,64,.5);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+  display: flex; align-items: center; justify-content: center; padding: 20px;
+  opacity: 0; pointer-events: none;
+  transition: opacity .2s;
+}
+.overlay.open { opacity: 1; pointer-events: all; }
+.modal {
+  background: var(--white);
+  border-radius: 16px;
+  width: 100%; max-width: 560px; max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: var(--shadow-lg);
+  transform: translateY(20px) scale(.98);
+  transition: transform .2s;
+}
+.overlay.open .modal { transform: translateY(0) scale(1); }
+.modal-head {
+  padding: 22px 22px 0;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.modal-title { font-size: 17px; font-weight: 800; color: var(--navy); }
+.modal-close {
+  width: 30px; height: 30px; border-radius: 7px; border: none;
+  background: var(--gray-100); cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; color: var(--gray-500);
+  transition: all .13s;
+}
+.modal-close:hover { background: var(--gray-200); color: var(--gray-900); }
+.modal-body { padding: 20px 22px; }
+.modal-foot { padding: 0 22px 22px; display: flex; gap: 9px; justify-content: flex-end; }
+
+/* ─── Form ─── */
+.fg { margin-bottom: 16px; }
+.fl {
+  display: block; font-size: 12.5px; font-weight: 600;
+  color: var(--gray-700); margin-bottom: 5px;
+}
+.fi, .fs, .fta {
+  width: 100%; padding: 9px 13px;
+  border: 1.5px solid var(--gray-200); border-radius: var(--rs);
+  font-size: 13.5px; font-family: 'Inter', sans-serif;
+  color: var(--gray-900); background: var(--white);
+  transition: border-color .15s, box-shadow .15s; outline: none;
+}
+.fi:focus, .fs:focus, .fta:focus {
+  border-color: var(--pink);
+  box-shadow: 0 0 0 3px rgba(233,30,140,.1);
+}
+.fta { resize: vertical; min-height: 80px; }
+.frow { display: grid; grid-template-columns: 1fr 1fr; gap: 13px; }
+
+/* Emoji picker */
+.eg {
+  display: grid; grid-template-columns: repeat(8,1fr); gap: 5px; margin-top: 7px;
+}
+.eo {
+  font-size: 21px; width: 36px; height: 36px; border-radius: 7px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: all .13s; border: 2px solid transparent;
+}
+.eo:hover { background: var(--gray-100); }
+.eo.sel { background: var(--pink-bg); border-color: var(--pink); }
+
+/* ─── Detail Slide-over ─── */
+.detail-bg {
+  position: fixed; inset: 0;
+  background: rgba(13,18,64,.3);
+  backdrop-filter: blur(2px);
+  z-index: 900;
+  opacity: 0; pointer-events: none;
+  transition: opacity .25s;
+}
+.detail-bg.open { opacity: 1; pointer-events: all; }
+.detail-panel {
+  position: fixed; right: 0; top: 62px; bottom: 0;
+  width: 480px;
+  background: var(--white);
+  border-left: 1px solid var(--gray-200);
+  box-shadow: -8px 0 32px rgba(0,0,0,.1);
+  display: flex; flex-direction: column;
+  z-index: 901;
+  transform: translateX(100%);
+  transition: transform .28s cubic-bezier(.4,0,.2,1);
+}
+.detail-panel.open { transform: translateX(0); }
+.detail-head {
+  padding: 18px 18px 14px;
+  border-bottom: 1px solid var(--gray-200);
+  display: flex; align-items: flex-start; gap: 10px;
+}
+.detail-info { flex: 1; }
+.detail-title { font-size: 17px; font-weight: 800; color: var(--navy); line-height: 1.3; }
+.detail-sectag { font-size: 12px; color: var(--gray-500); margin-top: 3px; }
+.detail-body { flex: 1; overflow-y: auto; padding: 18px; }
+.df { margin-bottom: 18px; }
+.df-label {
+  font-size: 10.5px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 1px; color: var(--gray-500); margin-bottom: 6px;
+}
+.df-val { font-size: 13.5px; color: var(--gray-700); line-height: 1.6; }
+.df-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.status-opts { display: flex; gap: 7px; flex-wrap: wrap; }
+.sopt {
+  padding: 5px 12px; border-radius: 20px;
+  font-size: 11.5px; font-weight: 700;
+  cursor: pointer; border: 2px solid transparent;
+  transition: all .13s; text-transform: uppercase; letter-spacing: .5px;
+  user-select: none;
+}
+.sopt.s-todo  { background: var(--blue-bg);   color: var(--blue); }
+.sopt.s-prog  { background: var(--orange-bg); color: var(--orange); }
+.sopt.s-done  { background: var(--green-bg);  color: var(--green); }
+.sopt.s-block { background: var(--red-bg);    color: var(--red); }
+.sopt.sel { border-color: currentColor; box-shadow: 0 0 0 2px rgba(0,0,0,.04); }
+
+/* ─── Comments ─── */
+.comments-wrap {
+  border-top: 1px solid var(--gray-200);
+  padding: 18px;
+}
+.comments-title {
+  font-size: 13px; font-weight: 700; color: var(--gray-700);
+  margin-bottom: 13px; display: flex; align-items: center; gap: 6px;
+}
+.comment-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 13px; }
+.citem {
+  background: var(--gray-50); border-radius: var(--rs); padding: 11px;
+  position: relative;
+}
+.citem-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 5px; }
+.citem-date { font-size: 11px; color: var(--gray-500); }
+.citem-del {
+  opacity: 0; background: none; border: none; cursor: pointer;
+  color: var(--red); font-size: 13px; padding: 2px; border-radius: 4px;
+  transition: opacity .13s;
+}
+.citem:hover .citem-del { opacity: 1; }
+.citem-text { font-size: 12.5px; color: var(--gray-700); line-height: 1.5; }
+.c-row { display: flex; gap: 7px; }
+.c-input {
+  flex: 1; padding: 8px 11px;
+  border: 1.5px solid var(--gray-200); border-radius: var(--rs);
+  font-size: 13px; font-family: 'Inter', sans-serif; outline: none;
+  transition: border-color .15s;
+}
+.c-input:focus { border-color: var(--pink); box-shadow: 0 0 0 3px rgba(233,30,140,.1); }
+
+/* ─── Toast ─── */
+.toast-wrap {
+  position: fixed; bottom: 22px; right: 22px; z-index: 2000;
+  display: flex; flex-direction: column; gap: 7px;
+}
+@keyframes toastIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.toast {
+  background: var(--navy); color: #fff;
+  padding: 11px 16px; border-radius: 10px;
+  font-size: 13px; font-weight: 500;
+  box-shadow: var(--shadow-md);
+  display: flex; align-items: center; gap: 9px;
+  animation: toastIn .2s ease;
+  max-width: 300px;
+  transition: opacity .25s, transform .25s;
+}
+.toast.success { background: #16a34a; }
+.toast.error   { background: var(--red); }
+
+/* ─── Scrollbars ─── */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--gray-200); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--gray-300); }
+
+@media (max-width: 700px) {
+  .sidebar { width: 56px; min-width: 56px; }
+  .sec-name, .sec-count, .sec-btns, .sidebar-label { display: none; }
+  .sidebar-foot .btn span { display: none; }
+  .detail-panel { width: 100%; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ Header ═══ -->
+<header class="header">
+  <div class="header-logo">
+    <div class="dot">🎯</div>
+    Mission Control
+  </div>
+  <div class="header-right">
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input class="search-input" id="gSearch" placeholder="Search missions…" oninput="onSearch(this.value)">
+    </div>
+  </div>
+</header>
+
+<!-- ═══ Layout ═══ -->
+<div class="layout">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-top">
+      <div class="sidebar-label">Sections</div>
+    </div>
+    <div class="sidebar-list" id="secList"></div>
+    <div class="sidebar-foot">
+      <button class="btn btn-primary btn-full btn-sm" onclick="openSecModal()">
+        <span>+</span><span> New Section</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <main class="main" id="main"></main>
+</div>
+
+<!-- ═══ Detail slide-over ═══ -->
+<div class="detail-bg" id="detailBg" onclick="closeDetail()"></div>
+<div class="detail-panel" id="detailPanel">
+  <div class="detail-head">
+    <div class="detail-info">
+      <div class="detail-title" id="dTitle"></div>
+      <div class="detail-sectag" id="dSectag"></div>
+    </div>
+    <div style="display:flex;gap:7px;flex-shrink:0;">
+      <button class="btn btn-ghost btn-sm" onclick="editCurrent()">✏️ Edit</button>
+      <button class="modal-close" onclick="closeDetail()">✕</button>
+    </div>
+  </div>
+  <div class="detail-body" id="dBody"></div>
+  <div class="comments-wrap" id="dComments"></div>
+</div>
+
+<!-- ═══ Mission Modal ═══ -->
+<div class="overlay" id="mOverlay">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-title" id="mTitle">New Mission</div>
+      <button class="modal-close" onclick="closeMModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="fg">
+        <label class="fl">Mission Title *</label>
+        <input class="fi" id="mName" placeholder="What needs to be accomplished?">
+      </div>
+      <div class="fg">
+        <label class="fl">Description</label>
+        <textarea class="fta" id="mDesc" placeholder="Add context, details, notes…"></textarea>
+      </div>
+      <div class="frow">
+        <div class="fg">
+          <label class="fl">Status</label>
+          <select class="fs" id="mStatus">
+            <option value="todo">📋 Todo</option>
+            <option value="in-progress">⚡ In Progress</option>
+            <option value="done">✅ Done</option>
+            <option value="blocked">🚫 Blocked</option>
+          </select>
+        </div>
+        <div class="fg">
+          <label class="fl">Priority</label>
+          <select class="fs" id="mPriority">
+            <option value="medium">🟡 Medium</option>
+            <option value="high">🔴 High</option>
+            <option value="low">🟢 Low</option>
+          </select>
+        </div>
+      </div>
+      <div class="frow">
+        <div class="fg">
+          <label class="fl">Deadline</label>
+          <input type="date" class="fi" id="mDeadline">
+        </div>
+        <div class="fg">
+          <label class="fl">Section</label>
+          <select class="fs" id="mSection"></select>
+        </div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeMModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveMission()">Save Mission</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ Section Modal ═══ -->
+<div class="overlay" id="sOverlay">
+  <div class="modal" style="max-width:400px;">
+    <div class="modal-head">
+      <div class="modal-title" id="sTitle">New Section</div>
+      <button class="modal-close" onclick="closeSModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="fg">
+        <label class="fl">Section Name *</label>
+        <input class="fi" id="sName" placeholder="e.g. Development, Marketing, Research…">
+      </div>
+      <div class="fg">
+        <label class="fl">Icon</label>
+        <div class="eg" id="emojiGrid"></div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeSModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveSection()">Save Section</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ Delete Confirm Modal ═══ -->
+<div class="overlay" id="dOverlay">
+  <div class="modal" style="max-width:380px;">
+    <div class="modal-head">
+      <div class="modal-title">⚠️ Confirm Delete</div>
+      <button class="modal-close" onclick="closeDModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <p id="dText" style="font-size:13.5px;color:var(--gray-700);line-height:1.6;"></p>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeDModal()">Cancel</button>
+      <button class="btn btn-danger" id="dConfirm">Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ Toast Container ═══ -->
+<div class="toast-wrap" id="toasts"></div>
+
+<script>
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// Constants
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+const EMOJIS = [
+  '📁','🚀','💡','🔥','⚡','🎯','🛠️','📊',
+  '🌟','🎨','💼','🔬','📱','🌐','🏆','💪',
+  '🎪','🔧','📝','🎭','🌈','🦋','🤖','💎',
+  '🏗️','📌','🎸','🚂','🌊','🔑','🧩','🎮',
+];
+
+const STATUS_CSS = {
+  'todo':        's-todo',
+  'in-progress': 's-prog',
+  'done':        's-done',
+  'blocked':     's-block',
+};
+const STATUS_LABEL = {
+  'todo': 'Todo', 'in-progress': 'In Progress', 'done': 'Done', 'blocked': 'Blocked',
+};
+const STATUS_ICON = {
+  'todo': '📋', 'in-progress': '⚡', 'done': '✅', 'blocked': '🚫',
+};
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// State
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+const S = {
+  sections: [],
+  missions: [],
+  activeSecId: null,
+  filter: 'all',
+  search: '',
+  // modal state
+  editMissionId: null,
+  editSecId: null,
+  selEmoji: '📁',
+  openDetailId: null,
+};
+
+function load() {
+  try {
+    const d = JSON.parse(localStorage.getItem('mc_v1') || '{}');
+    S.sections = d.sections || [];
+    S.missions = d.missions || [];
+  } catch(e) {}
+}
+function save() {
+  localStorage.setItem('mc_v1', JSON.stringify({ sections: S.sections, missions: S.missions }));
+}
+function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2,7); }
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// Render
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+function render() { renderSidebar(); renderMain(); }
+
+function renderSidebar() {
+  const el = document.getElementById('secList');
+  if (!S.sections.length) {
+    el.innerHTML = '<div style="padding:18px 10px;text-align:center;font-size:12.5px;color:var(--gray-500);">No sections yet</div>';
+    return;
+  }
+  el.innerHTML = S.sections.map(sec => {
+    const n = S.missions.filter(m => m.secId === sec.id).length;
+    const act = S.activeSecId === sec.id;
+    return `<div class="sec-item ${act ? 'active' : ''}" onclick="selectSec('${sec.id}')">
+      <span class="sec-emoji">${sec.emoji}</span>
+      <span class="sec-name">${esc(sec.name)}</span>
+      <span class="sec-count">${n}</span>
+      <div class="sec-btns">
+        <button class="icon-btn" onclick="event.stopPropagation();openSecModal('${sec.id}')" title="Edit">✏️</button>
+        <button class="icon-btn" onclick="event.stopPropagation();confirmDelSec('${sec.id}')" title="Delete">🗑️</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderMain() {
+  const el = document.getElementById('main');
+
+  if (!S.activeSecId) {
+    el.innerHTML = `<div class="welcome">
+      <div class="welcome-ico">🚀</div>
+      <div class="welcome-t">Welcome to Mission Control</div>
+      <div class="welcome-sub">Create a section to start organizing your missions. Sections help you group related work together.</div>
+      <button class="btn btn-primary" onclick="openSecModal()">+ Create First Section</button>
+    </div>`;
+    return;
+  }
+
+  const sec = S.sections.find(s => s.id === S.activeSecId);
+  if (!sec) return;
+
+  const all = S.missions.filter(m => m.secId === S.activeSecId);
+  let shown = [...all];
+  if (S.filter !== 'all') shown = shown.filter(m => m.status === S.filter);
+  if (S.search) {
+    const q = S.search.toLowerCase();
+    shown = shown.filter(m => m.name.toLowerCase().includes(q) || (m.desc||'').toLowerCase().includes(q));
+  }
+
+  const counts = {
+    all: all.length,
+    todo: all.filter(m => m.status==='todo').length,
+    'in-progress': all.filter(m => m.status==='in-progress').length,
+    done: all.filter(m => m.status==='done').length,
+    blocked: all.filter(m => m.status==='blocked').length,
+  };
+
+  el.innerHTML = `
+  <div class="main-header">
+    <div>
+      <div class="main-h1">${sec.emoji} ${esc(sec.name)}</div>
+      <div class="main-sub">${all.length} mission${all.length!==1?'s':''} in this section</div>
+    </div>
+    <div class="main-header-right">
+      <button class="btn btn-primary btn-sm" onclick="openMModal()">+ Add Mission</button>
+    </div>
+  </div>
+  <div class="filter-bar">
+    ${fpill('all','All',counts.all)}
+    ${fpill('todo','📋 Todo',counts.todo)}
+    ${fpill('in-progress','⚡ In Progress',counts['in-progress'])}
+    ${fpill('done','✅ Done',counts.done)}
+    ${fpill('blocked','🚫 Blocked',counts.blocked)}
+  </div>
+  <div class="missions-wrap">
+    ${shown.length ? `<div class="missions-grid">${shown.map(mcard).join('')}</div>` : emptyState()}
+  </div>`;
+}
+
+function fpill(f, label, n) {
+  const fc = f === 'all' ? 'f-all' : f === 'in-progress' ? 'f-prog' : f === 'done' ? 'f-done' : f === 'blocked' ? 'f-block' : 'f-todo';
+  const act = S.filter === f ? 'active' : '';
+  return `<div class="fpill ${fc} ${act}" onclick="setFilter('${f}')">${label} <span class="cnt">${n}</span></div>`;
+}
+
+function mcard(m) {
+  const css = STATUS_CSS[m.status] || 's-todo';
+  const dl  = deadlineInfo(m.deadline);
+  const nc  = (m.comments||[]).length;
+  return `<div class="mcard ${css}" onclick="openDetail('${m.id}')">
+    <div class="mcard-head">
+      <div class="mcard-title">${esc(m.name)}</div>
+      <div class="mcard-actions">
+        <button class="icon-btn" onclick="event.stopPropagation();openMModal('${m.id}')" title="Edit" style="color:var(--gray-500)">✏️</button>
+        <button class="icon-btn" onclick="event.stopPropagation();confirmDelMission('${m.id}')" title="Delete" style="color:var(--red)">🗑️</button>
+      </div>
+    </div>
+    ${m.desc ? `<div class="mcard-desc">${esc(m.desc)}</div>` : ''}
+    <div class="mcard-meta">
+      <span class="sbadge ${css}">${STATUS_ICON[m.status]} ${STATUS_LABEL[m.status]}</span>
+      ${dl ? `<span class="dline ${dl.cls}">📅 ${dl.txt}</span>` : ''}
+      ${m.priority ? `<span class="pdot ${m.priority}" title="${m.priority} priority"></span>` : ''}
+      ${nc ? `<span class="ccount">💬 ${nc}</span>` : ''}
+    </div>
+  </div>`;
+}
+
+function emptyState() {
+  if (S.filter !== 'all' || S.search) {
+    return `<div class="empty">
+      <div class="empty-ico">🔍</div>
+      <div class="empty-t">No matches</div>
+      <div class="empty-sub">Adjust your filter or search term.</div>
+      <button class="btn btn-ghost btn-sm" onclick="clearFilters()">Clear Filters</button>
+    </div>`;
+  }
+  return `<div class="empty">
+    <div class="empty-ico">📋</div>
+    <div class="empty-t">No missions yet</div>
+    <div class="empty-sub">Start adding missions to track your work.</div>
+    <button class="btn btn-primary" onclick="openMModal()">+ Add Mission</button>
+  </div>`;
+}
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// Detail Panel
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+function openDetail(id) {
+  S.openDetailId = id;
+  refreshDetail();
+  document.getElementById('detailBg').classList.add('open');
+  document.getElementById('detailPanel').classList.add('open');
+}
+
+function refreshDetail() {
+  const m = S.missions.find(x => x.id === S.openDetailId);
+  if (!m) return;
+  const sec = S.sections.find(s => s.id === m.secId);
+  document.getElementById('dTitle').textContent = m.name;
+  document.getElementById('dSectag').textContent = sec ? `${sec.emoji} ${sec.name}` : '';
+
+  const dl = deadlineInfo(m.deadline);
+  document.getElementById('dBody').innerHTML = `
+  <div class="df">
+    <div class="df-label">Status</div>
+    <div class="status-opts">
+      ${['todo','in-progress','done','blocked'].map(st => {
+        const css = STATUS_CSS[st];
+        const sel = m.status === st ? 'sel' : '';
+        return `<div class="sopt ${css} ${sel}" onclick="setStatus('${m.id}','${st}')">${STATUS_ICON[st]} ${STATUS_LABEL[st]}</div>`;
+      }).join('')}
+    </div>
+  </div>
+  <div class="df-row">
+    <div class="df">
+      <div class="df-label">Priority</div>
+      <div class="df-val">${m.priority==='high'?'🔴 High':m.priority==='low'?'🟢 Low':'🟡 Medium'}</div>
+    </div>
+    <div class="df">
+      <div class="df-label">Deadline</div>
+      <div class="df-val ${dl?.cls||''}">${m.deadline ? `📅 ${fmtDate(m.deadline)}${dl ? ` — ${dl.txt}` : ''}` : '—'}</div>
+    </div>
+  </div>
+  ${m.desc ? `<div class="df">
+    <div class="df-label">Description</div>
+    <div class="df-val">${esc(m.desc).replace(/\n/g,'<br>')}</div>
+  </div>` : ''}`;
+
+  const comments = m.comments || [];
+  document.getElementById('dComments').innerHTML = `
+  <div class="comments-title">💬 Comments
+    <span style="background:var(--gray-200);padding:1px 8px;border-radius:10px;font-size:11px;">${comments.length}</span>
+  </div>
+  <div class="comment-list">
+    ${comments.length ? comments.map((c,i) => `
+    <div class="citem">
+      <div class="citem-head">
+        <span class="citem-date">${fmtDate(c.date)}</span>
+        <button class="citem-del" onclick="delComment('${m.id}',${i})" title="Delete">✕</button>
+      </div>
+      <div class="citem-text">${esc(c.text)}</div>
+    </div>`).join('') : '<div style="font-size:12.5px;color:var(--gray-500);text-align:center;padding:14px 0;">No comments yet</div>'}
+  </div>
+  <div class="c-row">
+    <input class="c-input" id="cInput" placeholder="Add a comment…" onkeydown="if(event.key==='Enter')addComment('${m.id}')">
+    <button class="btn btn-primary btn-sm" onclick="addComment('${m.id}')">Post</button>
+  </div>`;
+}
+
+function closeDetail() {
+  S.openDetailId = null;
+  document.getElementById('detailBg').classList.remove('open');
+  document.getElementById('detailPanel').classList.remove('open');
+}
+
+function editCurrent() { if (S.openDetailId) openMModal(S.openDetailId); }
+
+function setStatus(id, status) {
+  const m = S.missions.find(x => x.id === id);
+  if (!m) return;
+  m.status = status;
+  save(); refreshDetail(); render();
+  toast(`Status → ${STATUS_LABEL[status]}`);
+}
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// Section Modal
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+function openSecModal(editId = null) {
+  S.editSecId = editId;
+  const existing = editId ? S.sections.find(s => s.id === editId) : null;
+  S.selEmoji = existing?.emoji || '📁';
+  document.getElementById('sTitle').textContent = editId ? 'Edit Section' : 'New Section';
+  document.getElementById('sName').value = existing?.name || '';
+  renderEmojiGrid();
+  document.getElementById('sOverlay').classList.add('open');
+  setTimeout(() => document.getElementById('sName').focus(), 80);
+}
+function closeSModal() {
+  document.getElementById('sOverlay').classList.remove('open');
+  S.editSecId = null;
+}
+function renderEmojiGrid() {
+  document.getElementById('emojiGrid').innerHTML = EMOJIS.map(e =>
+    `<div class="eo ${e===S.selEmoji?'sel':''}" onclick="pickEmoji('${e}')">${e}</div>`
+  ).join('');
+}
+function pickEmoji(e) { S.selEmoji = e; renderEmojiGrid(); }
+function saveSection() {
+  const name = document.getElementById('sName').value.trim();
+  if (!name) { toast('Section name is required','error'); return; }
+  if (S.editSecId) {
+    const sec = S.sections.find(s => s.id === S.editSecId);
+    if (sec) { sec.name = name; sec.emoji = S.selEmoji; }
+    toast('Section updated');
+  } else {
+    const ns = { id: uid(), name, emoji: S.selEmoji };
+    S.sections.push(ns);
+    S.activeSecId = ns.id;
+    toast('Section created', 'success');
+  }
+  save(); closeSModal(); render();
+}
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// Mission Modal
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+function openMModal(editId = null) {
+  S.editMissionId = editId;
+  const secSel = document.getElementById('mSection');
+  secSel.innerHTML = S.sections.map(s =>
+    `<option value="${s.id}" ${s.id===S.activeSecId?'selected':''}>${s.emoji} ${esc(s.name)}</option>`
+  ).join('');
+
+  if (editId) {
+    const m = S.missions.find(x => x.id === editId);
+    document.getElementById('mTitle').textContent = 'Edit Mission';
+    document.getElementById('mName').value = m.name;
+    document.getElementById('mDesc').value = m.desc || '';
+    document.getElementById('mStatus').value = m.status;
+    document.getElementById('mPriority').value = m.priority || 'medium';
+    document.getElementById('mDeadline').value = m.deadline || '';
+    document.getElementById('mSection').value = m.secId;
+  } else {
+    document.getElementById('mTitle').textContent = 'New Mission';
+    document.getElementById('mName').value = '';
+    document.getElementById('mDesc').value = '';
+    document.getElementById('mStatus').value = 'todo';
+    document.getElementById('mPriority').value = 'medium';
+    document.getElementById('mDeadline').value = '';
+  }
+  document.getElementById('mOverlay').classList.add('open');
+  setTimeout(() => document.getElementById('mName').focus(), 80);
+}
+function closeMModal() {
+  document.getElementById('mOverlay').classList.remove('open');
+  S.editMissionId = null;
+}
+function saveMission() {
+  const name = document.getElementById('mName').value.trim();
+  if (!name) { toast('Mission title is required','error'); return; }
+  const data = {
+    name,
+    desc:     document.getElementById('mDesc').value.trim(),
+    status:   document.getElementById('mStatus').value,
+    priority: document.getElementById('mPriority').value,
+    deadline: document.getElementById('mDeadline').value,
+    secId:    document.getElementById('mSection').value,
+  };
+  if (S.editMissionId) {
+    const m = S.missions.find(x => x.id === S.editMissionId);
+    Object.assign(m, data);
+    if (S.openDetailId === S.editMissionId) refreshDetail();
+    toast('Mission updated');
+  } else {
+    S.missions.push({ id: uid(), ...data, comments: [], createdAt: new Date().toISOString() });
+    S.activeSecId = data.secId;
+    toast('Mission created','success');
+  }
+  save(); closeMModal(); render();
+}
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// Delete helpers
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+function confirmDelSec(id) {
+  const sec = S.sections.find(s => s.id === id);
+  const n   = S.missions.filter(m => m.secId === id).length;
+  document.getElementById('dText').textContent =
+    `Delete "${sec.name}"? This will also remove ${n} mission(s). This cannot be undone.`;
+  document.getElementById('dConfirm').onclick = () => { delSec(id); closeDModal(); };
+  document.getElementById('dOverlay').classList.add('open');
+}
+function delSec(id) {
+  S.sections = S.sections.filter(s => s.id !== id);
+  S.missions = S.missions.filter(m => m.secId !== id);
+  if (S.activeSecId === id) S.activeSecId = S.sections[0]?.id || null;
+  save(); render(); toast('Section deleted');
+}
+
+function confirmDelMission(id) {
+  const m = S.missions.find(x => x.id === id);
+  document.getElementById('dText').textContent = `Delete "${m.name}"? This cannot be undone.`;
+  document.getElementById('dConfirm').onclick = () => { delMission(id); closeDModal(); };
+  document.getElementById('dOverlay').classList.add('open');
+}
+function delMission(id) {
+  S.missions = S.missions.filter(m => m.id !== id);
+  if (S.openDetailId === id) closeDetail();
+  save(); render(); toast('Mission deleted');
+}
+function closeDModal() { document.getElementById('dOverlay').classList.remove('open'); }
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// Comments
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+function addComment(id) {
+  const inp = document.getElementById('cInput');
+  const text = inp.value.trim();
+  if (!text) return;
+  const m = S.missions.find(x => x.id === id);
+  if (!m) return;
+  if (!m.comments) m.comments = [];
+  m.comments.push({ text, date: new Date().toISOString().split('T')[0] });
+  inp.value = '';
+  save(); refreshDetail(); render(); toast('Comment added');
+}
+function delComment(id, idx) {
+  const m = S.missions.find(x => x.id === id);
+  if (!m) return;
+  m.comments.splice(idx, 1);
+  save(); refreshDetail(); render();
+}
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// Filter / Search / Section select
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+function selectSec(id) { S.activeSecId = id; S.filter = 'all'; render(); renderSidebar(); }
+function setFilter(f)  { S.filter = f; renderMain(); }
+function onSearch(v)   { S.search = v; renderMain(); }
+function clearFilters(){ S.filter = 'all'; S.search = ''; document.getElementById('gSearch').value = ''; renderMain(); }
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// Helpers
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+function esc(s) {
+  if (!s) return '';
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function fmtDate(s) {
+  if (!s) return '';
+  return new Date(s + 'T00:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+}
+function deadlineInfo(s) {
+  if (!s) return null;
+  const today = new Date(); today.setHours(0,0,0,0);
+  const d     = new Date(s + 'T00:00:00');
+  const diff  = Math.round((d - today) / 86400000);
+  if (diff < 0)  return { txt: `${Math.abs(diff)}d overdue`, cls: 'overdue' };
+  if (diff === 0) return { txt: 'Due today',                 cls: 'soon'    };
+  if (diff <= 3) return { txt: `${diff}d left`,              cls: 'soon'    };
+  return { txt: fmtDate(s), cls: '' };
+}
+function toast(msg, type='') {
+  const w = document.getElementById('toasts');
+  const t = document.createElement('div');
+  t.className = `toast ${type}`;
+  t.innerHTML = `${type==='success'?'✅':type==='error'?'❌':'ℹ️'} ${msg}`;
+  w.appendChild(t);
+  setTimeout(() => { t.style.opacity='0'; t.style.transform='translateY(8px)'; setTimeout(()=>t.remove(),280); }, 2400);
+}
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// Keyboard shortcuts
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    if (document.getElementById('mOverlay').classList.contains('open')) { closeMModal(); return; }
+    if (document.getElementById('sOverlay').classList.contains('open')) { closeSModal(); return; }
+    if (document.getElementById('dOverlay').classList.contains('open')) { closeDModal(); return; }
+    if (document.getElementById('detailPanel').classList.contains('open')) { closeDetail(); return; }
+  }
+  // n = new mission (when a section is selected and no modal is open)
+  if (e.key === 'n' && S.activeSecId &&
+      !document.getElementById('mOverlay').classList.contains('open') &&
+      !document.getElementById('sOverlay').classList.contains('open') &&
+      !['INPUT','TEXTAREA','SELECT'].includes(document.activeElement.tagName)) {
+    openMModal();
+  }
+});
+
+// Close modals on overlay click
+['mOverlay','sOverlay','dOverlay'].forEach(id => {
+  document.getElementById(id).addEventListener('click', function(e) {
+    if (e.target === this) {
+      if (id === 'mOverlay') closeMModal();
+      if (id === 'sOverlay') closeSModal();
+      if (id === 'dOverlay') closeDModal();
+    }
+  });
+});
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// Boot
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+load();
+render();
+</script>
+</body>
+</html>
