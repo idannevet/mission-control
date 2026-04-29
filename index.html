@@ -576,6 +576,7 @@ const EMOJIS = [
   '🎪','🔧','📝','🎭','🌈','🦋','🤖','💎',
   '🏗️','📌','🎸','🚂','🌊','🔑','🧩','🎮',
 ];
+const ALL_SEC_ID   = '__all__';
 const STATUS_CSS   = { 'todo':'s-todo','in-progress':'s-prog','done':'s-done','blocked':'s-block' };
 const STATUS_LABEL = { 'todo':'ממתין','in-progress':'בתהליך','done':'הושלם','blocked':'חסום' };
 const STATUS_ICON  = { 'todo':'📋','in-progress':'⚡','done':'✅','blocked':'🚫' };
@@ -700,27 +701,40 @@ function render() { renderSidebar(); renderMain(); }
 
 function renderSidebar() {
   const el = document.getElementById('secList');
+
+  // Pinned "all missions" row
+  const allAct = S.activeSecId === ALL_SEC_ID;
+  let html = `<div class="sec-item ${allAct?'active':''}" onclick="selectSec('${ALL_SEC_ID}')">
+    <span class="sec-emoji">🌐</span>
+    <span class="sec-name">כל המשימות</span>
+    <span class="sec-count">${S.missions.length}</span>
+  </div>
+  <div style="height:1px;background:var(--gray-200);margin:6px 4px;"></div>`;
+
   if (!S.sections.length) {
-    el.innerHTML = '<div style="padding:18px 10px;text-align:center;font-size:12.5px;color:var(--gray-500);">אין קטגוריות עדיין</div>';
-    return;
+    html += '<div style="padding:10px 10px;text-align:center;font-size:12.5px;color:var(--gray-500);">אין קטגוריות עדיין</div>';
+  } else {
+    html += S.sections.map(sec => {
+      const n = S.missions.filter(m => m.secId === sec.id).length;
+      const act = S.activeSecId === sec.id;
+      return `<div class="sec-item ${act?'active':''}" onclick="selectSec('${sec.id}')">
+        <span class="sec-emoji">${sec.emoji}</span>
+        <span class="sec-name">${esc(sec.name)}</span>
+        <span class="sec-count">${n}</span>
+        <div class="sec-btns">
+          <button class="icon-btn" onclick="event.stopPropagation();openSecModal('${sec.id}')" title="עריכה">✏️</button>
+          <button class="icon-btn" onclick="event.stopPropagation();confirmDelSec('${sec.id}')" title="מחיקה">🗑️</button>
+        </div>
+      </div>`;
+    }).join('');
   }
-  el.innerHTML = S.sections.map(sec => {
-    const n = S.missions.filter(m => m.secId === sec.id).length;
-    const act = S.activeSecId === sec.id;
-    return `<div class="sec-item ${act?'active':''}" onclick="selectSec('${sec.id}')">
-      <span class="sec-emoji">${sec.emoji}</span>
-      <span class="sec-name">${esc(sec.name)}</span>
-      <span class="sec-count">${n}</span>
-      <div class="sec-btns">
-        <button class="icon-btn" onclick="event.stopPropagation();openSecModal('${sec.id}')" title="עריכה">✏️</button>
-        <button class="icon-btn" onclick="event.stopPropagation();confirmDelSec('${sec.id}')" title="מחיקה">🗑️</button>
-      </div>
-    </div>`;
-  }).join('');
+  el.innerHTML = html;
 }
 
 function renderMain() {
   const el = document.getElementById('main');
+  const isAllView = S.activeSecId === ALL_SEC_ID;
+
   if (!S.activeSecId) {
     el.innerHTML = `<div class="welcome">
       <div class="welcome-ico">🚀</div>
@@ -730,28 +744,36 @@ function renderMain() {
     </div>`;
     return;
   }
-  const sec = S.sections.find(s => s.id === S.activeSecId);
+
+  const pool = isAllView
+    ? [...S.missions]
+    : S.missions.filter(m => m.secId === S.activeSecId);
+
+  const sec = isAllView ? { emoji:'🌐', name:'כל המשימות' } : S.sections.find(s => s.id === S.activeSecId);
   if (!sec) return;
 
-  const all = S.missions.filter(m => m.secId === S.activeSecId);
-  let shown = [...all];
+  let shown = [...pool];
   if (S.filter !== 'all') shown = shown.filter(m => m.status === S.filter);
   if (S.search) {
     const q = S.search.toLowerCase();
     shown = shown.filter(m => m.name.toLowerCase().includes(q) || (m.desc||'').toLowerCase().includes(q));
   }
   const counts = {
-    all: all.length,
-    todo: all.filter(m=>m.status==='todo').length,
-    'in-progress': all.filter(m=>m.status==='in-progress').length,
-    done: all.filter(m=>m.status==='done').length,
-    blocked: all.filter(m=>m.status==='blocked').length,
+    all: pool.length,
+    todo: pool.filter(m=>m.status==='todo').length,
+    'in-progress': pool.filter(m=>m.status==='in-progress').length,
+    done: pool.filter(m=>m.status==='done').length,
+    blocked: pool.filter(m=>m.status==='blocked').length,
   };
+  const subLine = isAllView
+    ? `${pool.length} משימות מכל הקטגוריות`
+    : `${pool.length} משימות בקטגוריה זו`;
+
   el.innerHTML = `
   <div class="main-header">
     <div>
       <div class="main-h1">${sec.emoji} ${esc(sec.name)}</div>
-      <div class="main-sub">${all.length} משימות בקטגוריה זו</div>
+      <div class="main-sub">${subLine}</div>
     </div>
     <div class="main-header-right">
       <button class="btn btn-primary btn-sm" onclick="openMModal()">+ הוסף משימה</button>
@@ -765,7 +787,7 @@ function renderMain() {
     ${fpill('blocked','🚫 חסום',counts.blocked)}
   </div>
   <div class="missions-wrap">
-    ${shown.length ? `<div class="missions-grid">${shown.map(mcard).join('')}</div>` : emptyState()}
+    ${shown.length ? `<div class="missions-grid">${shown.map(m => mcard(m, isAllView)).join('')}</div>` : emptyState()}
   </div>`;
 }
 
@@ -774,11 +796,12 @@ function fpill(f, label, n) {
   return `<div class="fpill ${fc} ${S.filter===f?'active':''}" onclick="setFilter('${f}')">${label} <span class="cnt">${n}</span></div>`;
 }
 
-function mcard(m) {
+function mcard(m, showSection=false) {
   const css = STATUS_CSS[m.status]||'s-todo';
   const dl  = deadlineInfo(m.deadline);
   const nc  = (m.comments||[]).length;
   const nf  = (m.files||[]).length;
+  const sec = showSection ? S.sections.find(s => s.id === m.secId) : null;
   return `<div class="mcard ${css}" onclick="openDetail('${m.id}')">
     <div class="mcard-head">
       <div class="mcard-title">${esc(m.name)}</div>
@@ -787,6 +810,7 @@ function mcard(m) {
         <button class="icon-btn" onclick="event.stopPropagation();confirmDelMission('${m.id}')" title="מחיקה" style="color:var(--red)">🗑️</button>
       </div>
     </div>
+    ${sec ? `<div style="font-size:11.5px;color:var(--gray-500);margin-bottom:8px;">${sec.emoji} ${esc(sec.name)}</div>` : ''}
     ${m.desc?`<div class="mcard-desc">${esc(m.desc)}</div>`:''}
     <div class="mcard-meta">
       <span class="sbadge ${css}">${STATUS_ICON[m.status]} ${STATUS_LABEL[m.status]}</span>
@@ -1000,7 +1024,7 @@ async function importData(input) {
     if (!Array.isArray(data.sections) || !Array.isArray(data.missions)) throw new Error();
     S.sections = data.sections;
     S.missions = data.missions;
-    S.activeSecId = S.sections[0]?.id || null;
+    S.activeSecId = ALL_SEC_ID;
     save(); render();
     toast(`יובאו ${S.sections.length} קטגוריות ו-${S.missions.length} משימות`, 'success');
   } catch(e) {
@@ -1111,7 +1135,7 @@ function confirmDelSec(id) {
 function delSec(id) {
   S.sections = S.sections.filter(s=>s.id!==id);
   S.missions = S.missions.filter(m=>m.secId!==id);
-  if (S.activeSecId===id) S.activeSecId = S.sections[0]?.id||null;
+  if (S.activeSecId===id) S.activeSecId = S.sections[0]?.id || ALL_SEC_ID;
   save(); render(); toast('קטגוריה נמחקה');
 }
 function confirmDelMission(id) {
@@ -1212,8 +1236,13 @@ document.addEventListener('keydown', e => {
 
 // Boot: load local instantly so the UI appears, then fetch cloud data
 _loadLocal();
+if (!S.activeSecId) S.activeSecId = ALL_SEC_ID;
 render();
-cloudLoad().then(() => { render(); startPolling(); });
+cloudLoad().then(() => {
+  if (!S.activeSecId) S.activeSecId = ALL_SEC_ID;
+  render();
+  startPolling();
+});
 </script>
 </body>
 </html>
