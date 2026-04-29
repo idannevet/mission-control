@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="he" dir="rtl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mission Control</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<title>מרכז משימות</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -40,7 +40,7 @@
 }
 
 body {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Heebo', sans-serif;
   background: var(--gray-100);
   color: var(--gray-900);
   min-height: 100vh;
@@ -69,7 +69,6 @@ body {
   gap: 11px;
   font-weight: 800;
   font-size: 19px;
-  letter-spacing: -.5px;
   flex-shrink: 0;
 }
 .header-logo .dot {
@@ -93,7 +92,7 @@ body {
 }
 .search-icon {
   position: absolute;
-  left: 11px;
+  right: 11px;
   top: 50%;
   transform: translateY(-50%);
   font-size: 13px;
@@ -101,16 +100,17 @@ body {
   pointer-events: none;
 }
 .search-input {
-  padding: 8px 14px 8px 34px;
+  padding: 8px 34px 8px 14px;
   border: 1.5px solid rgba(255,255,255,.15);
   border-radius: var(--rs);
   font-size: 13px;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Heebo', sans-serif;
   background: rgba(255,255,255,.08);
   color: #fff;
   width: 220px;
   outline: none;
   transition: all .15s;
+  text-align: right;
 }
 .search-input::placeholder { color: rgba(255,255,255,.45); }
 .search-input:focus {
@@ -132,7 +132,7 @@ body {
   width: 255px;
   min-width: 255px;
   background: var(--white);
-  border-right: 1px solid var(--gray-200);
+  border-left: 1px solid var(--gray-200);
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -142,10 +142,8 @@ body {
   border-bottom: 1px solid var(--gray-100);
 }
 .sidebar-label {
-  font-size: 10.5px;
+  font-size: 11px;
   font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 1.3px;
   color: var(--gray-500);
 }
 .sidebar-list {
@@ -218,7 +216,7 @@ body {
   cursor: pointer; border: none;
   transition: all .15s;
   white-space: nowrap;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Heebo', sans-serif;
 }
 .btn-primary { background: var(--pink); color: #fff; }
 .btn-primary:hover { background: var(--pink-light); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(233,30,140,.3); }
@@ -315,18 +313,18 @@ body {
 .mcard-head {
   display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; margin-bottom: 9px;
 }
-.mcard-title { font-size: 14.5px; font-weight: 700; color: var(--gray-900); line-height: 1.4; flex: 1; }
+.mcard-title { font-size: 14.5px; font-weight: 700; color: var(--gray-900); line-height: 1.5; flex: 1; }
 .mcard-actions { display: flex; gap: 3px; opacity: 0; transition: opacity .13s; }
 .mcard:hover .mcard-actions { opacity: 1; }
 .mcard-desc {
-  font-size: 12.5px; color: var(--gray-500); line-height: 1.5; margin-bottom: 13px;
+  font-size: 12.5px; color: var(--gray-500); line-height: 1.6; margin-bottom: 13px;
   display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
 }
 .mcard-meta { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
 .sbadge {
   display: inline-flex; align-items: center; gap: 3px;
   padding: 3px 9px; border-radius: 20px;
-  font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px;
+  font-size: 11px; font-weight: 700;
 }
 .sbadge.s-todo  { background: var(--blue-bg);   color: var(--blue); }
 .sbadge.s-prog  { background: var(--orange-bg); color: var(--orange); }
@@ -339,7 +337,7 @@ body {
 .pdot.high   { background: var(--red); }
 .pdot.medium { background: var(--orange); }
 .pdot.low    { background: var(--green); }
-.ccount { display: inline-flex; align-items: center; gap: 3px; font-size: 11.5px; color: var(--gray-500); margin-left: auto; }
+.ccount { display: inline-flex; align-items: center; gap: 3px; font-size: 11.5px; color: var(--gray-500); margin-right: auto; }
 
 /* ─── Empty / Welcome ─── */
 .empty, .welcome {
@@ -348,7 +346,7 @@ body {
 }
 .empty-ico, .welcome-ico { font-size: 64px; margin-bottom: 16px; }
 .empty-t, .welcome-t { font-size: 19px; font-weight: 800; color: var(--gray-700); margin-bottom: 8px; }
-.empty-sub, .welcome-sub { font-size: 13.5px; color: var(--gray-500); margin-bottom: 24px; line-height: 1.6; max-width: 340px; }
+.empty-sub, .welcome-sub { font-size: 13.5px; color: var(--gray-500); margin-bottom: 24px; line-height: 1.7; max-width: 340px; }
 
 /* ─── Modal ─── */
 .overlay {
@@ -385,7 +383,7 @@ body {
 }
 .modal-close:hover { background: var(--gray-200); color: var(--gray-900); }
 .modal-body { padding: 20px 22px; }
-.modal-foot { padding: 0 22px 22px; display: flex; gap: 9px; justify-content: flex-end; }
+.modal-foot { padding: 0 22px 22px; display: flex; gap: 9px; justify-content: flex-start; }
 
 /* ─── Form ─── */
 .fg { margin-bottom: 16px; }
@@ -396,9 +394,10 @@ body {
 .fi, .fs, .fta {
   width: 100%; padding: 9px 13px;
   border: 1.5px solid var(--gray-200); border-radius: var(--rs);
-  font-size: 13.5px; font-family: 'Inter', sans-serif;
+  font-size: 13.5px; font-family: 'Heebo', sans-serif;
   color: var(--gray-900); background: var(--white);
   transition: border-color .15s, box-shadow .15s; outline: none;
+  text-align: right;
 }
 .fi:focus, .fs:focus, .fta:focus {
   border-color: var(--pink);
@@ -419,7 +418,7 @@ body {
 .eo:hover { background: var(--gray-100); }
 .eo.sel { background: var(--pink-bg); border-color: var(--pink); }
 
-/* ─── Detail Slide-over ─── */
+/* ─── Detail Slide-over (from left in RTL) ─── */
 .detail-bg {
   position: fixed; inset: 0;
   background: rgba(13,18,64,.3);
@@ -430,14 +429,14 @@ body {
 }
 .detail-bg.open { opacity: 1; pointer-events: all; }
 .detail-panel {
-  position: fixed; right: 0; top: 62px; bottom: 0;
+  position: fixed; left: 0; top: 62px; bottom: 0;
   width: 480px;
   background: var(--white);
-  border-left: 1px solid var(--gray-200);
-  box-shadow: -8px 0 32px rgba(0,0,0,.1);
+  border-right: 1px solid var(--gray-200);
+  box-shadow: 8px 0 32px rgba(0,0,0,.1);
   display: flex; flex-direction: column;
   z-index: 901;
-  transform: translateX(100%);
+  transform: translateX(-100%);
   transition: transform .28s cubic-bezier(.4,0,.2,1);
 }
 .detail-panel.open { transform: translateX(0); }
@@ -447,22 +446,22 @@ body {
   display: flex; align-items: flex-start; gap: 10px;
 }
 .detail-info { flex: 1; }
-.detail-title { font-size: 17px; font-weight: 800; color: var(--navy); line-height: 1.3; }
+.detail-title { font-size: 17px; font-weight: 800; color: var(--navy); line-height: 1.4; }
 .detail-sectag { font-size: 12px; color: var(--gray-500); margin-top: 3px; }
 .detail-body { flex: 1; overflow-y: auto; padding: 18px; }
 .df { margin-bottom: 18px; }
 .df-label {
-  font-size: 10.5px; font-weight: 700; text-transform: uppercase;
-  letter-spacing: 1px; color: var(--gray-500); margin-bottom: 6px;
+  font-size: 11px; font-weight: 700;
+  color: var(--gray-500); margin-bottom: 6px;
 }
 .df-val { font-size: 13.5px; color: var(--gray-700); line-height: 1.6; }
 .df-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 .status-opts { display: flex; gap: 7px; flex-wrap: wrap; }
 .sopt {
   padding: 5px 12px; border-radius: 20px;
-  font-size: 11.5px; font-weight: 700;
+  font-size: 12px; font-weight: 700;
   cursor: pointer; border: 2px solid transparent;
-  transition: all .13s; text-transform: uppercase; letter-spacing: .5px;
+  transition: all .13s;
   user-select: none;
 }
 .sopt.s-todo  { background: var(--blue-bg);   color: var(--blue); }
@@ -493,19 +492,19 @@ body {
   transition: opacity .13s;
 }
 .citem:hover .citem-del { opacity: 1; }
-.citem-text { font-size: 12.5px; color: var(--gray-700); line-height: 1.5; }
+.citem-text { font-size: 12.5px; color: var(--gray-700); line-height: 1.6; }
 .c-row { display: flex; gap: 7px; }
 .c-input {
   flex: 1; padding: 8px 11px;
   border: 1.5px solid var(--gray-200); border-radius: var(--rs);
-  font-size: 13px; font-family: 'Inter', sans-serif; outline: none;
-  transition: border-color .15s;
+  font-size: 13px; font-family: 'Heebo', sans-serif; outline: none;
+  transition: border-color .15s; text-align: right;
 }
 .c-input:focus { border-color: var(--pink); box-shadow: 0 0 0 3px rgba(233,30,140,.1); }
 
 /* ─── Toast ─── */
 .toast-wrap {
-  position: fixed; bottom: 22px; right: 22px; z-index: 2000;
+  position: fixed; bottom: 22px; left: 22px; z-index: 2000;
   display: flex; flex-direction: column; gap: 7px;
 }
 @keyframes toastIn {
@@ -545,12 +544,12 @@ body {
 <header class="header">
   <div class="header-logo">
     <div class="dot">🎯</div>
-    Mission Control
+    מרכז משימות
   </div>
   <div class="header-right">
     <div class="search-wrap">
       <span class="search-icon">🔍</span>
-      <input class="search-input" id="gSearch" placeholder="Search missions…" oninput="onSearch(this.value)">
+      <input class="search-input" id="gSearch" placeholder="חיפוש משימות..." oninput="onSearch(this.value)">
     </div>
   </div>
 </header>
@@ -558,34 +557,34 @@ body {
 <!-- ═══ Layout ═══ -->
 <div class="layout">
 
-  <!-- Sidebar -->
+  <!-- Main -->
+  <main class="main" id="main"></main>
+
+  <!-- Sidebar (right side in RTL) -->
   <aside class="sidebar">
     <div class="sidebar-top">
-      <div class="sidebar-label">Sections</div>
+      <div class="sidebar-label">קטגוריות</div>
     </div>
     <div class="sidebar-list" id="secList"></div>
     <div class="sidebar-foot">
       <button class="btn btn-primary btn-full btn-sm" onclick="openSecModal()">
-        <span>+</span><span> New Section</span>
+        <span>+</span><span> קטגוריה חדשה</span>
       </button>
     </div>
   </aside>
-
-  <!-- Main -->
-  <main class="main" id="main"></main>
 </div>
 
 <!-- ═══ Detail slide-over ═══ -->
 <div class="detail-bg" id="detailBg" onclick="closeDetail()"></div>
 <div class="detail-panel" id="detailPanel">
   <div class="detail-head">
+    <div style="display:flex;gap:7px;flex-shrink:0;">
+      <button class="btn btn-ghost btn-sm" onclick="editCurrent()">✏️ עריכה</button>
+      <button class="modal-close" onclick="closeDetail()">✕</button>
+    </div>
     <div class="detail-info">
       <div class="detail-title" id="dTitle"></div>
       <div class="detail-sectag" id="dSectag"></div>
-    </div>
-    <div style="display:flex;gap:7px;flex-shrink:0;">
-      <button class="btn btn-ghost btn-sm" onclick="editCurrent()">✏️ Edit</button>
-      <button class="modal-close" onclick="closeDetail()">✕</button>
     </div>
   </div>
   <div class="detail-body" id="dBody"></div>
@@ -596,51 +595,51 @@ body {
 <div class="overlay" id="mOverlay">
   <div class="modal">
     <div class="modal-head">
-      <div class="modal-title" id="mTitle">New Mission</div>
+      <div class="modal-title" id="mTitle">משימה חדשה</div>
       <button class="modal-close" onclick="closeMModal()">✕</button>
     </div>
     <div class="modal-body">
       <div class="fg">
-        <label class="fl">Mission Title *</label>
-        <input class="fi" id="mName" placeholder="What needs to be accomplished?">
+        <label class="fl">שם משימה *</label>
+        <input class="fi" id="mName" placeholder="מה צריך לבצע?">
       </div>
       <div class="fg">
-        <label class="fl">Description</label>
-        <textarea class="fta" id="mDesc" placeholder="Add context, details, notes…"></textarea>
+        <label class="fl">תיאור</label>
+        <textarea class="fta" id="mDesc" placeholder="הוסף פרטים, הקשר, הערות..."></textarea>
       </div>
       <div class="frow">
         <div class="fg">
-          <label class="fl">Status</label>
+          <label class="fl">סטטוס</label>
           <select class="fs" id="mStatus">
-            <option value="todo">📋 Todo</option>
-            <option value="in-progress">⚡ In Progress</option>
-            <option value="done">✅ Done</option>
-            <option value="blocked">🚫 Blocked</option>
+            <option value="todo">📋 ממתין</option>
+            <option value="in-progress">⚡ בתהליך</option>
+            <option value="done">✅ הושלם</option>
+            <option value="blocked">🚫 חסום</option>
           </select>
         </div>
         <div class="fg">
-          <label class="fl">Priority</label>
+          <label class="fl">עדיפות</label>
           <select class="fs" id="mPriority">
-            <option value="medium">🟡 Medium</option>
-            <option value="high">🔴 High</option>
-            <option value="low">🟢 Low</option>
+            <option value="medium">🟡 בינונית</option>
+            <option value="high">🔴 גבוהה</option>
+            <option value="low">🟢 נמוכה</option>
           </select>
         </div>
       </div>
       <div class="frow">
         <div class="fg">
-          <label class="fl">Deadline</label>
+          <label class="fl">תאריך יעד</label>
           <input type="date" class="fi" id="mDeadline">
         </div>
         <div class="fg">
-          <label class="fl">Section</label>
+          <label class="fl">קטגוריה</label>
           <select class="fs" id="mSection"></select>
         </div>
       </div>
     </div>
     <div class="modal-foot">
-      <button class="btn btn-ghost" onclick="closeMModal()">Cancel</button>
-      <button class="btn btn-primary" onclick="saveMission()">Save Mission</button>
+      <button class="btn btn-ghost" onclick="closeMModal()">ביטול</button>
+      <button class="btn btn-primary" onclick="saveMission()">שמור משימה</button>
     </div>
   </div>
 </div>
@@ -649,22 +648,22 @@ body {
 <div class="overlay" id="sOverlay">
   <div class="modal" style="max-width:400px;">
     <div class="modal-head">
-      <div class="modal-title" id="sTitle">New Section</div>
+      <div class="modal-title" id="sTitle">קטגוריה חדשה</div>
       <button class="modal-close" onclick="closeSModal()">✕</button>
     </div>
     <div class="modal-body">
       <div class="fg">
-        <label class="fl">Section Name *</label>
-        <input class="fi" id="sName" placeholder="e.g. Development, Marketing, Research…">
+        <label class="fl">שם קטגוריה *</label>
+        <input class="fi" id="sName" placeholder="לדוג׳ פיתוח, שיווק, מחקר...">
       </div>
       <div class="fg">
-        <label class="fl">Icon</label>
+        <label class="fl">אייקון</label>
         <div class="eg" id="emojiGrid"></div>
       </div>
     </div>
     <div class="modal-foot">
-      <button class="btn btn-ghost" onclick="closeSModal()">Cancel</button>
-      <button class="btn btn-primary" onclick="saveSection()">Save Section</button>
+      <button class="btn btn-ghost" onclick="closeSModal()">ביטול</button>
+      <button class="btn btn-primary" onclick="saveSection()">שמור קטגוריה</button>
     </div>
   </div>
 </div>
@@ -673,15 +672,15 @@ body {
 <div class="overlay" id="dOverlay">
   <div class="modal" style="max-width:380px;">
     <div class="modal-head">
-      <div class="modal-title">⚠️ Confirm Delete</div>
+      <div class="modal-title">⚠️ אישור מחיקה</div>
       <button class="modal-close" onclick="closeDModal()">✕</button>
     </div>
     <div class="modal-body">
-      <p id="dText" style="font-size:13.5px;color:var(--gray-700);line-height:1.6;"></p>
+      <p id="dText" style="font-size:13.5px;color:var(--gray-700);line-height:1.7;"></p>
     </div>
     <div class="modal-foot">
-      <button class="btn btn-ghost" onclick="closeDModal()">Cancel</button>
-      <button class="btn btn-danger" id="dConfirm">Delete</button>
+      <button class="btn btn-ghost" onclick="closeDModal()">ביטול</button>
+      <button class="btn btn-danger" id="dConfirm">מחק</button>
     </div>
   </div>
 </div>
@@ -707,10 +706,13 @@ const STATUS_CSS = {
   'blocked':     's-block',
 };
 const STATUS_LABEL = {
-  'todo': 'Todo', 'in-progress': 'In Progress', 'done': 'Done', 'blocked': 'Blocked',
+  'todo': 'ממתין', 'in-progress': 'בתהליך', 'done': 'הושלם', 'blocked': 'חסום',
 };
 const STATUS_ICON = {
   'todo': '📋', 'in-progress': '⚡', 'done': '✅', 'blocked': '🚫',
+};
+const PRIORITY_LABEL = {
+  'high': '🔴 גבוהה', 'medium': '🟡 בינונית', 'low': '🟢 נמוכה',
 };
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -722,7 +724,6 @@ const S = {
   activeSecId: null,
   filter: 'all',
   search: '',
-  // modal state
   editMissionId: null,
   editSecId: null,
   selEmoji: '📁',
@@ -749,7 +750,7 @@ function render() { renderSidebar(); renderMain(); }
 function renderSidebar() {
   const el = document.getElementById('secList');
   if (!S.sections.length) {
-    el.innerHTML = '<div style="padding:18px 10px;text-align:center;font-size:12.5px;color:var(--gray-500);">No sections yet</div>';
+    el.innerHTML = '<div style="padding:18px 10px;text-align:center;font-size:12.5px;color:var(--gray-500);">אין קטגוריות עדיין</div>';
     return;
   }
   el.innerHTML = S.sections.map(sec => {
@@ -760,8 +761,8 @@ function renderSidebar() {
       <span class="sec-name">${esc(sec.name)}</span>
       <span class="sec-count">${n}</span>
       <div class="sec-btns">
-        <button class="icon-btn" onclick="event.stopPropagation();openSecModal('${sec.id}')" title="Edit">✏️</button>
-        <button class="icon-btn" onclick="event.stopPropagation();confirmDelSec('${sec.id}')" title="Delete">🗑️</button>
+        <button class="icon-btn" onclick="event.stopPropagation();openSecModal('${sec.id}')" title="עריכה">✏️</button>
+        <button class="icon-btn" onclick="event.stopPropagation();confirmDelSec('${sec.id}')" title="מחיקה">🗑️</button>
       </div>
     </div>`;
   }).join('');
@@ -773,9 +774,9 @@ function renderMain() {
   if (!S.activeSecId) {
     el.innerHTML = `<div class="welcome">
       <div class="welcome-ico">🚀</div>
-      <div class="welcome-t">Welcome to Mission Control</div>
-      <div class="welcome-sub">Create a section to start organizing your missions. Sections help you group related work together.</div>
-      <button class="btn btn-primary" onclick="openSecModal()">+ Create First Section</button>
+      <div class="welcome-t">ברוכים הבאים למרכז המשימות</div>
+      <div class="welcome-sub">צור קטגוריה כדי להתחיל לארגן את המשימות שלך. קטגוריות עוזרות לקבץ משימות קשורות יחד.</div>
+      <button class="btn btn-primary" onclick="openSecModal()">+ צור קטגוריה ראשונה</button>
     </div>`;
     return;
   }
@@ -803,18 +804,18 @@ function renderMain() {
   <div class="main-header">
     <div>
       <div class="main-h1">${sec.emoji} ${esc(sec.name)}</div>
-      <div class="main-sub">${all.length} mission${all.length!==1?'s':''} in this section</div>
+      <div class="main-sub">${all.length} משימות בקטגוריה זו</div>
     </div>
     <div class="main-header-right">
-      <button class="btn btn-primary btn-sm" onclick="openMModal()">+ Add Mission</button>
+      <button class="btn btn-primary btn-sm" onclick="openMModal()">+ הוסף משימה</button>
     </div>
   </div>
   <div class="filter-bar">
-    ${fpill('all','All',counts.all)}
-    ${fpill('todo','📋 Todo',counts.todo)}
-    ${fpill('in-progress','⚡ In Progress',counts['in-progress'])}
-    ${fpill('done','✅ Done',counts.done)}
-    ${fpill('blocked','🚫 Blocked',counts.blocked)}
+    ${fpill('all','הכל',counts.all)}
+    ${fpill('todo','📋 ממתין',counts.todo)}
+    ${fpill('in-progress','⚡ בתהליך',counts['in-progress'])}
+    ${fpill('done','✅ הושלם',counts.done)}
+    ${fpill('blocked','🚫 חסום',counts.blocked)}
   </div>
   <div class="missions-wrap">
     ${shown.length ? `<div class="missions-grid">${shown.map(mcard).join('')}</div>` : emptyState()}
@@ -835,15 +836,15 @@ function mcard(m) {
     <div class="mcard-head">
       <div class="mcard-title">${esc(m.name)}</div>
       <div class="mcard-actions">
-        <button class="icon-btn" onclick="event.stopPropagation();openMModal('${m.id}')" title="Edit" style="color:var(--gray-500)">✏️</button>
-        <button class="icon-btn" onclick="event.stopPropagation();confirmDelMission('${m.id}')" title="Delete" style="color:var(--red)">🗑️</button>
+        <button class="icon-btn" onclick="event.stopPropagation();openMModal('${m.id}')" title="עריכה" style="color:var(--gray-500)">✏️</button>
+        <button class="icon-btn" onclick="event.stopPropagation();confirmDelMission('${m.id}')" title="מחיקה" style="color:var(--red)">🗑️</button>
       </div>
     </div>
     ${m.desc ? `<div class="mcard-desc">${esc(m.desc)}</div>` : ''}
     <div class="mcard-meta">
       <span class="sbadge ${css}">${STATUS_ICON[m.status]} ${STATUS_LABEL[m.status]}</span>
       ${dl ? `<span class="dline ${dl.cls}">📅 ${dl.txt}</span>` : ''}
-      ${m.priority ? `<span class="pdot ${m.priority}" title="${m.priority} priority"></span>` : ''}
+      ${m.priority ? `<span class="pdot ${m.priority}" title="עדיפות: ${PRIORITY_LABEL[m.priority]}"></span>` : ''}
       ${nc ? `<span class="ccount">💬 ${nc}</span>` : ''}
     </div>
   </div>`;
@@ -853,16 +854,16 @@ function emptyState() {
   if (S.filter !== 'all' || S.search) {
     return `<div class="empty">
       <div class="empty-ico">🔍</div>
-      <div class="empty-t">No matches</div>
-      <div class="empty-sub">Adjust your filter or search term.</div>
-      <button class="btn btn-ghost btn-sm" onclick="clearFilters()">Clear Filters</button>
+      <div class="empty-t">לא נמצאו תוצאות</div>
+      <div class="empty-sub">שנה את הסינון או מונח החיפוש.</div>
+      <button class="btn btn-ghost btn-sm" onclick="clearFilters()">נקה סינון</button>
     </div>`;
   }
   return `<div class="empty">
     <div class="empty-ico">📋</div>
-    <div class="empty-t">No missions yet</div>
-    <div class="empty-sub">Start adding missions to track your work.</div>
-    <button class="btn btn-primary" onclick="openMModal()">+ Add Mission</button>
+    <div class="empty-t">אין משימות עדיין</div>
+    <div class="empty-sub">התחל להוסיף משימות לעקוב אחר העבודה שלך.</div>
+    <button class="btn btn-primary" onclick="openMModal()">+ הוסף משימה</button>
   </div>`;
 }
 
@@ -886,7 +887,7 @@ function refreshDetail() {
   const dl = deadlineInfo(m.deadline);
   document.getElementById('dBody').innerHTML = `
   <div class="df">
-    <div class="df-label">Status</div>
+    <div class="df-label">סטטוס</div>
     <div class="status-opts">
       ${['todo','in-progress','done','blocked'].map(st => {
         const css = STATUS_CSS[st];
@@ -897,22 +898,22 @@ function refreshDetail() {
   </div>
   <div class="df-row">
     <div class="df">
-      <div class="df-label">Priority</div>
-      <div class="df-val">${m.priority==='high'?'🔴 High':m.priority==='low'?'🟢 Low':'🟡 Medium'}</div>
+      <div class="df-label">עדיפות</div>
+      <div class="df-val">${PRIORITY_LABEL[m.priority] || PRIORITY_LABEL['medium']}</div>
     </div>
     <div class="df">
-      <div class="df-label">Deadline</div>
+      <div class="df-label">תאריך יעד</div>
       <div class="df-val ${dl?.cls||''}">${m.deadline ? `📅 ${fmtDate(m.deadline)}${dl ? ` — ${dl.txt}` : ''}` : '—'}</div>
     </div>
   </div>
   ${m.desc ? `<div class="df">
-    <div class="df-label">Description</div>
+    <div class="df-label">תיאור</div>
     <div class="df-val">${esc(m.desc).replace(/\n/g,'<br>')}</div>
   </div>` : ''}`;
 
   const comments = m.comments || [];
   document.getElementById('dComments').innerHTML = `
-  <div class="comments-title">💬 Comments
+  <div class="comments-title">💬 הערות
     <span style="background:var(--gray-200);padding:1px 8px;border-radius:10px;font-size:11px;">${comments.length}</span>
   </div>
   <div class="comment-list">
@@ -920,14 +921,14 @@ function refreshDetail() {
     <div class="citem">
       <div class="citem-head">
         <span class="citem-date">${fmtDate(c.date)}</span>
-        <button class="citem-del" onclick="delComment('${m.id}',${i})" title="Delete">✕</button>
+        <button class="citem-del" onclick="delComment('${m.id}',${i})" title="מחק">✕</button>
       </div>
       <div class="citem-text">${esc(c.text)}</div>
-    </div>`).join('') : '<div style="font-size:12.5px;color:var(--gray-500);text-align:center;padding:14px 0;">No comments yet</div>'}
+    </div>`).join('') : '<div style="font-size:12.5px;color:var(--gray-500);text-align:center;padding:14px 0;">אין הערות עדיין</div>'}
   </div>
   <div class="c-row">
-    <input class="c-input" id="cInput" placeholder="Add a comment…" onkeydown="if(event.key==='Enter')addComment('${m.id}')">
-    <button class="btn btn-primary btn-sm" onclick="addComment('${m.id}')">Post</button>
+    <input class="c-input" id="cInput" placeholder="הוסף הערה..." onkeydown="if(event.key==='Enter')addComment('${m.id}')">
+    <button class="btn btn-primary btn-sm" onclick="addComment('${m.id}')">שלח</button>
   </div>`;
 }
 
@@ -944,7 +945,7 @@ function setStatus(id, status) {
   if (!m) return;
   m.status = status;
   save(); refreshDetail(); render();
-  toast(`Status → ${STATUS_LABEL[status]}`);
+  toast(`סטטוס עודכן: ${STATUS_LABEL[status]}`);
 }
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -954,7 +955,7 @@ function openSecModal(editId = null) {
   S.editSecId = editId;
   const existing = editId ? S.sections.find(s => s.id === editId) : null;
   S.selEmoji = existing?.emoji || '📁';
-  document.getElementById('sTitle').textContent = editId ? 'Edit Section' : 'New Section';
+  document.getElementById('sTitle').textContent = editId ? 'עריכת קטגוריה' : 'קטגוריה חדשה';
   document.getElementById('sName').value = existing?.name || '';
   renderEmojiGrid();
   document.getElementById('sOverlay').classList.add('open');
@@ -972,16 +973,16 @@ function renderEmojiGrid() {
 function pickEmoji(e) { S.selEmoji = e; renderEmojiGrid(); }
 function saveSection() {
   const name = document.getElementById('sName').value.trim();
-  if (!name) { toast('Section name is required','error'); return; }
+  if (!name) { toast('שם קטגוריה נדרש','error'); return; }
   if (S.editSecId) {
     const sec = S.sections.find(s => s.id === S.editSecId);
     if (sec) { sec.name = name; sec.emoji = S.selEmoji; }
-    toast('Section updated');
+    toast('קטגוריה עודכנה');
   } else {
     const ns = { id: uid(), name, emoji: S.selEmoji };
     S.sections.push(ns);
     S.activeSecId = ns.id;
-    toast('Section created', 'success');
+    toast('קטגוריה נוצרה', 'success');
   }
   save(); closeSModal(); render();
 }
@@ -998,7 +999,7 @@ function openMModal(editId = null) {
 
   if (editId) {
     const m = S.missions.find(x => x.id === editId);
-    document.getElementById('mTitle').textContent = 'Edit Mission';
+    document.getElementById('mTitle').textContent = 'עריכת משימה';
     document.getElementById('mName').value = m.name;
     document.getElementById('mDesc').value = m.desc || '';
     document.getElementById('mStatus').value = m.status;
@@ -1006,7 +1007,7 @@ function openMModal(editId = null) {
     document.getElementById('mDeadline').value = m.deadline || '';
     document.getElementById('mSection').value = m.secId;
   } else {
-    document.getElementById('mTitle').textContent = 'New Mission';
+    document.getElementById('mTitle').textContent = 'משימה חדשה';
     document.getElementById('mName').value = '';
     document.getElementById('mDesc').value = '';
     document.getElementById('mStatus').value = 'todo';
@@ -1022,7 +1023,7 @@ function closeMModal() {
 }
 function saveMission() {
   const name = document.getElementById('mName').value.trim();
-  if (!name) { toast('Mission title is required','error'); return; }
+  if (!name) { toast('שם משימה נדרש','error'); return; }
   const data = {
     name,
     desc:     document.getElementById('mDesc').value.trim(),
@@ -1035,11 +1036,11 @@ function saveMission() {
     const m = S.missions.find(x => x.id === S.editMissionId);
     Object.assign(m, data);
     if (S.openDetailId === S.editMissionId) refreshDetail();
-    toast('Mission updated');
+    toast('משימה עודכנה');
   } else {
     S.missions.push({ id: uid(), ...data, comments: [], createdAt: new Date().toISOString() });
     S.activeSecId = data.secId;
-    toast('Mission created','success');
+    toast('משימה נוצרה','success');
   }
   save(); closeMModal(); render();
 }
@@ -1051,7 +1052,7 @@ function confirmDelSec(id) {
   const sec = S.sections.find(s => s.id === id);
   const n   = S.missions.filter(m => m.secId === id).length;
   document.getElementById('dText').textContent =
-    `Delete "${sec.name}"? This will also remove ${n} mission(s). This cannot be undone.`;
+    `האם למחוק את "${sec.name}"? פעולה זו תמחק גם ${n} משימות בקטגוריה זו. לא ניתן לבטל פעולה זו.`;
   document.getElementById('dConfirm').onclick = () => { delSec(id); closeDModal(); };
   document.getElementById('dOverlay').classList.add('open');
 }
@@ -1059,19 +1060,19 @@ function delSec(id) {
   S.sections = S.sections.filter(s => s.id !== id);
   S.missions = S.missions.filter(m => m.secId !== id);
   if (S.activeSecId === id) S.activeSecId = S.sections[0]?.id || null;
-  save(); render(); toast('Section deleted');
+  save(); render(); toast('קטגוריה נמחקה');
 }
 
 function confirmDelMission(id) {
   const m = S.missions.find(x => x.id === id);
-  document.getElementById('dText').textContent = `Delete "${m.name}"? This cannot be undone.`;
+  document.getElementById('dText').textContent = `האם למחוק את "${m.name}"? לא ניתן לבטל פעולה זו.`;
   document.getElementById('dConfirm').onclick = () => { delMission(id); closeDModal(); };
   document.getElementById('dOverlay').classList.add('open');
 }
 function delMission(id) {
   S.missions = S.missions.filter(m => m.id !== id);
   if (S.openDetailId === id) closeDetail();
-  save(); render(); toast('Mission deleted');
+  save(); render(); toast('משימה נמחקה');
 }
 function closeDModal() { document.getElementById('dOverlay').classList.remove('open'); }
 
@@ -1087,7 +1088,7 @@ function addComment(id) {
   if (!m.comments) m.comments = [];
   m.comments.push({ text, date: new Date().toISOString().split('T')[0] });
   inp.value = '';
-  save(); refreshDetail(); render(); toast('Comment added');
+  save(); refreshDetail(); render(); toast('הערה נוספה');
 }
 function delComment(id, idx) {
   const m = S.missions.find(x => x.id === id);
@@ -1113,16 +1114,16 @@ function esc(s) {
 }
 function fmtDate(s) {
   if (!s) return '';
-  return new Date(s + 'T00:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+  return new Date(s + 'T00:00:00').toLocaleDateString('he-IL',{day:'numeric',month:'long',year:'numeric'});
 }
 function deadlineInfo(s) {
   if (!s) return null;
   const today = new Date(); today.setHours(0,0,0,0);
   const d     = new Date(s + 'T00:00:00');
   const diff  = Math.round((d - today) / 86400000);
-  if (diff < 0)  return { txt: `${Math.abs(diff)}d overdue`, cls: 'overdue' };
-  if (diff === 0) return { txt: 'Due today',                 cls: 'soon'    };
-  if (diff <= 3) return { txt: `${diff}d left`,              cls: 'soon'    };
+  if (diff < 0)  return { txt: `באיחור של ${Math.abs(diff)} ימים`, cls: 'overdue' };
+  if (diff === 0) return { txt: 'היום!',                           cls: 'soon'    };
+  if (diff <= 3) return { txt: `נותרו ${diff} ימים`,              cls: 'soon'    };
   return { txt: fmtDate(s), cls: '' };
 }
 function toast(msg, type='') {
@@ -1144,16 +1145,8 @@ document.addEventListener('keydown', e => {
     if (document.getElementById('dOverlay').classList.contains('open')) { closeDModal(); return; }
     if (document.getElementById('detailPanel').classList.contains('open')) { closeDetail(); return; }
   }
-  // n = new mission (when a section is selected and no modal is open)
-  if (e.key === 'n' && S.activeSecId &&
-      !document.getElementById('mOverlay').classList.contains('open') &&
-      !document.getElementById('sOverlay').classList.contains('open') &&
-      !['INPUT','TEXTAREA','SELECT'].includes(document.activeElement.tagName)) {
-    openMModal();
-  }
 });
 
-// Close modals on overlay click
 ['mOverlay','sOverlay','dOverlay'].forEach(id => {
   document.getElementById(id).addEventListener('click', function(e) {
     if (e.target === this) {
