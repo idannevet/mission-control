@@ -515,6 +515,15 @@ body {
           <select class="fs" id="mSection"></select>
         </div>
       </div>
+      <div class="fg">
+        <label class="fl">אחראי משימה</label>
+        <select class="fs" id="mOwner">
+          <option value="">— ללא אחראי —</option>
+          <option value="עידן נבט">👤 עידן נבט</option>
+          <option value="ירין סעדון">👤 ירין סעדון</option>
+          <option value="ירדן סעדון">👤 ירדן סעדון</option>
+        </select>
+      </div>
     </div>
     <div class="modal-foot">
       <button class="btn btn-ghost" onclick="closeMModal()">ביטול</button>
@@ -816,6 +825,7 @@ function mcard(m, showSection=false) {
       <span class="sbadge ${css}">${STATUS_ICON[m.status]} ${STATUS_LABEL[m.status]}</span>
       ${dl?`<span class="dline ${dl.cls}">📅 ${dl.txt}</span>`:''}
       ${m.priority?`<span class="pdot ${m.priority}" title="${PRIORITY_LBL[m.priority]}"></span>`:''}
+      ${m.owner?`<span class="ccount">👤 ${esc(m.owner)}</span>`:''}
       ${nf?`<span class="ccount">📎 ${nf}</span>`:''}
       ${nc?`<span class="ccount">💬 ${nc}</span>`:''}
     </div>
@@ -863,6 +873,10 @@ function refreshDetail() {
       <div class="df-label">תאריך יעד</div>
       <div class="df-val ${dl?.cls||''}">${m.deadline?`📅 ${fmtDate(m.deadline)}${dl?` — ${dl.txt}`:''}` : '—'}</div>
     </div>
+  </div>
+  <div class="df">
+    <div class="df-label">אחראי משימה</div>
+    <div class="df-val">${m.owner ? `👤 ${esc(m.owner)}` : '—'}</div>
   </div>
   ${m.desc?`<div class="df"><div class="df-label">תיאור</div><div class="df-val">${esc(m.desc).replace(/\n/g,'<br>')}</div></div>`:''}`;
 
@@ -1086,6 +1100,7 @@ function openMModal(editId=null) {
     document.getElementById('mPriority').value = m.priority||'medium';
     document.getElementById('mDeadline').value = m.deadline||'';
     document.getElementById('mSection').value = m.secId;
+    document.getElementById('mOwner').value = m.owner||'';
   } else {
     document.getElementById('mTitle').textContent = 'משימה חדשה';
     document.getElementById('mName').value = '';
@@ -1093,6 +1108,7 @@ function openMModal(editId=null) {
     document.getElementById('mStatus').value = 'todo';
     document.getElementById('mPriority').value = 'medium';
     document.getElementById('mDeadline').value = '';
+    document.getElementById('mOwner').value = '';
   }
   document.getElementById('mOverlay').classList.add('open');
   setTimeout(()=>document.getElementById('mName').focus(), 80);
@@ -1108,6 +1124,7 @@ function saveMission() {
     priority: document.getElementById('mPriority').value,
     deadline: document.getElementById('mDeadline').value,
     secId:    document.getElementById('mSection').value,
+    owner:    document.getElementById('mOwner').value,
   };
   if (S.editMissionId) {
     const m = S.missions.find(x=>x.id===S.editMissionId);
