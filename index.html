@@ -463,6 +463,102 @@ body {
 .cal-noddl-item { background: var(--white); padding: 4px 9px; border-radius: 12px; font-size: 11.5px; cursor: pointer; border: 1px solid var(--gray-200); }
 .cal-noddl-item:hover { border-color: var(--pink); }
 
+.cal-mode-tabs { display: flex; gap: 4px; background: var(--gray-100); padding: 3px; border-radius: var(--rs); }
+.cal-mode-tab { padding: 6px 14px; border-radius: 6px; border: none; background: transparent; color: var(--gray-700); font-size: 12.5px; font-weight: 600; cursor: pointer; font-family: 'Heebo', sans-serif; transition: all .13s; }
+.cal-mode-tab.active { background: var(--white); color: var(--navy); box-shadow: var(--shadow-sm); }
+.cal-mode-tab:hover:not(.active) { background: rgba(0,0,0,.04); }
+
+/* ─── Week / Day time grid ─── */
+.cal-week-wrap { padding: 0 26px 26px; }
+.cal-week-head {
+  display: grid; gap: 0;
+  position: sticky; top: 0; background: var(--white); z-index: 5;
+  border-bottom: 1.5px solid var(--gray-200);
+}
+.cal-week-head.mode-week { grid-template-columns: 56px repeat(7, 1fr); }
+.cal-week-head.mode-day  { grid-template-columns: 56px 1fr; }
+.cal-headcell { padding: 11px 6px; font-size: 12px; text-align: center; color: var(--gray-700); border-left: 1px solid var(--gray-200); }
+.cal-headcell:first-child { border-left: none; background: var(--gray-50); }
+.cal-headcell .dayname { display: block; font-size: 11px; color: var(--gray-500); font-weight: 600; }
+.cal-headcell .dayno { display: block; font-size: 17px; font-weight: 800; color: var(--gray-900); margin-top: 2px; }
+.cal-headcell.today { background: rgba(233,30,140,.06); color: var(--pink); }
+.cal-headcell.today .dayno, .cal-headcell.today .dayname { color: var(--pink); }
+.cal-week-body {
+  display: grid; gap: 0;
+  border: 1.5px solid var(--gray-200); border-top: none;
+  border-radius: 0 0 var(--rs) var(--rs);
+  overflow: hidden;
+  background: var(--white);
+  position: relative;
+}
+.cal-week-body.mode-week { grid-template-columns: 56px repeat(7, 1fr); }
+.cal-week-body.mode-day  { grid-template-columns: 56px 1fr; }
+.cal-time-col { background: var(--gray-50); border-left: 1px solid var(--gray-200); }
+.cal-time-cell {
+  height: 50px; padding: 2px 6px; font-size: 10.5px; color: var(--gray-500);
+  border-bottom: 1px dashed var(--gray-200); position: relative; text-align: center;
+}
+.cal-day-col {
+  position: relative; border-left: 1px solid var(--gray-200);
+  background-image: repeating-linear-gradient(to bottom, transparent 0, transparent 49px, var(--gray-100) 49px, var(--gray-100) 50px);
+}
+.cal-day-col.today { background-color: rgba(233,30,140,.025); }
+.cal-day-col:first-of-type { /* leftmost day col */ }
+.cal-now-line {
+  position: absolute; left: 0; right: 0; height: 2px;
+  background: var(--pink); z-index: 3; pointer-events: none;
+}
+.cal-now-line::before {
+  content: ''; position: absolute; right: -5px; top: -4px;
+  width: 10px; height: 10px; border-radius: 50%; background: var(--pink);
+  box-shadow: 0 0 6px rgba(233,30,140,.5);
+}
+.cal-mblock {
+  position: absolute; left: 3px; right: 3px;
+  padding: 4px 7px; border-radius: 5px; font-size: 11px;
+  cursor: pointer; overflow: hidden; line-height: 1.3;
+  border-right: 3px solid; transition: transform .1s, box-shadow .15s;
+  z-index: 2;
+}
+.cal-mblock:hover { transform: scale(1.01); box-shadow: var(--shadow-sm); z-index: 4; }
+.cal-mblock.s-todo  { background: var(--blue-bg);   color: var(--blue);   border-color: var(--blue); }
+.cal-mblock.s-prog  { background: var(--orange-bg); color: var(--orange); border-color: var(--orange); }
+.cal-mblock.s-done  { background: var(--green-bg);  color: var(--green);  border-color: var(--green); opacity: .6; }
+.cal-mblock.s-block { background: var(--red-bg);    color: var(--red);    border-color: var(--red); }
+.cal-mblock.deadline-only { background: repeating-linear-gradient(135deg, var(--red-bg), var(--red-bg) 5px, #fff 5px, #fff 8px); border-right-style: dashed; }
+.cal-mblock-time { font-weight: 700; opacity: .85; font-size: 10px; display: block; }
+.cal-mblock-name { font-weight: 600; }
+
+/* ─── Schedule Proposal ─── */
+.sched-overlay {
+  position: fixed; inset: 0; background: rgba(13,18,64,.5); backdrop-filter: blur(4px);
+  z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 20px;
+  opacity: 0; pointer-events: none; transition: opacity .2s;
+}
+.sched-overlay.open { opacity: 1; pointer-events: all; }
+.sched-modal {
+  background: var(--white); border-radius: 16px;
+  width: 100%; max-width: 700px; max-height: 88vh;
+  overflow: hidden; box-shadow: var(--shadow-lg);
+  display: flex; flex-direction: column;
+  transform: translateY(20px) scale(.98); transition: transform .2s;
+}
+.sched-overlay.open .sched-modal { transform: translateY(0) scale(1); }
+.sched-head { padding: 20px 22px; border-bottom: 1px solid var(--gray-200); display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+.sched-summary { font-size: 13px; color: var(--gray-700); line-height: 1.65; flex: 1; }
+.sched-list { flex: 1; overflow-y: auto; padding: 14px 22px; }
+.sched-item {
+  padding: 12px 14px; border-radius: var(--rs); border: 1.5px solid var(--gray-200);
+  margin-bottom: 8px; transition: border-color .13s;
+}
+.sched-item:hover { border-color: var(--gray-300); }
+.sched-item-head { display: flex; align-items: center; gap: 10px; margin-bottom: 5px; flex-wrap: wrap; }
+.sched-item-name { font-size: 13.5px; font-weight: 700; color: var(--gray-900); flex: 1; min-width: 140px; }
+.sched-item-meta { font-size: 11.5px; color: var(--gray-500); }
+.sched-item-when { font-size: 12.5px; font-weight: 700; color: var(--pink); background: var(--pink-bg); padding: 3px 9px; border-radius: 12px; }
+.sched-item-reason { font-size: 12px; color: var(--gray-700); line-height: 1.55; padding-right: 4px; border-right: 2px solid var(--pink-bg); padding-right: 8px; }
+.sched-foot { padding: 16px 22px; border-top: 1px solid var(--gray-200); display: flex; gap: 9px; justify-content: flex-start; background: var(--gray-50); }
+
 /* ─── AI Assistant ─── */
 .ai-wrap { padding: 22px 26px; flex: 1; display: flex; flex-direction: column; max-width: 880px; width: 100%; margin: 0 auto; }
 .ai-quick { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 18px; }
@@ -629,6 +725,16 @@ body {
           <option value="ירדן סעדון">👤 ירדן סעדון</option>
         </select>
       </div>
+      <div class="frow">
+        <div class="fg">
+          <label class="fl">משך משוער (דקות)</label>
+          <input type="number" min="5" step="15" class="fi" id="mEstDur" placeholder="לדוג׳ 60">
+        </div>
+        <div class="fg">
+          <label class="fl">מועד עבודה מתוכנן</label>
+          <input type="datetime-local" class="fi" id="mSchedStart">
+        </div>
+      </div>
     </div>
     <div class="modal-foot">
       <button class="btn btn-ghost" onclick="closeMModal()">ביטול</button>
@@ -678,6 +784,24 @@ body {
   </div>
 </div>
 
+<!-- ═══ Schedule Proposal Modal ═══ -->
+<div class="sched-overlay" id="schedOverlay">
+  <div class="sched-modal">
+    <div class="sched-head">
+      <div>
+        <div class="modal-title">🪄 הצעת תכנון לוח זמנים</div>
+        <div class="sched-summary" id="schedSummary" style="margin-top:8px;"></div>
+      </div>
+      <button class="modal-close" onclick="closeSchedModal()">✕</button>
+    </div>
+    <div class="sched-list" id="schedList"></div>
+    <div class="sched-foot">
+      <button class="btn btn-ghost" onclick="closeSchedModal()">בטל</button>
+      <button class="btn btn-primary" onclick="applySchedule()">✅ החל את התכנון</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast-wrap" id="toasts"></div>
 
 <script>
@@ -711,10 +835,16 @@ const S = {
   selEmoji: '📁', openDetailId: null,
   view: 'board',
   calOwner: 'עידן נבט',
-  calCursor: { y: new Date().getFullYear(), m: new Date().getMonth() },
+  calMode: 'month',
+  calCursor: new Date(),
   aiHistory: [],
   aiBusy: false,
+  schedProposal: null,
+  schedBusy: false,
 };
+const CAL_HOUR_START = 6;   // 6 AM
+const CAL_HOUR_END   = 23;  // 11 PM
+const CAL_HOUR_PX    = 50;  // px per hour
 
 // ── Cloud sync (Cloudflare Workers + KV) ──
 const API_URL    = 'https://mission-control-api.idan-nevet.workers.dev/';
@@ -1233,6 +1363,8 @@ function openMModal(editId=null) {
     document.getElementById('mDeadline').value = m.deadline||'';
     document.getElementById('mSection').value = m.secId;
     document.getElementById('mOwner').value = m.owner||'';
+    document.getElementById('mEstDur').value = m.estDuration||'';
+    document.getElementById('mSchedStart').value = m.scheduledStart||'';
   } else {
     document.getElementById('mTitle').textContent = 'משימה חדשה';
     document.getElementById('mName').value = '';
@@ -1241,6 +1373,8 @@ function openMModal(editId=null) {
     document.getElementById('mPriority').value = 'medium';
     document.getElementById('mDeadline').value = '';
     document.getElementById('mOwner').value = '';
+    document.getElementById('mEstDur').value = '';
+    document.getElementById('mSchedStart').value = '';
   }
   document.getElementById('mOverlay').classList.add('open');
   setTimeout(()=>document.getElementById('mName').focus(), 80);
@@ -1249,6 +1383,7 @@ function closeMModal() { document.getElementById('mOverlay').classList.remove('o
 function saveMission() {
   const name = document.getElementById('mName').value.trim();
   if (!name) { toast('שם משימה נדרש','error'); return; }
+  const dur = parseInt(document.getElementById('mEstDur').value, 10);
   const data = {
     name,
     desc:     document.getElementById('mDesc').value.trim(),
@@ -1257,6 +1392,8 @@ function saveMission() {
     deadline: document.getElementById('mDeadline').value,
     secId:    document.getElementById('mSection').value,
     owner:    document.getElementById('mOwner').value,
+    estDuration:    isNaN(dur) ? null : dur,
+    scheduledStart: document.getElementById('mSchedStart').value || null,
   };
   if (S.editMissionId) {
     const m = S.missions.find(x=>x.id===S.editMissionId);
@@ -1345,82 +1482,212 @@ function renderCalendar() {
     ${OWNERS.map(o => `<div class="otab ${S.calOwner===o?'active':''}" onclick="setCalOwner('${o}')">👤 ${o} <span class="ocnt">${ownerCounts[o]}</span></div>`).join('')}
   `;
 
-  const { y, m } = S.calCursor;
-  const monthMissions = S.missions.filter(mi => {
-    if (!mi.deadline) return false;
-    if (S.calOwner !== '__all__' && mi.owner !== S.calOwner) return false;
-    return true;
-  });
-
-  const noDeadline = S.missions.filter(mi => !mi.deadline && (S.calOwner === '__all__' || mi.owner === S.calOwner));
-
-  const first = new Date(y, m, 1);
-  const startDow = first.getDay();
-  const daysInMonth = new Date(y, m+1, 0).getDate();
-  const prevDays = new Date(y, m, 0).getDate();
-
-  const cells = [];
-  for (let i = 0; i < startDow; i++) {
-    const d = prevDays - startDow + 1 + i;
-    cells.push({ d, other: true, date: new Date(y, m-1, d) });
-  }
-  for (let d = 1; d <= daysInMonth; d++) {
-    cells.push({ d, other: false, date: new Date(y, m, d) });
-  }
-  while (cells.length % 7 !== 0) {
-    const last = cells[cells.length-1].date;
-    const next = new Date(last.getFullYear(), last.getMonth(), last.getDate()+1);
-    cells.push({ d: next.getDate(), other: true, date: next });
-  }
-
-  const today = new Date(); today.setHours(0,0,0,0);
   const ownerLabel = S.calOwner === '__all__' ? 'כל האחראים' : S.calOwner;
+  const title = calBarTitle();
 
   el.innerHTML = `
   <div class="main-header">
     <div>
       <div class="main-h1">📅 לוח שנה — ${esc(ownerLabel)}</div>
-      <div class="main-sub">משימות לפי תאריך יעד · ${monthMissions.length} משימות עם תאריך</div>
+      <div class="main-sub">${calSubLine()}</div>
+    </div>
+    <div class="main-header-right">
+      <button class="btn btn-primary btn-sm" onclick="proposeSchedule()" ${S.schedBusy?'disabled':''}>${S.schedBusy?'⏳ בונה תכנון…':'🪄 תכנן את השבוע'}</button>
     </div>
   </div>
   <div class="owner-tabs">${ownerTabs}</div>
   <div class="cal-bar">
-    <div class="cal-title">${HE_MONTHS[m]} ${y}</div>
+    <div style="display:flex;gap:14px;align-items:center;">
+      <div class="cal-title">${title}</div>
+      <div class="cal-mode-tabs">
+        <button class="cal-mode-tab ${S.calMode==='month'?'active':''}" onclick="setCalMode('month')">חודש</button>
+        <button class="cal-mode-tab ${S.calMode==='week'?'active':''}"  onclick="setCalMode('week')">שבוע</button>
+        <button class="cal-mode-tab ${S.calMode==='day'?'active':''}"   onclick="setCalMode('day')">יום</button>
+      </div>
+    </div>
     <div style="display:flex;gap:8px;align-items:center;">
       <button class="cal-today" onclick="calToday()">היום</button>
       <div class="cal-nav">
-        <button onclick="calNav(-1)" title="חודש קודם">›</button>
-        <button onclick="calNav(1)" title="חודש הבא">‹</button>
+        <button onclick="calNav(-1)" title="הקודם">›</button>
+        <button onclick="calNav(1)" title="הבא">‹</button>
       </div>
     </div>
   </div>
-  <div class="cal-grid">
-    <div class="cal-weekhead">${HE_WEEKDAYS.map(d => `<div class="cal-weekday">${d}</div>`).join('')}</div>
-    <div class="cal-days">
-      ${cells.map(c => {
-        const isToday = c.date.getTime() === today.getTime();
-        const dayMissions = monthMissions.filter(mi => sameDay(new Date(mi.deadline), c.date));
-        return `<div class="cal-day ${c.other?'other':''} ${isToday?'today':''}">
-          <div class="cal-daynum">${c.d}</div>
-          ${dayMissions.map(mi => calChip(mi)).join('')}
+  <div id="calContent"></div>`;
+
+  if      (S.calMode === 'week') renderCalWeek();
+  else if (S.calMode === 'day')  renderCalDay();
+  else                           renderCalMonth();
+}
+
+function calBarTitle() {
+  const c = S.calCursor;
+  if (S.calMode === 'month') return `${HE_MONTHS[c.getMonth()]} ${c.getFullYear()}`;
+  if (S.calMode === 'day')   return `${HE_WEEKDAYS[c.getDay()]} · ${c.getDate()} ${HE_MONTHS[c.getMonth()]} ${c.getFullYear()}`;
+  // week
+  const ws = weekStart(c);
+  const we = new Date(ws); we.setDate(ws.getDate()+6);
+  if (ws.getMonth() === we.getMonth()) return `${ws.getDate()}–${we.getDate()} ${HE_MONTHS[ws.getMonth()]} ${ws.getFullYear()}`;
+  return `${ws.getDate()} ${HE_MONTHS[ws.getMonth()]} – ${we.getDate()} ${HE_MONTHS[we.getMonth()]} ${we.getFullYear()}`;
+}
+function calSubLine() {
+  const f = filteredMissions();
+  return `${f.length} משימות${S.calMode==='month'?'':' (לפי שעה)'}`;
+}
+function filteredMissions() {
+  return S.missions.filter(mi => {
+    if (S.calOwner !== '__all__' && mi.owner !== S.calOwner) return false;
+    return true;
+  });
+}
+function weekStart(d) {  // Sunday
+  const x = new Date(d); x.setHours(0,0,0,0);
+  x.setDate(x.getDate() - x.getDay());
+  return x;
+}
+
+// ─── Month view (existing layout) ───
+function renderCalMonth() {
+  const c = S.calCursor;
+  const y = c.getFullYear(), m = c.getMonth();
+  const monthMissions = filteredMissions().filter(mi => mi.deadline);
+  const noDeadline = filteredMissions().filter(mi => !mi.deadline);
+
+  const first = new Date(y, m, 1);
+  const startDow = first.getDay();
+  const daysInMonth = new Date(y, m+1, 0).getDate();
+  const prevDays = new Date(y, m, 0).getDate();
+  const cells = [];
+  for (let i = 0; i < startDow; i++) {
+    const d = prevDays - startDow + 1 + i;
+    cells.push({ d, other: true, date: new Date(y, m-1, d) });
+  }
+  for (let d = 1; d <= daysInMonth; d++) cells.push({ d, other: false, date: new Date(y, m, d) });
+  while (cells.length % 7 !== 0) {
+    const last = cells[cells.length-1].date;
+    const next = new Date(last.getFullYear(), last.getMonth(), last.getDate()+1);
+    cells.push({ d: next.getDate(), other: true, date: next });
+  }
+  const today = new Date(); today.setHours(0,0,0,0);
+
+  document.getElementById('calContent').innerHTML = `
+    <div class="cal-grid">
+      <div class="cal-weekhead">${HE_WEEKDAYS.map(d => `<div class="cal-weekday">${d}</div>`).join('')}</div>
+      <div class="cal-days">
+        ${cells.map(c => {
+          const isToday = c.date.getTime() === today.getTime();
+          const dayMissions = monthMissions.filter(mi => sameDay(missionDate(mi), c.date));
+          return `<div class="cal-day ${c.other?'other':''} ${isToday?'today':''}">
+            <div class="cal-daynum">${c.d}</div>
+            ${dayMissions.map(mi => calChip(mi)).join('')}
+          </div>`;
+        }).join('')}
+      </div>
+    </div>
+    ${noDeadline.length ? `
+      <div class="cal-noddl">
+        <strong>${noDeadline.length} משימות ללא תאריך יעד</strong> — לא יוצגו בלוח עד שיוגדר תאריך:
+        <div class="cal-noddl-list">
+          ${noDeadline.slice(0,12).map(mi => `<span class="cal-noddl-item" onclick="openDetail('${mi.id}')">${esc(mi.name)}</span>`).join('')}
+          ${noDeadline.length>12 ? `<span class="cal-noddl-item">+ ${noDeadline.length-12} נוספות…</span>` : ''}
+        </div>
+      </div>` : ''}`;
+}
+
+// ─── Week / Day time-grid view ───
+function renderCalWeek() { renderTimeGrid(7); }
+function renderCalDay()  { renderTimeGrid(1); }
+
+function renderTimeGrid(numDays) {
+  const today = new Date(); today.setHours(0,0,0,0);
+  const start = numDays === 7 ? weekStart(S.calCursor) : new Date(S.calCursor.getFullYear(), S.calCursor.getMonth(), S.calCursor.getDate());
+  const days = Array.from({length: numDays}, (_, i) => {
+    const d = new Date(start); d.setDate(start.getDate()+i); return d;
+  });
+  const modeCls = numDays === 7 ? 'mode-week' : 'mode-day';
+
+  const headHtml = `
+    <div class="cal-week-head ${modeCls}">
+      <div class="cal-headcell"></div>
+      ${days.map(d => {
+        const isToday = sameDay(d, today);
+        return `<div class="cal-headcell ${isToday?'today':''}">
+          <span class="dayname">${HE_WEEKDAYS[d.getDay()]}</span>
+          <span class="dayno">${d.getDate()}/${d.getMonth()+1}</span>
         </div>`;
       }).join('')}
-    </div>
-  </div>
-  ${noDeadline.length ? `
-    <div class="cal-noddl">
-      <strong>${noDeadline.length} משימות ללא תאריך יעד</strong> — לא יוצגו בלוח עד שיוגדר תאריך:
-      <div class="cal-noddl-list">
-        ${noDeadline.slice(0,12).map(mi => `<span class="cal-noddl-item" onclick="openDetail('${mi.id}')">${esc(mi.name)}</span>`).join('')}
-        ${noDeadline.length>12 ? `<span class="cal-noddl-item">+ ${noDeadline.length-12} נוספות…</span>` : ''}
+    </div>`;
+
+  const hours = [];
+  for (let h = CAL_HOUR_START; h <= CAL_HOUR_END; h++) {
+    hours.push(`<div class="cal-time-cell">${String(h).padStart(2,'0')}:00</div>`);
+  }
+
+  const dayCols = days.map(d => {
+    const isToday = sameDay(d, today);
+    const items = filteredMissions().map(m => {
+      const block = missionBlock(m, d);
+      return block;
+    }).filter(Boolean);
+    const nowLine = isToday ? nowLineHtml() : '';
+    return `<div class="cal-day-col ${isToday?'today':''}">${nowLine}${items.join('')}</div>`;
+  }).join('');
+
+  const bodyHeight = (CAL_HOUR_END - CAL_HOUR_START + 1) * CAL_HOUR_PX;
+
+  document.getElementById('calContent').innerHTML = `
+    <div class="cal-week-wrap">
+      ${headHtml}
+      <div class="cal-week-body ${modeCls}" style="height:${bodyHeight + 4}px;">
+        <div class="cal-time-col">${hours.join('')}</div>
+        ${dayCols}
       </div>
-    </div>` : ''}
-  `;
+    </div>`;
+}
+
+function missionBlock(m, day) {
+  // Pick anchor time: scheduledStart if set, else deadline (only if it has a time)
+  let anchor = null, isDeadline = false;
+  if (m.scheduledStart) anchor = new Date(m.scheduledStart);
+  else if (m.deadline && m.deadline.includes('T')) { anchor = new Date(m.deadline); isDeadline = true; }
+  if (!anchor) return null;
+  if (!sameDay(anchor, day)) return null;
+
+  const startMin = anchor.getHours() * 60 + anchor.getMinutes();
+  const baseMin  = CAL_HOUR_START * 60;
+  const endMin   = (CAL_HOUR_END + 1) * 60;
+  if (startMin >= endMin) return null;
+
+  const dur = m.estDuration || (isDeadline ? 30 : 60);
+  const top = Math.max(0, (startMin - baseMin) * (CAL_HOUR_PX / 60));
+  const height = Math.max(22, dur * (CAL_HOUR_PX / 60) - 2);
+  const css = STATUS_CSS[m.status] || 's-todo';
+  const dlOnly = isDeadline ? ' deadline-only' : '';
+  const timeLbl = anchor.toLocaleTimeString('he-IL',{hour:'2-digit',minute:'2-digit'});
+  const tip = `${m.name}${m.owner?' — '+m.owner:''} (${timeLbl}, ${dur} דק׳)${isDeadline?' · יעד':''}`;
+  return `<div class="cal-mblock ${css}${dlOnly}" style="top:${top}px;height:${height}px;" onclick="openDetail('${m.id}')" title="${esc(tip)}">
+    <span class="cal-mblock-time">${timeLbl}${isDeadline?' 🎯':''}</span>
+    <span class="cal-mblock-name">${esc(m.name)}</span>
+  </div>`;
+}
+
+function nowLineHtml() {
+  const now = new Date();
+  const min = now.getHours()*60 + now.getMinutes();
+  const baseMin = CAL_HOUR_START*60;
+  const endMin = (CAL_HOUR_END+1)*60;
+  if (min < baseMin || min > endMin) return '';
+  const top = (min - baseMin) * (CAL_HOUR_PX / 60);
+  return `<div class="cal-now-line" style="top:${top}px;"></div>`;
+}
+
+function missionDate(m) {
+  return new Date(m.deadline.includes('T') ? m.deadline : m.deadline+'T00:00:00');
 }
 
 function calChip(m) {
   const css = STATUS_CSS[m.status] || 's-todo';
-  const d = new Date(m.deadline);
+  const d = missionDate(m);
   const hasTime = m.deadline.includes('T');
   const t = hasTime ? d.toLocaleTimeString('he-IL',{hour:'2-digit',minute:'2-digit'}) : '';
   return `<div class="cal-mchip ${css}" onclick="openDetail('${m.id}')" title="${esc(m.name)}${t?' — '+t:''}">
@@ -1432,18 +1699,92 @@ function sameDay(a, b) {
   return a.getFullYear()===b.getFullYear() && a.getMonth()===b.getMonth() && a.getDate()===b.getDate();
 }
 function setCalOwner(o) { S.calOwner = o; renderCalendar(); }
+function setCalMode(mode) { S.calMode = mode; renderCalendar(); }
 function calNav(delta) {
-  let { y, m } = S.calCursor;
-  m += delta;
-  if (m < 0)  { m = 11; y--; }
-  if (m > 11) { m = 0;  y++; }
-  S.calCursor = { y, m };
+  const c = new Date(S.calCursor);
+  if (S.calMode === 'month') c.setMonth(c.getMonth() + delta);
+  else if (S.calMode === 'week') c.setDate(c.getDate() + delta * 7);
+  else c.setDate(c.getDate() + delta);
+  S.calCursor = c;
   renderCalendar();
 }
-function calToday() {
-  const t = new Date();
-  S.calCursor = { y: t.getFullYear(), m: t.getMonth() };
+function calToday() { S.calCursor = new Date(); renderCalendar(); }
+
+// ─── AI scheduling: propose / preview / apply ───
+async function proposeSchedule() {
+  if (S.schedBusy) return;
+  S.schedBusy = true;
   renderCalendar();
+  try {
+    const ws = weekStart(new Date());
+    const weekStartIso = `${ws.getFullYear()}-${String(ws.getMonth()+1).padStart(2,'0')}-${String(ws.getDate()).padStart(2,'0')}`;
+    const res = await fetch(API_URL + 'ai/schedule', {
+      method: 'POST',
+      headers: _apiHeaders(),
+      body: JSON.stringify({
+        sections: S.sections,
+        missions: _missionsForCloud(),
+        weekStart: weekStartIso,
+        workStart: '09:00',
+        workEnd:   '18:00',
+        workDays:  [0,1,2,3,4], // Sun-Thu
+      }),
+    });
+    if (!res.ok) {
+      const err = await res.text();
+      throw new Error(err || ('HTTP '+res.status));
+    }
+    const data = await res.json();
+    S.schedProposal = data;
+    showSchedModal();
+  } catch (e) {
+    toast('שגיאה בתכנון: ' + (e.message||''), 'error');
+  } finally {
+    S.schedBusy = false;
+    renderCalendar();
+  }
+}
+
+function showSchedModal() {
+  if (!S.schedProposal) return;
+  document.getElementById('schedSummary').textContent = S.schedProposal.summary || '';
+  const list = (S.schedProposal.schedule || []).map(s => {
+    const m = S.missions.find(x => x.id === s.mission_id);
+    if (!m) return '';
+    const startD = new Date(s.start_iso);
+    const when = `${HE_WEEKDAYS[startD.getDay()]} ${startD.getDate()}/${startD.getMonth()+1} · ${startD.toLocaleTimeString('he-IL',{hour:'2-digit',minute:'2-digit'})}`;
+    return `<div class="sched-item">
+      <div class="sched-item-head">
+        <div class="sched-item-name">${esc(m.name)}</div>
+        <span class="sched-item-when">${when}</span>
+        <span class="sched-item-meta">${s.duration_minutes} דק׳${m.owner?' · '+esc(m.owner):''}</span>
+      </div>
+      ${s.reasoning?`<div class="sched-item-reason">${esc(s.reasoning)}</div>`:''}
+    </div>`;
+  }).join('');
+  document.getElementById('schedList').innerHTML = list || '<div style="text-align:center;color:var(--gray-500);padding:30px;">לא הוצעה תוכנית</div>';
+  document.getElementById('schedOverlay').classList.add('open');
+}
+
+function closeSchedModal() {
+  document.getElementById('schedOverlay').classList.remove('open');
+  S.schedProposal = null;
+}
+
+function applySchedule() {
+  if (!S.schedProposal) return;
+  let applied = 0;
+  (S.schedProposal.schedule || []).forEach(s => {
+    const m = S.missions.find(x => x.id === s.mission_id);
+    if (!m) return;
+    m.scheduledStart = s.start_iso;
+    m.estDuration   = s.duration_minutes;
+    applied++;
+  });
+  save();
+  closeSchedModal();
+  render();
+  toast(`${applied} משימות תוזמנו בלוח השנה`, 'success');
 }
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -1468,6 +1809,7 @@ function renderAI() {
       <button class="ai-qbtn" onclick="aiQuick('מי האחראי הכי עמוס? יש העמסה לא מאוזנת בין הצוות?')">⚖️ ניתוח עומס</button>
       <button class="ai-qbtn" onclick="aiQuick('אילו משימות באיחור או עומדות לאחר?')">⏰ איחורים</button>
       <button class="ai-qbtn" onclick="aiQuick('הצע לי תוכנית עבודה לשבוע הקרוב')">📅 תוכנית שבועית</button>
+      <button class="ai-qbtn" onclick="proposeSchedule()" ${S.schedBusy?'disabled':''}>${S.schedBusy?'⏳ בונה תכנון…':'🪄 תכנן את השבוע (תוזמן בלוח)'}</button>
       <button class="ai-qbtn" onclick="aiOrganize()">⚡ סדר אוטומטי (מקומי)</button>
     </div>
     <div class="ai-chat" id="aiChat">
@@ -1665,18 +2007,20 @@ function toast(msg, type='') {
 // Keyboard
 document.addEventListener('keydown', e => {
   if (e.key==='Escape') {
+    if (document.getElementById('schedOverlay').classList.contains('open')){ closeSchedModal(); return; }
     if (document.getElementById('mOverlay').classList.contains('open'))   { closeMModal(); return; }
     if (document.getElementById('sOverlay').classList.contains('open'))   { closeSModal(); return; }
     if (document.getElementById('dOverlay').classList.contains('open'))   { closeDModal(); return; }
     if (document.getElementById('detailPanel').classList.contains('open')){ closeDetail(); return; }
   }
 });
-['mOverlay','sOverlay','dOverlay'].forEach(id => {
+['mOverlay','sOverlay','dOverlay','schedOverlay'].forEach(id => {
   document.getElementById(id).addEventListener('click', function(e) {
     if (e.target===this) {
-      if (id==='mOverlay') closeMModal();
-      if (id==='sOverlay') closeSModal();
-      if (id==='dOverlay') closeDModal();
+      if (id==='mOverlay')     closeMModal();
+      if (id==='sOverlay')     closeSModal();
+      if (id==='dOverlay')     closeDModal();
+      if (id==='schedOverlay') closeSchedModal();
     }
   });
 });
