@@ -507,8 +507,8 @@ body {
       </div>
       <div class="frow">
         <div class="fg">
-          <label class="fl">תאריך יעד</label>
-          <input type="date" class="fi" id="mDeadline">
+          <label class="fl">תאריך ושעת יעד</label>
+          <input type="datetime-local" class="fi" id="mDeadline">
         </div>
         <div class="fg">
           <label class="fl">קטגוריה</label>
@@ -1206,7 +1206,12 @@ function esc(s) {
 }
 function fmtDate(s) {
   if (!s) return '';
-  return new Date(s+'T00:00:00').toLocaleDateString('he-IL',{day:'numeric',month:'long',year:'numeric'});
+  const hasTime = s.includes('T');
+  const d = new Date(hasTime ? s : s+'T00:00:00');
+  const dateStr = d.toLocaleDateString('he-IL',{day:'numeric',month:'long',year:'numeric'});
+  if (!hasTime) return dateStr;
+  const timeStr = d.toLocaleTimeString('he-IL',{hour:'2-digit',minute:'2-digit'});
+  return `${dateStr} ${timeStr}`;
 }
 function fmtSize(b) {
   if (b<1024) return `${b} B`;
@@ -1215,6 +1220,27 @@ function fmtSize(b) {
 }
 function deadlineInfo(s) {
   if (!s) return null;
+  const hasTime = s.includes('T');
+  const now = new Date();
+  if (hasTime) {
+    const d = new Date(s);
+    const diffMs = d - now;
+    if (diffMs < 0) {
+      const mins = Math.round(-diffMs/60000);
+      if (mins < 60)  return { txt:`באיחור של ${mins} דק׳`,            cls:'overdue' };
+      const hrs = Math.round(-diffMs/3600000);
+      if (hrs < 24)   return { txt:`באיחור של ${hrs} שעות`,            cls:'overdue' };
+      const days = Math.round(-diffMs/86400000);
+      return { txt:`באיחור של ${days} ימים`, cls:'overdue' };
+    }
+    const mins = Math.round(diffMs/60000);
+    if (mins < 60)    return { txt:`עוד ${mins} דק׳`,                  cls:'soon' };
+    const hrs = Math.round(diffMs/3600000);
+    if (hrs < 24)     return { txt:`עוד ${hrs} שעות`,                  cls:'soon' };
+    const days = Math.round(diffMs/86400000);
+    if (days <= 3)    return { txt:`נותרו ${days} ימים`,               cls:'soon' };
+    return { txt:fmtDate(s), cls:'' };
+  }
   const today=new Date(); today.setHours(0,0,0,0);
   const d=new Date(s+'T00:00:00');
   const diff=Math.round((d-today)/86400000);
