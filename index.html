@@ -399,6 +399,103 @@ body {
 ::-webkit-scrollbar-thumb { background: var(--gray-200); border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--gray-300); }
 
+/* ─── View Tabs (Board / Calendar / AI) ─── */
+.view-tabs { display: flex; gap: 4px; background: rgba(255,255,255,.08); padding: 3px; border-radius: var(--rs); border: 1.5px solid rgba(255,255,255,.15); }
+.vtab {
+  padding: 6px 12px; border-radius: 6px; border: none;
+  background: transparent; color: rgba(255,255,255,.7);
+  font-size: 12.5px; font-weight: 600; cursor: pointer;
+  font-family: 'Heebo', sans-serif; transition: all .15s; white-space: nowrap;
+}
+.vtab:hover { color: #fff; background: rgba(255,255,255,.07); }
+.vtab.active { background: var(--pink); color: #fff; box-shadow: 0 2px 8px rgba(233,30,140,.35); }
+
+/* ─── Calendar ─── */
+.owner-tabs { display: flex; gap: 8px; padding: 14px 26px; background: var(--gray-50); border-bottom: 1px solid var(--gray-200); flex-wrap: wrap; }
+.otab {
+  padding: 7px 16px; border-radius: 22px;
+  font-size: 13px; font-weight: 600; cursor: pointer;
+  border: 2px solid var(--gray-200); background: var(--white); color: var(--gray-700);
+  transition: all .13s; user-select: none; font-family: 'Heebo', sans-serif;
+}
+.otab:hover { border-color: var(--gray-300); transform: translateY(-1px); }
+.otab.active { background: var(--navy); color: #fff; border-color: var(--navy); }
+.otab .ocnt { display: inline-block; background: rgba(0,0,0,.08); padding: 1px 7px; border-radius: 10px; font-size: 11px; margin-right: 5px; }
+.otab.active .ocnt { background: rgba(255,255,255,.22); }
+
+.cal-bar { display: flex; align-items: center; justify-content: space-between; padding: 14px 26px; background: var(--white); border-bottom: 1px solid var(--gray-200); }
+.cal-title { font-size: 18px; font-weight: 800; color: var(--navy); }
+.cal-nav { display: flex; gap: 6px; }
+.cal-nav button { width: 34px; height: 34px; border-radius: var(--rs); border: 1.5px solid var(--gray-200); background: var(--white); cursor: pointer; font-size: 14px; color: var(--gray-700); transition: all .13s; }
+.cal-nav button:hover { background: var(--gray-100); border-color: var(--gray-300); }
+.cal-today { padding: 7px 14px; border-radius: var(--rs); border: 1.5px solid var(--gray-200); background: var(--white); cursor: pointer; font-size: 12.5px; font-weight: 600; color: var(--gray-700); font-family: 'Heebo', sans-serif; transition: all .13s; }
+.cal-today:hover { background: var(--gray-100); }
+
+.cal-grid { padding: 0 26px 26px; }
+.cal-weekhead { display: grid; grid-template-columns: repeat(7,1fr); gap: 6px; padding: 14px 0 8px; }
+.cal-weekday { font-size: 11.5px; font-weight: 700; color: var(--gray-500); text-align: center; padding: 4px 0; }
+.cal-days { display: grid; grid-template-columns: repeat(7,1fr); gap: 6px; }
+.cal-day {
+  background: var(--white); border: 1.5px solid var(--gray-200); border-radius: var(--rs);
+  min-height: 110px; padding: 8px; display: flex; flex-direction: column; gap: 4px;
+  transition: border-color .13s; position: relative;
+}
+.cal-day:hover { border-color: var(--gray-300); }
+.cal-day.other { background: var(--gray-50); opacity: .55; }
+.cal-day.today { border-color: var(--pink); border-width: 2px; box-shadow: 0 2px 8px rgba(233,30,140,.12); }
+.cal-daynum { font-size: 12.5px; font-weight: 700; color: var(--gray-700); }
+.cal-day.today .cal-daynum { color: var(--pink); }
+.cal-mchip {
+  font-size: 11px; font-weight: 600; padding: 3px 7px; border-radius: 5px;
+  cursor: pointer; line-height: 1.4;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  border-right: 3px solid; transition: transform .1s;
+}
+.cal-mchip:hover { transform: translateX(-2px); }
+.cal-mchip.s-todo  { background: var(--blue-bg);   color: var(--blue);   border-color: var(--blue); }
+.cal-mchip.s-prog  { background: var(--orange-bg); color: var(--orange); border-color: var(--orange); }
+.cal-mchip.s-done  { background: var(--green-bg);  color: var(--green);  border-color: var(--green); text-decoration: line-through; opacity: .75; }
+.cal-mchip.s-block { background: var(--red-bg);    color: var(--red);    border-color: var(--red); }
+.cal-mchip-time { opacity: .8; font-weight: 700; margin-left: 4px; }
+.cal-noddl { padding: 12px 16px; margin: 14px 26px 0; background: var(--gray-50); border: 1.5px dashed var(--gray-300); border-radius: var(--rs); font-size: 12.5px; color: var(--gray-500); }
+.cal-noddl strong { color: var(--gray-700); }
+.cal-noddl-list { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.cal-noddl-item { background: var(--white); padding: 4px 9px; border-radius: 12px; font-size: 11.5px; cursor: pointer; border: 1px solid var(--gray-200); }
+.cal-noddl-item:hover { border-color: var(--pink); }
+
+/* ─── AI Assistant ─── */
+.ai-wrap { padding: 22px 26px; flex: 1; display: flex; flex-direction: column; max-width: 880px; width: 100%; margin: 0 auto; }
+.ai-quick { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 18px; }
+.ai-qbtn {
+  padding: 9px 14px; border-radius: 22px; cursor: pointer;
+  background: var(--pink-bg); color: var(--pink); border: 1.5px solid transparent;
+  font-size: 13px; font-weight: 600; font-family: 'Heebo', sans-serif;
+  transition: all .13s;
+}
+.ai-qbtn:hover { background: var(--pink); color: #fff; transform: translateY(-1px); }
+.ai-chat { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; padding: 8px 4px 14px; min-height: 240px; }
+.ai-msg { display: flex; gap: 10px; max-width: 85%; }
+.ai-msg.user { margin-right: auto; flex-direction: row-reverse; }
+.ai-msg.bot { margin-left: auto; }
+.ai-avatar { width: 32px; height: 32px; border-radius: 8px; background: var(--gray-200); display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+.ai-msg.user .ai-avatar { background: var(--navy); color: #fff; }
+.ai-msg.bot .ai-avatar { background: var(--pink); color: #fff; }
+.ai-bubble {
+  padding: 10px 14px; border-radius: 12px;
+  font-size: 13.5px; line-height: 1.65; color: var(--gray-900);
+  background: var(--white); border: 1.5px solid var(--gray-200);
+  white-space: pre-wrap; word-break: break-word;
+}
+.ai-msg.user .ai-bubble { background: var(--navy); color: #fff; border-color: var(--navy); }
+.ai-bubble.thinking { color: var(--gray-500); font-style: italic; }
+.ai-empty { text-align: center; padding: 50px 20px; color: var(--gray-500); }
+.ai-empty .ico { font-size: 56px; margin-bottom: 12px; }
+.ai-empty .t { font-size: 17px; font-weight: 800; color: var(--gray-700); margin-bottom: 6px; }
+.ai-empty .s { font-size: 13px; line-height: 1.7; max-width: 360px; margin: 0 auto; }
+.ai-input-row { display: flex; gap: 8px; padding-top: 12px; border-top: 1px solid var(--gray-200); }
+.ai-input { flex: 1; padding: 11px 14px; border: 1.5px solid var(--gray-200); border-radius: var(--rs); font-size: 13.5px; font-family: 'Heebo', sans-serif; outline: none; transition: border-color .15s; text-align: right; }
+.ai-input:focus { border-color: var(--pink); box-shadow: 0 0 0 3px rgba(233,30,140,.1); }
+
 @media (max-width: 700px) {
   .sidebar { width: 56px; min-width: 56px; }
   .sec-name, .sec-count, .sec-btns, .sidebar-label { display: none; }
@@ -406,6 +503,9 @@ body {
   .detail-panel { width: 100%; }
   .search-input { width: 140px; }
   .hdr-btn span { display: none; }
+  .vtab { padding: 6px 9px; font-size: 11.5px; }
+  .cal-day { min-height: 78px; padding: 5px; }
+  .cal-mchip { font-size: 10px; padding: 2px 5px; }
 }
 </style>
 </head>
@@ -418,6 +518,11 @@ body {
     מרכז משימות
   </div>
   <div class="header-right">
+    <div class="view-tabs" id="viewTabs">
+      <button class="vtab active" data-view="board" onclick="setView('board')">📋 לוח</button>
+      <button class="vtab" data-view="calendar" onclick="setView('calendar')">📅 לוח שנה</button>
+      <button class="vtab" data-view="ai" onclick="setView('ai')">🤖 עוזר AI</button>
+    </div>
     <div class="search-wrap">
       <span class="search-icon">🔍</span>
       <input class="search-input" id="gSearch" placeholder="חיפוש משימות..." oninput="onSearch(this.value)">
@@ -595,11 +700,20 @@ const MAX_FILE_BYTES = 3 * 1024 * 1024; // 3 MB per file
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // State
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+const OWNERS = ['עידן נבט', 'ירין סעדון', 'ירדן סעדון'];
+const HE_WEEKDAYS = ['א׳','ב׳','ג׳','ד׳','ה׳','ו׳','שבת'];
+const HE_MONTHS = ['ינואר','פברואר','מרץ','אפריל','מאי','יוני','יולי','אוגוסט','ספטמבר','אוקטובר','נובמבר','דצמבר'];
+
 const S = {
   sections: [], missions: [],
   activeSecId: null, filter: 'all', search: '',
   editMissionId: null, editSecId: null,
   selEmoji: '📁', openDetailId: null,
+  view: 'board',
+  calOwner: 'עידן נבט',
+  calCursor: { y: new Date().getFullYear(), m: new Date().getMonth() },
+  aiHistory: [],
+  aiBusy: false,
 };
 
 // ── Cloud sync (Cloudflare Workers + KV) ──
@@ -706,7 +820,19 @@ function uid() { return Date.now().toString(36) + Math.random().toString(36).sli
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // Render
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-function render() { renderSidebar(); renderMain(); }
+function render() { renderSidebar(); renderMain(); updateViewTabs(); }
+
+function updateViewTabs() {
+  document.querySelectorAll('#viewTabs .vtab').forEach(b => {
+    b.classList.toggle('active', b.dataset.view === S.view);
+  });
+  const sb = document.querySelector('.sidebar');
+  const search = document.querySelector('.search-wrap');
+  if (sb) sb.style.display = S.view === 'board' ? '' : 'none';
+  if (search) search.style.display = S.view === 'board' ? '' : 'none';
+}
+
+function setView(v) { S.view = v; render(); }
 
 function renderSidebar() {
   const el = document.getElementById('secList');
@@ -741,6 +867,12 @@ function renderSidebar() {
 }
 
 function renderMain() {
+  if (S.view === 'calendar') return renderCalendar();
+  if (S.view === 'ai')       return renderAI();
+  return renderBoard();
+}
+
+function renderBoard() {
   const el = document.getElementById('main');
   const isAllView = S.activeSecId === ALL_SEC_ID;
 
@@ -1196,6 +1328,278 @@ function selectSec(id) { S.activeSecId=id; S.filter='all'; render(); }
 function setFilter(f)  { S.filter=f; renderMain(); }
 function onSearch(v)   { S.search=v; renderMain(); }
 function clearFilters(){ S.filter='all'; S.search=''; document.getElementById('gSearch').value=''; renderMain(); }
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// Calendar View
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+function renderCalendar() {
+  const el = document.getElementById('main');
+  const ownerCounts = OWNERS.reduce((acc, o) => {
+    acc[o] = S.missions.filter(m => m.owner === o).length;
+    return acc;
+  }, {});
+  const allCnt = S.missions.length;
+
+  const ownerTabs = `
+    <div class="otab ${S.calOwner==='__all__'?'active':''}" onclick="setCalOwner('__all__')">🌐 הכל <span class="ocnt">${allCnt}</span></div>
+    ${OWNERS.map(o => `<div class="otab ${S.calOwner===o?'active':''}" onclick="setCalOwner('${o}')">👤 ${o} <span class="ocnt">${ownerCounts[o]}</span></div>`).join('')}
+  `;
+
+  const { y, m } = S.calCursor;
+  const monthMissions = S.missions.filter(mi => {
+    if (!mi.deadline) return false;
+    if (S.calOwner !== '__all__' && mi.owner !== S.calOwner) return false;
+    return true;
+  });
+
+  const noDeadline = S.missions.filter(mi => !mi.deadline && (S.calOwner === '__all__' || mi.owner === S.calOwner));
+
+  const first = new Date(y, m, 1);
+  const startDow = first.getDay();
+  const daysInMonth = new Date(y, m+1, 0).getDate();
+  const prevDays = new Date(y, m, 0).getDate();
+
+  const cells = [];
+  for (let i = 0; i < startDow; i++) {
+    const d = prevDays - startDow + 1 + i;
+    cells.push({ d, other: true, date: new Date(y, m-1, d) });
+  }
+  for (let d = 1; d <= daysInMonth; d++) {
+    cells.push({ d, other: false, date: new Date(y, m, d) });
+  }
+  while (cells.length % 7 !== 0) {
+    const last = cells[cells.length-1].date;
+    const next = new Date(last.getFullYear(), last.getMonth(), last.getDate()+1);
+    cells.push({ d: next.getDate(), other: true, date: next });
+  }
+
+  const today = new Date(); today.setHours(0,0,0,0);
+  const ownerLabel = S.calOwner === '__all__' ? 'כל האחראים' : S.calOwner;
+
+  el.innerHTML = `
+  <div class="main-header">
+    <div>
+      <div class="main-h1">📅 לוח שנה — ${esc(ownerLabel)}</div>
+      <div class="main-sub">משימות לפי תאריך יעד · ${monthMissions.length} משימות עם תאריך</div>
+    </div>
+  </div>
+  <div class="owner-tabs">${ownerTabs}</div>
+  <div class="cal-bar">
+    <div class="cal-title">${HE_MONTHS[m]} ${y}</div>
+    <div style="display:flex;gap:8px;align-items:center;">
+      <button class="cal-today" onclick="calToday()">היום</button>
+      <div class="cal-nav">
+        <button onclick="calNav(-1)" title="חודש קודם">›</button>
+        <button onclick="calNav(1)" title="חודש הבא">‹</button>
+      </div>
+    </div>
+  </div>
+  <div class="cal-grid">
+    <div class="cal-weekhead">${HE_WEEKDAYS.map(d => `<div class="cal-weekday">${d}</div>`).join('')}</div>
+    <div class="cal-days">
+      ${cells.map(c => {
+        const isToday = c.date.getTime() === today.getTime();
+        const dayMissions = monthMissions.filter(mi => sameDay(new Date(mi.deadline), c.date));
+        return `<div class="cal-day ${c.other?'other':''} ${isToday?'today':''}">
+          <div class="cal-daynum">${c.d}</div>
+          ${dayMissions.map(mi => calChip(mi)).join('')}
+        </div>`;
+      }).join('')}
+    </div>
+  </div>
+  ${noDeadline.length ? `
+    <div class="cal-noddl">
+      <strong>${noDeadline.length} משימות ללא תאריך יעד</strong> — לא יוצגו בלוח עד שיוגדר תאריך:
+      <div class="cal-noddl-list">
+        ${noDeadline.slice(0,12).map(mi => `<span class="cal-noddl-item" onclick="openDetail('${mi.id}')">${esc(mi.name)}</span>`).join('')}
+        ${noDeadline.length>12 ? `<span class="cal-noddl-item">+ ${noDeadline.length-12} נוספות…</span>` : ''}
+      </div>
+    </div>` : ''}
+  `;
+}
+
+function calChip(m) {
+  const css = STATUS_CSS[m.status] || 's-todo';
+  const d = new Date(m.deadline);
+  const hasTime = m.deadline.includes('T');
+  const t = hasTime ? d.toLocaleTimeString('he-IL',{hour:'2-digit',minute:'2-digit'}) : '';
+  return `<div class="cal-mchip ${css}" onclick="openDetail('${m.id}')" title="${esc(m.name)}${t?' — '+t:''}">
+    ${t?`<span class="cal-mchip-time">${t}</span>`:''}${esc(m.name)}
+  </div>`;
+}
+
+function sameDay(a, b) {
+  return a.getFullYear()===b.getFullYear() && a.getMonth()===b.getMonth() && a.getDate()===b.getDate();
+}
+function setCalOwner(o) { S.calOwner = o; renderCalendar(); }
+function calNav(delta) {
+  let { y, m } = S.calCursor;
+  m += delta;
+  if (m < 0)  { m = 11; y--; }
+  if (m > 11) { m = 0;  y++; }
+  S.calCursor = { y, m };
+  renderCalendar();
+}
+function calToday() {
+  const t = new Date();
+  S.calCursor = { y: t.getFullYear(), m: t.getMonth() };
+  renderCalendar();
+}
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// AI Assistant View
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+function renderAI() {
+  const el = document.getElementById('main');
+  const empty = S.aiHistory.length === 0;
+  el.innerHTML = `
+  <div class="main-header">
+    <div>
+      <div class="main-h1">🤖 עוזר AI לניהול משימות</div>
+      <div class="main-sub">שאל שאלות על המשימות, קבל המלצות עדיפויות וניתוחי עומס · מופעל ע"י Claude</div>
+    </div>
+    <div class="main-header-right">
+      <button class="btn btn-ghost btn-sm" onclick="aiClear()" title="נקה שיחה">🗑️ נקה</button>
+    </div>
+  </div>
+  <div class="ai-wrap">
+    <div class="ai-quick">
+      <button class="ai-qbtn" onclick="aiQuick('סדר לי את המשימות לפי עדיפות וזמן — מה הכי דחוף?')">📌 מה דחוף עכשיו?</button>
+      <button class="ai-qbtn" onclick="aiQuick('מי האחראי הכי עמוס? יש העמסה לא מאוזנת בין הצוות?')">⚖️ ניתוח עומס</button>
+      <button class="ai-qbtn" onclick="aiQuick('אילו משימות באיחור או עומדות לאחר?')">⏰ איחורים</button>
+      <button class="ai-qbtn" onclick="aiQuick('הצע לי תוכנית עבודה לשבוע הקרוב')">📅 תוכנית שבועית</button>
+      <button class="ai-qbtn" onclick="aiOrganize()">⚡ סדר אוטומטי (מקומי)</button>
+    </div>
+    <div class="ai-chat" id="aiChat">
+      ${empty ? `<div class="ai-empty">
+        <div class="ico">🤖</div>
+        <div class="t">איך אפשר לעזור?</div>
+        <div class="s">אני רואה את כל המשימות שלך — סטטוסים, אחראים, תאריכים ועדיפויות. שאל אותי כל שאלה או לחץ על אחד הכפתורים למעלה.</div>
+      </div>` : S.aiHistory.map(aiMsgHtml).join('')}
+    </div>
+    <div class="ai-input-row">
+      <input class="ai-input" id="aiInput" placeholder="שאל שאלה על המשימות..." onkeydown="if(event.key==='Enter')aiSend()" ${S.aiBusy?'disabled':''}>
+      <button class="btn btn-primary" onclick="aiSend()" ${S.aiBusy?'disabled':''}>${S.aiBusy?'⏳':'שלח'}</button>
+    </div>
+  </div>`;
+  const chat = document.getElementById('aiChat');
+  if (chat) chat.scrollTop = chat.scrollHeight;
+  setTimeout(() => { const i = document.getElementById('aiInput'); if (i && !S.aiBusy) i.focus(); }, 50);
+}
+
+function aiMsgHtml(msg) {
+  const isUser = msg.role === 'user';
+  const cls = isUser ? 'user' : 'bot';
+  const av  = isUser ? '👤' : '🤖';
+  const bubbleCls = msg.thinking ? 'ai-bubble thinking' : 'ai-bubble';
+  return `<div class="ai-msg ${cls}">
+    <div class="ai-avatar">${av}</div>
+    <div class="${bubbleCls}">${esc(msg.content)}</div>
+  </div>`;
+}
+
+function aiQuick(q) {
+  const inp = document.getElementById('aiInput');
+  if (inp) inp.value = q;
+  aiSend();
+}
+function aiClear() { S.aiHistory = []; renderAI(); }
+
+async function aiSend() {
+  if (S.aiBusy) return;
+  const inp = document.getElementById('aiInput');
+  const text = (inp?.value || '').trim();
+  if (!text) return;
+  inp.value = '';
+  S.aiHistory.push({ role: 'user', content: text });
+  S.aiHistory.push({ role: 'assistant', content: 'חושב…', thinking: true });
+  S.aiBusy = true;
+  renderAI();
+
+  try {
+    const history = S.aiHistory
+      .filter(m => !m.thinking)
+      .slice(0, -1) // exclude the just-added user msg (sent separately as userMessage)
+      .map(m => ({ role: m.role, content: m.content }));
+    const res = await fetch(API_URL + 'ai', {
+      method: 'POST',
+      headers: _apiHeaders(),
+      body: JSON.stringify({
+        sections: S.sections,
+        missions: _missionsForCloud(),
+        history,
+        userMessage: text,
+      }),
+    });
+    if (!res.ok) {
+      const err = await res.text();
+      throw new Error(err || ('HTTP '+res.status));
+    }
+    const data = await res.json();
+    S.aiHistory = S.aiHistory.filter(m => !m.thinking);
+    S.aiHistory.push({ role: 'assistant', content: data.text || '(ללא תשובה)' });
+  } catch (e) {
+    S.aiHistory = S.aiHistory.filter(m => !m.thinking);
+    S.aiHistory.push({ role: 'assistant', content: '⚠️ שגיאה: לא הצלחתי לקבל תשובה. ' + (e.message||'') });
+  } finally {
+    S.aiBusy = false;
+    renderAI();
+  }
+}
+
+// Rule-based local organizer (no API call, instant)
+function aiOrganize() {
+  const now = new Date();
+  const overdue = [];
+  const today = [];
+  const soon = [];
+  const blocked = [];
+  const noOwner = [];
+  const noDeadline = [];
+
+  S.missions.filter(m => m.status !== 'done').forEach(m => {
+    if (m.status === 'blocked') blocked.push(m);
+    if (!m.owner) noOwner.push(m);
+    if (!m.deadline) { noDeadline.push(m); return; }
+    const d = new Date(m.deadline.includes('T') ? m.deadline : m.deadline+'T23:59');
+    const diffH = (d - now) / 3600000;
+    if (diffH < 0) overdue.push({ m, diffH });
+    else if (diffH < 24) today.push({ m, diffH });
+    else if (diffH < 24*7) soon.push({ m, diffH });
+  });
+
+  overdue.sort((a,b) => a.diffH - b.diffH);
+  today.sort((a,b) => a.diffH - b.diffH);
+  soon.sort((a,b) => a.diffH - b.diffH);
+
+  const ownerLoad = OWNERS.map(o => ({
+    o,
+    n: S.missions.filter(m => m.owner === o && m.status !== 'done').length
+  }));
+  ownerLoad.sort((a,b) => b.n - a.n);
+
+  const fmtMission = m => `• ${m.name}${m.owner?` (${m.owner})`:''}${m.priority==='high'?' 🔴':''}`;
+  const sections = [];
+
+  if (overdue.length) sections.push(`🚨 *באיחור* (${overdue.length}):\n${overdue.slice(0,8).map(x=>fmtMission(x.m)).join('\n')}`);
+  if (today.length)   sections.push(`⏰ *עד היום* (${today.length}):\n${today.slice(0,8).map(x=>fmtMission(x.m)).join('\n')}`);
+  if (soon.length)    sections.push(`📅 *השבוע הקרוב* (${soon.length}):\n${soon.slice(0,8).map(x=>fmtMission(x.m)).join('\n')}`);
+  if (blocked.length) sections.push(`🚫 *חסומות* (${blocked.length}):\n${blocked.slice(0,5).map(fmtMission).join('\n')}`);
+
+  sections.push(`👥 *עומס לפי אחראי*:\n${ownerLoad.map(x => `• ${x.o}: ${x.n} משימות פתוחות`).join('\n')}`);
+
+  if (noOwner.length)    sections.push(`⚠️ ${noOwner.length} משימות ללא אחראי — מומלץ להקצות`);
+  if (noDeadline.length) sections.push(`📌 ${noDeadline.length} משימות ללא תאריך יעד`);
+
+  if (!overdue.length && !today.length && !soon.length) {
+    sections.unshift('✨ אין משימות דחופות לשבוע הקרוב — עבודה טובה!');
+  }
+
+  const summary = sections.join('\n\n');
+  S.aiHistory.push({ role: 'user', content: '⚡ סדר אוטומטי' });
+  S.aiHistory.push({ role: 'assistant', content: summary });
+  renderAI();
+}
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // Helpers
