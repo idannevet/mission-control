@@ -514,20 +514,28 @@ body {
   box-shadow: 0 0 6px rgba(233,30,140,.5);
 }
 .cal-mblock {
-  position: absolute; left: 3px; right: 3px;
-  padding: 4px 7px; border-radius: 5px; font-size: 11px;
+  position: absolute;
+  /* left + width set inline based on overlap layout */
+  padding: 3px 6px; border-radius: 5px; font-size: 11px;
   cursor: pointer; overflow: hidden; line-height: 1.3;
-  border-right: 3px solid; transition: transform .1s, box-shadow .15s;
+  border-right: 3px solid;
+  box-shadow: 0 1px 2px rgba(0,0,0,.04);
+  transition: box-shadow .15s, z-index 0s;
   z-index: 2;
 }
-.cal-mblock:hover { transform: scale(1.01); box-shadow: var(--shadow-sm); z-index: 4; }
+.cal-mblock:hover { box-shadow: 0 4px 12px rgba(0,0,0,.12); z-index: 5; }
 .cal-mblock.s-todo  { background: var(--blue-bg);   color: var(--blue);   border-color: var(--blue); }
 .cal-mblock.s-prog  { background: var(--orange-bg); color: var(--orange); border-color: var(--orange); }
 .cal-mblock.s-done  { background: var(--green-bg);  color: var(--green);  border-color: var(--green); opacity: .6; }
 .cal-mblock.s-block { background: var(--red-bg);    color: var(--red);    border-color: var(--red); }
-.cal-mblock.deadline-only { background: repeating-linear-gradient(135deg, var(--red-bg), var(--red-bg) 5px, #fff 5px, #fff 8px); border-right-style: dashed; }
-.cal-mblock-time { font-weight: 700; opacity: .85; font-size: 10px; display: block; }
-.cal-mblock-name { font-weight: 600; }
+.cal-mblock.deadline-only {
+  background-image: repeating-linear-gradient(135deg, transparent, transparent 5px, rgba(0,0,0,.06) 5px, rgba(0,0,0,.06) 9px);
+  border-right-style: dashed; border-right-width: 4px;
+}
+.cal-mblock-time { font-weight: 700; opacity: .9; font-size: 10px; display: block; line-height: 1.15; }
+.cal-mblock-name { font-weight: 600; display: block; line-height: 1.25; word-break: break-word; }
+.cal-mblock.tiny .cal-mblock-name { display: none; }
+.cal-mblock.tiny { padding: 2px 6px; }
 
 /* ─── Schedule Proposal ─── */
 .sched-overlay {
@@ -1625,10 +1633,13 @@ function renderTimeGrid(numDays) {
 
   const dayCols = days.map(d => {
     const isToday = sameDay(d, today);
-    const items = filteredMissions().map(m => {
-      const block = missionBlock(m, d);
-      return block;
-    }).filter(Boolean);
+    const dayBlocks = [];
+    filteredMissions().forEach(m => {
+      const info = missionBlockInfo(m, d);
+      if (info) dayBlocks.push(info);
+    });
+    layoutDayBlocks(dayBlocks);
+    const items = dayBlocks.map(renderBlockHtml).filter(Boolean);
     const nowLine = isToday ? nowLineHtml() : '';
     return `<div class="cal-day-col ${isToday?'today':''}">${nowLine}${items.join('')}</div>`;
   }).join('');
@@ -1645,28 +1656,73 @@ function renderTimeGrid(numDays) {
     </div>`;
 }
 
-function missionBlock(m, day) {
+function missionBlockInfo(m, day) {
   // Pick anchor time: scheduledStart if set, else deadline (only if it has a time)
   let anchor = null, isDeadline = false;
   if (m.scheduledStart) anchor = new Date(m.scheduledStart);
   else if (m.deadline && m.deadline.includes('T')) { anchor = new Date(m.deadline); isDeadline = true; }
   if (!anchor) return null;
   if (!sameDay(anchor, day)) return null;
-
   const startMin = anchor.getHours() * 60 + anchor.getMinutes();
-  const baseMin  = CAL_HOUR_START * 60;
-  const endMin   = (CAL_HOUR_END + 1) * 60;
-  if (startMin >= endMin) return null;
-
   const dur = m.estDuration || (isDeadline ? 30 : 60);
-  const top = Math.max(0, (startMin - baseMin) * (CAL_HOUR_PX / 60));
-  const height = Math.max(22, dur * (CAL_HOUR_PX / 60) - 2);
+  return { m, anchor, isDeadline, startMin, endMin: startMin + dur, dur, col: 0, numCols: 1 };
+}
+
+// Standard "split overlapping events into columns" layout, à la Google Calendar.
+function layoutDayBlocks(blocks) {
+  blocks.sort((a, b) => a.startMin - b.startMin || b.endMin - a.endMin);
+  // Group blocks that overlap (clusters) and assign each block a column
+  // (first column where it doesn't overlap with another block already there).
+  const clusters = [];
+  let cur = null;
+  for (const b of blocks) {
+    if (!cur || b.startMin >= cur.maxEnd) {
+      cur = { items: [], maxEnd: b.endMin };
+      clusters.push(cur);
+    }
+    cur.items.push(b);
+    if (b.endMin > cur.maxEnd) cur.maxEnd = b.endMin;
+  }
+  for (const cluster of clusters) {
+    const columns = [];
+    for (const b of cluster.items) {
+      let placed = false;
+      for (let ci = 0; ci < columns.length; ci++) {
+        const last = columns[ci][columns[ci].length - 1];
+        if (last.endMin <= b.startMin) {
+          columns[ci].push(b);
+          b.col = ci;
+          placed = true;
+          break;
+        }
+      }
+      if (!placed) {
+        b.col = columns.length;
+        columns.push([b]);
+      }
+    }
+    const numCols = columns.length;
+    for (const b of cluster.items) b.numCols = numCols;
+  }
+}
+
+function renderBlockHtml(b) {
+  const m = b.m;
+  const baseMin = CAL_HOUR_START * 60;
+  const endMin  = (CAL_HOUR_END + 1) * 60;
+  if (b.startMin >= endMin) return '';
+  const top    = Math.max(0, (b.startMin - baseMin) * (CAL_HOUR_PX / 60));
+  const height = Math.max(20, Math.min(b.dur, endMin - b.startMin) * (CAL_HOUR_PX / 60) - 2);
   const css = STATUS_CSS[m.status] || 's-todo';
-  const dlOnly = isDeadline ? ' deadline-only' : '';
-  const timeLbl = anchor.toLocaleTimeString('he-IL',{hour:'2-digit',minute:'2-digit'});
-  const tip = `${m.name}${m.owner?' — '+m.owner:''} (${timeLbl}, ${dur} דק׳)${isDeadline?' · יעד':''}`;
-  return `<div class="cal-mblock ${css}${dlOnly}" style="top:${top}px;height:${height}px;" onclick="openDetail('${m.id}')" title="${esc(tip)}">
-    <span class="cal-mblock-time">${timeLbl}${isDeadline?' 🎯':''}</span>
+  const dlOnly = b.isDeadline ? ' deadline-only' : '';
+  const tiny = height < 32 ? ' tiny' : '';
+  const timeLbl = b.anchor.toLocaleTimeString('he-IL',{hour:'2-digit',minute:'2-digit'});
+  const tip = `${m.name}${m.owner?' — '+m.owner:''} (${timeLbl}, ${b.dur} דק׳)${b.isDeadline?' · יעד':''}`;
+  const colWidth = 100 / (b.numCols || 1);
+  const colLeft  = (b.col || 0) * colWidth;
+  const style = `top:${top}px;height:${height}px;left:calc(${colLeft}% + 2px);width:calc(${colWidth}% - 4px);`;
+  return `<div class="cal-mblock ${css}${dlOnly}${tiny}" style="${style}" onclick="openDetail('${m.id}')" title="${esc(tip)}">
+    <span class="cal-mblock-time">${timeLbl}${b.isDeadline?' 🎯':''}</span>
     <span class="cal-mblock-name">${esc(m.name)}</span>
   </div>`;
 }
