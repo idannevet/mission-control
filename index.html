@@ -452,6 +452,8 @@ body {
   border-right: 3px solid; transition: transform .1s;
 }
 .cal-mchip:hover { transform: translateX(-2px); }
+.cal-mchip { cursor: grab; }
+.cal-mchip:active { cursor: grabbing; }
 .cal-mchip.s-todo  { background: var(--blue-bg);   color: var(--blue);   border-color: var(--blue); }
 .cal-mchip.s-prog  { background: var(--orange-bg); color: var(--orange); border-color: var(--orange); }
 .cal-mchip.s-done  { background: var(--green-bg);  color: var(--green);  border-color: var(--green); text-decoration: line-through; opacity: .75; }
@@ -517,13 +519,22 @@ body {
   position: absolute;
   /* left + width set inline based on overlap layout */
   padding: 3px 6px; border-radius: 5px; font-size: 11px;
-  cursor: pointer; overflow: hidden; line-height: 1.3;
+  cursor: grab; overflow: hidden; line-height: 1.3;
   border-right: 3px solid;
   box-shadow: 0 1px 2px rgba(0,0,0,.04);
   transition: box-shadow .15s, z-index 0s;
   z-index: 2;
 }
+.cal-mblock:active { cursor: grabbing; }
 .cal-mblock:hover { box-shadow: 0 4px 12px rgba(0,0,0,.12); z-index: 5; }
+.cal-mblock.dragging { opacity: .35; }
+.cal-mchip.dragging { opacity: .35; }
+
+/* During a drag, child blocks should not intercept drop events on their parent cells */
+body.dragging-mission .cal-mblock:not(.dragging),
+body.dragging-mission .cal-mchip:not(.dragging) { pointer-events: none; }
+.cal-day.drag-over { background: var(--pink-bg) !important; border-color: var(--pink) !important; }
+.cal-day-col.drag-over { background-color: rgba(233,30,140,.07); box-shadow: inset 0 0 0 2px var(--pink); }
 .cal-mblock.s-todo  { background: var(--blue-bg);   color: var(--blue);   border-color: var(--blue); }
 .cal-mblock.s-prog  { background: var(--orange-bg); color: var(--orange); border-color: var(--orange); }
 .cal-mblock.s-done  { background: var(--green-bg);  color: var(--green);  border-color: var(--green); opacity: .6; }
@@ -1585,7 +1596,9 @@ function renderCalMonth() {
         ${cells.map(c => {
           const isToday = c.date.getTime() === today.getTime();
           const dayMissions = monthMissions.filter(mi => sameDay(missionDate(mi), c.date));
-          return `<div class="cal-day ${c.other?'other':''} ${isToday?'today':''}">
+          const iso = isoDate(c.date);
+          return `<div class="cal-day ${c.other?'other':''} ${isToday?'today':''}"
+            ondragover="dragOver(event)" ondragleave="dragLeave(event)" ondrop="dropMonthDay(event,'${iso}')">
             <div class="cal-daynum">${c.d}</div>
             ${dayMissions.map(mi => calChip(mi)).join('')}
           </div>`;
@@ -1641,7 +1654,9 @@ function renderTimeGrid(numDays) {
     layoutDayBlocks(dayBlocks);
     const items = dayBlocks.map(renderBlockHtml).filter(Boolean);
     const nowLine = isToday ? nowLineHtml() : '';
-    return `<div class="cal-day-col ${isToday?'today':''}">${nowLine}${items.join('')}</div>`;
+    const iso = isoDate(d);
+    return `<div class="cal-day-col ${isToday?'today':''}"
+      ondragover="dragOver(event)" ondragleave="dragLeave(event)" ondrop="dropTimeGrid(event,'${iso}')">${nowLine}${items.join('')}</div>`;
   }).join('');
 
   const bodyHeight = (CAL_HOUR_END - CAL_HOUR_START + 1) * CAL_HOUR_PX;
@@ -1721,7 +1736,9 @@ function renderBlockHtml(b) {
   const colWidth = 100 / (b.numCols || 1);
   const colLeft  = (b.col || 0) * colWidth;
   const style = `top:${top}px;height:${height}px;left:calc(${colLeft}% + 2px);width:calc(${colWidth}% - 4px);`;
-  return `<div class="cal-mblock ${css}${dlOnly}${tiny}" style="${style}" onclick="openDetail('${m.id}')" title="${esc(tip)}">
+  return `<div class="cal-mblock ${css}${dlOnly}${tiny}" style="${style}"
+    draggable="true" ondragstart="dragStart(event,'${m.id}')" ondragend="dragEnd(event)"
+    onclick="openDetail('${m.id}')" title="${esc(tip)}">
     <span class="cal-mblock-time">${timeLbl}${b.isDeadline?' 🎯':''}</span>
     <span class="cal-mblock-name">${esc(m.name)}</span>
   </div>`;
@@ -1746,7 +1763,9 @@ function calChip(m) {
   const d = missionDate(m);
   const hasTime = m.deadline.includes('T');
   const t = hasTime ? d.toLocaleTimeString('he-IL',{hour:'2-digit',minute:'2-digit'}) : '';
-  return `<div class="cal-mchip ${css}" onclick="openDetail('${m.id}')" title="${esc(m.name)}${t?' — '+t:''}">
+  return `<div class="cal-mchip ${css}" draggable="true"
+    ondragstart="dragStart(event,'${m.id}')" ondragend="dragEnd(event)"
+    onclick="openDetail('${m.id}')" title="${esc(m.name)}${t?' — '+t:''}">
     ${t?`<span class="cal-mchip-time">${t}</span>`:''}${esc(m.name)}
   </div>`;
 }
@@ -1765,6 +1784,102 @@ function calNav(delta) {
   renderCalendar();
 }
 function calToday() { S.calCursor = new Date(); renderCalendar(); }
+
+// ─── Drag & drop: reschedule by dragging chips/blocks ───
+let _dragMissionId = null;
+
+function dragStart(e, id) {
+  _dragMissionId = id;
+  try { e.dataTransfer.setData('text/plain', id); } catch(_) {}
+  e.dataTransfer.effectAllowed = 'move';
+  e.currentTarget.classList.add('dragging');
+  document.body.classList.add('dragging-mission');
+}
+function dragEnd(e) {
+  _dragMissionId = null;
+  e.currentTarget.classList.remove('dragging');
+  document.body.classList.remove('dragging-mission');
+  document.querySelectorAll('.drag-over').forEach(el => el.classList.remove('drag-over'));
+}
+function dragOver(e) {
+  if (!_dragMissionId) return;
+  e.preventDefault();
+  e.dataTransfer.dropEffect = 'move';
+  e.currentTarget.classList.add('drag-over');
+}
+function dragLeave(e) {
+  // currentTarget may receive dragleave when entering child; only remove if leaving the target
+  if (e.currentTarget.contains(e.relatedTarget)) return;
+  e.currentTarget.classList.remove('drag-over');
+}
+
+function dropMonthDay(e, dateIso) {
+  e.preventDefault();
+  e.currentTarget.classList.remove('drag-over');
+  const id = _dragMissionId || e.dataTransfer.getData('text/plain');
+  const m = S.missions.find(x => x.id === id);
+  if (!m || !m.deadline) return;
+
+  const oldDeadline = new Date(m.deadline.includes('T') ? m.deadline : m.deadline+'T00:00:00');
+  const oldMid = new Date(oldDeadline); oldMid.setHours(0,0,0,0);
+  const [y, mo, d] = dateIso.split('-').map(Number);
+  const newMid = new Date(y, mo-1, d);
+  const dayDelta = Math.round((newMid - oldMid) / 86400000);
+  if (!dayDelta) return;
+
+  // Update deadline (preserve time of day)
+  if (m.deadline.includes('T')) {
+    const nd = new Date(newMid); nd.setHours(oldDeadline.getHours(), oldDeadline.getMinutes());
+    m.deadline = toLocalIso(nd);
+  } else {
+    m.deadline = dateIso;
+  }
+  // Shift scheduledStart by the same number of days, if present
+  if (m.scheduledStart) {
+    const oldSched = new Date(m.scheduledStart);
+    oldSched.setDate(oldSched.getDate() + dayDelta);
+    m.scheduledStart = toLocalIso(oldSched);
+  }
+  save(); render();
+  toast(`"${m.name}" → ${newMid.toLocaleDateString('he-IL',{day:'numeric',month:'long'})}`, 'success');
+}
+
+function dropTimeGrid(e, dateIso) {
+  e.preventDefault();
+  e.currentTarget.classList.remove('drag-over');
+  const id = _dragMissionId || e.dataTransfer.getData('text/plain');
+  const m = S.missions.find(x => x.id === id);
+  if (!m) return;
+
+  const rect = e.currentTarget.getBoundingClientRect();
+  const yOff = e.clientY - rect.top;
+  const baseMin = CAL_HOUR_START * 60;
+  let newMin = baseMin + (yOff / CAL_HOUR_PX) * 60;
+  newMin = Math.round(newMin / 15) * 15; // snap to 15 min
+  newMin = Math.max(baseMin, Math.min((CAL_HOUR_END+1)*60 - 15, newMin));
+  const hr = Math.floor(newMin / 60), mi = newMin % 60;
+  const [y, mo, d] = dateIso.split('-').map(Number);
+  const newDate = new Date(y, mo-1, d, hr, mi);
+  const iso = toLocalIso(newDate);
+
+  // Update whichever field the block represents (scheduledStart wins if both)
+  if (m.scheduledStart) m.scheduledStart = iso;
+  else if (m.deadline)  m.deadline = iso;
+  else return;
+
+  save(); render();
+  const tlbl = `${String(hr).padStart(2,'0')}:${String(mi).padStart(2,'0')}`;
+  toast(`"${m.name}" → ${HE_WEEKDAYS[newDate.getDay()]} ${newDate.getDate()}/${newDate.getMonth()+1} ${tlbl}`, 'success');
+}
+
+function toLocalIso(d) {
+  const p = n => String(n).padStart(2,'0');
+  return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}T${p(d.getHours())}:${p(d.getMinutes())}`;
+}
+function isoDate(d) {
+  const p = n => String(n).padStart(2,'0');
+  return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}`;
+}
 
 // ─── AI scheduling: propose / preview / apply ───
 async function proposeSchedule() {
