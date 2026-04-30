@@ -611,16 +611,129 @@ body.dragging-mission .cal-mchip:not(.dragging) { pointer-events: none; }
 .ai-input { flex: 1; padding: 11px 14px; border: 1.5px solid var(--gray-200); border-radius: var(--rs); font-size: 13.5px; font-family: 'Heebo', sans-serif; outline: none; transition: border-color .15s; text-align: right; }
 .ai-input:focus { border-color: var(--pink); box-shadow: 0 0 0 3px rgba(233,30,140,.1); }
 
-@media (max-width: 700px) {
-  .sidebar { width: 56px; min-width: 56px; }
-  .sec-name, .sec-count, .sec-btns, .sidebar-label { display: none; }
-  .sidebar-foot .btn span { display: none; }
-  .detail-panel { width: 100%; }
-  .search-input { width: 140px; }
-  .hdr-btn span { display: none; }
-  .vtab { padding: 6px 9px; font-size: 11.5px; }
-  .cal-day { min-height: 78px; padding: 5px; }
-  .cal-mchip { font-size: 10px; padding: 2px 5px; }
+/* ─── Hamburger / Sidebar drawer (mobile) ─── */
+.hdr-menu {
+  display: none;
+  width: 38px; height: 38px; border-radius: 8px; border: 1.5px solid rgba(255,255,255,.2);
+  background: rgba(255,255,255,.08); color: #fff; cursor: pointer;
+  align-items: center; justify-content: center; font-size: 18px;
+  flex-shrink: 0; transition: background .15s;
+}
+.hdr-menu:hover { background: rgba(255,255,255,.16); }
+.sidebar-backdrop {
+  display: none; position: fixed; inset: 0; top: 62px;
+  background: rgba(13,18,64,.45); backdrop-filter: blur(2px);
+  z-index: 150; opacity: 0; pointer-events: none; transition: opacity .22s;
+}
+.sidebar-backdrop.open { opacity: 1; pointer-events: all; }
+
+@media (max-width: 768px) {
+  /* ─── Header ─── */
+  .header { height: 56px; padding: 0 10px; gap: 6px; }
+  .header-logo { font-size: 15px; gap: 8px; }
+  .header-logo .dot { width: 30px; height: 30px; font-size: 15px; border-radius: 8px; }
+  .header-right { gap: 5px; }
+  .hdr-menu { display: inline-flex; }
+  .search-wrap { display: none; }
+  #syncBadge span:not(#syncDot) { display: none; }     /* keep dot only */
+  #syncBadge { padding: 0 4px; }
+  .hdr-btn { display: none; }
+  .vtab { padding: 7px 9px; font-size: 12px; }
+  .vtab-label { display: none; }                       /* hide labels, keep icons */
+
+  /* ─── Sidebar becomes slide-in drawer ─── */
+  .layout { height: calc(100vh - 56px); }
+  .sidebar {
+    position: fixed; top: 56px; bottom: 0; right: -290px;
+    width: 280px; min-width: 280px; max-width: 85vw;
+    transition: right .26s cubic-bezier(.4,0,.2,1);
+    z-index: 200; box-shadow: -8px 0 32px rgba(0,0,0,.18);
+    border-left: 1px solid var(--gray-200); border-right: none;
+  }
+  .sidebar.open { right: 0; }
+  .sidebar-backdrop { display: block; top: 56px; }
+  /* keep labels visible inside the drawer */
+  .sec-name, .sec-count, .sec-btns, .sidebar-label { display: revert; }
+  .sidebar-foot .btn span { display: revert; }
+
+  /* ─── Main ─── */
+  .main-header {
+    padding: 14px 14px 12px; flex-direction: column; align-items: stretch; gap: 10px;
+    position: static;
+  }
+  .main-h1 { font-size: 17px; }
+  .main-sub { font-size: 12px; }
+  .main-header-right { flex-wrap: wrap; gap: 6px; }
+  .main-header-right .btn { flex: 1 1 auto; justify-content: center; padding: 9px 12px; font-size: 12.5px; }
+
+  .filter-bar { padding: 10px 14px; gap: 6px; overflow-x: auto; flex-wrap: nowrap; }
+  .fpill { padding: 5px 11px; font-size: 12px; flex-shrink: 0; }
+  .missions-wrap { padding: 14px; }
+  .missions-grid { grid-template-columns: 1fr; gap: 10px; }
+  .mcard { padding: 13px; }
+  .mcard-title { font-size: 14px; }
+  .mcard-actions { opacity: 1; }                      /* always visible on touch */
+
+  /* ─── Owner tabs (calendar) ─── */
+  .owner-tabs { padding: 10px 14px; gap: 6px; overflow-x: auto; flex-wrap: nowrap; }
+  .otab { padding: 6px 12px; font-size: 12.5px; flex-shrink: 0; white-space: nowrap; }
+
+  /* ─── Calendar bar ─── */
+  .cal-bar { padding: 10px 14px; flex-direction: column; align-items: stretch; gap: 10px; }
+  .cal-bar > div { justify-content: space-between !important; }
+  .cal-title { font-size: 15px; }
+  .cal-mode-tab { padding: 5px 10px; font-size: 11.5px; }
+  .cal-mode-tab[data-mode="week"] { display: none; }  /* hide week mode on mobile */
+
+  /* ─── Month grid ─── */
+  .cal-grid { padding: 0 8px 14px; }
+  .cal-weekday { font-size: 10.5px; }
+  .cal-day { min-height: 70px; padding: 4px; }
+  .cal-daynum { font-size: 11.5px; }
+  .cal-mchip { font-size: 9.5px; padding: 2px 5px; }
+  .cal-mchip-time { display: none; }                  /* save space */
+
+  /* ─── Day grid (no week on mobile, day works fine) ─── */
+  .cal-week-wrap { padding: 0 10px 14px; }
+  .cal-week-head .cal-headcell { padding: 8px 4px; font-size: 11px; }
+  .cal-week-head .dayno { font-size: 14px; }
+  .cal-headcell .dayname { font-size: 10px; }
+  .cal-week-body { /* no horizontal compression for day mode */ }
+  .cal-time-col { /* keep readable */ }
+  .cal-time-cell { font-size: 9.5px; padding: 2px 3px; }
+  .cal-mblock { font-size: 10px; padding: 3px 5px; }
+  .cal-mblock-time { font-size: 9.5px; }
+
+  /* ─── AI ─── */
+  .ai-wrap { padding: 14px; }
+  .ai-quick { gap: 6px; }
+  .ai-qbtn { padding: 7px 11px; font-size: 11.5px; }
+  .ai-msg { max-width: 92%; }
+  .ai-bubble { font-size: 13px; padding: 9px 12px; }
+
+  /* ─── Mission modal ─── */
+  .modal { max-height: 92vh; border-radius: 14px 14px 0 0; }
+  .overlay { padding: 0; align-items: flex-end; }
+  .modal-body { padding: 16px 18px; }
+  .modal-head { padding: 18px 18px 0; }
+  .modal-foot { padding: 0 18px 18px; }
+  .frow { grid-template-columns: 1fr; gap: 12px; }
+
+  /* ─── Detail slide-over ─── */
+  .detail-panel { width: 100%; top: 56px; }
+
+  /* ─── Schedule modal ─── */
+  .sched-modal { max-height: 90vh; border-radius: 14px 14px 0 0; }
+  .sched-overlay { padding: 0; align-items: flex-end; }
+  .sched-list { padding: 12px 16px; }
+  .sched-head { padding: 16px 18px; }
+  .sched-foot { padding: 12px 16px; }
+  .sched-foot .btn { flex: 1 1 auto; justify-content: center; }
+  .sched-item-head { gap: 6px; }
+
+  /* ─── Toast ─── */
+  .toast-wrap { left: 12px; right: 12px; bottom: 14px; }
+  .toast { max-width: none; }
 }
 </style>
 </head>
@@ -633,10 +746,11 @@ body.dragging-mission .cal-mchip:not(.dragging) { pointer-events: none; }
     מרכז משימות
   </div>
   <div class="header-right">
+    <button class="hdr-menu" onclick="toggleSidebar()" title="קטגוריות">☰</button>
     <div class="view-tabs" id="viewTabs">
-      <button class="vtab active" data-view="board" onclick="setView('board')">📋 לוח</button>
-      <button class="vtab" data-view="calendar" onclick="setView('calendar')">📅 לוח שנה</button>
-      <button class="vtab" data-view="ai" onclick="setView('ai')">🤖 עוזר AI</button>
+      <button class="vtab active" data-view="board" onclick="setView('board')">📋<span class="vtab-label"> לוח</span></button>
+      <button class="vtab" data-view="calendar" onclick="setView('calendar')">📅<span class="vtab-label"> לוח שנה</span></button>
+      <button class="vtab" data-view="ai" onclick="setView('ai')">🤖<span class="vtab-label"> עוזר AI</span></button>
     </div>
     <div class="search-wrap">
       <span class="search-icon">🔍</span>
@@ -655,9 +769,10 @@ body.dragging-mission .cal-mchip:not(.dragging) { pointer-events: none; }
 </header>
 
 <!-- ═══ Layout ═══ -->
+<div class="sidebar-backdrop" id="sbBackdrop" onclick="closeSidebar()"></div>
 <div class="layout">
   <main class="main" id="main"></main>
-  <aside class="sidebar">
+  <aside class="sidebar" id="sidebar">
     <div class="sidebar-top">
       <div class="sidebar-label">קטגוריות</div>
     </div>
@@ -977,11 +1092,35 @@ function updateViewTabs() {
   });
   const sb = document.querySelector('.sidebar');
   const search = document.querySelector('.search-wrap');
-  if (sb) sb.style.display = S.view === 'board' ? '' : 'none';
-  if (search) search.style.display = S.view === 'board' ? '' : 'none';
+  const hm = document.querySelector('.hdr-menu');
+  if (isMobile()) {
+    // Sidebar is a drawer on mobile — never display:none, just close it
+    if (sb) sb.style.display = '';
+    if (search) search.style.display = '';
+    if (hm) hm.style.display = S.view === 'board' ? 'inline-flex' : 'none';
+  } else {
+    if (sb) sb.style.display = S.view === 'board' ? '' : 'none';
+    if (search) search.style.display = S.view === 'board' ? '' : 'none';
+    if (hm) hm.style.display = '';
+  }
 }
 
-function setView(v) { S.view = v; render(); }
+function setView(v) { S.view = v; closeSidebar(); render(); }
+
+function isMobile() { return window.innerWidth <= 768; }
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('sbBackdrop').classList.toggle('open');
+}
+function closeSidebar() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sbBackdrop').classList.remove('open');
+}
+window.addEventListener('resize', () => {
+  if (!isMobile()) closeSidebar();
+  // Drop out of week mode on small screens, since the 7-col grid is too cramped
+  if (isMobile() && S.calMode === 'week') { S.calMode = 'day'; if (S.view === 'calendar') render(); }
+});
 
 function renderSidebar() {
   const el = document.getElementById('secList');
@@ -1480,7 +1619,7 @@ function delComment(id, idx) {
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // Filter / Search / Nav
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-function selectSec(id) { S.activeSecId=id; S.filter='all'; render(); }
+function selectSec(id) { S.activeSecId=id; S.filter='all'; closeSidebar(); render(); }
 function setFilter(f)  { S.filter=f; renderMain(); }
 function onSearch(v)   { S.search=v; renderMain(); }
 function clearFilters(){ S.filter='all'; S.search=''; document.getElementById('gSearch').value=''; renderMain(); }
@@ -1519,9 +1658,9 @@ function renderCalendar() {
     <div style="display:flex;gap:14px;align-items:center;">
       <div class="cal-title">${title}</div>
       <div class="cal-mode-tabs">
-        <button class="cal-mode-tab ${S.calMode==='month'?'active':''}" onclick="setCalMode('month')">חודש</button>
-        <button class="cal-mode-tab ${S.calMode==='week'?'active':''}"  onclick="setCalMode('week')">שבוע</button>
-        <button class="cal-mode-tab ${S.calMode==='day'?'active':''}"   onclick="setCalMode('day')">יום</button>
+        <button class="cal-mode-tab ${S.calMode==='month'?'active':''}" data-mode="month" onclick="setCalMode('month')">חודש</button>
+        <button class="cal-mode-tab ${S.calMode==='week'?'active':''}"  data-mode="week"  onclick="setCalMode('week')">שבוע</button>
+        <button class="cal-mode-tab ${S.calMode==='day'?'active':''}"   data-mode="day"   onclick="setCalMode('day')">יום</button>
       </div>
     </div>
     <div style="display:flex;gap:8px;align-items:center;">
@@ -1774,7 +1913,11 @@ function sameDay(a, b) {
   return a.getFullYear()===b.getFullYear() && a.getMonth()===b.getMonth() && a.getDate()===b.getDate();
 }
 function setCalOwner(o) { S.calOwner = o; renderCalendar(); }
-function setCalMode(mode) { S.calMode = mode; renderCalendar(); }
+function setCalMode(mode) {
+  if (mode === 'week' && isMobile()) mode = 'day';
+  S.calMode = mode;
+  renderCalendar();
+}
 function calNav(delta) {
   const c = new Date(S.calCursor);
   if (S.calMode === 'month') c.setMonth(c.getMonth() + delta);
