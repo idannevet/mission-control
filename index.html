@@ -556,8 +556,10 @@ body.dragging-mission .cal-mchip:not(.dragging) { pointer-events: none; }
 }
 .cal-mblock-time { font-weight: 700; opacity: .9; font-size: 10px; display: block; line-height: 1.15; }
 .cal-mblock-name { font-weight: 600; display: block; line-height: 1.25; word-break: break-word; }
-.cal-mblock.tiny .cal-mblock-name { display: none; }
-.cal-mblock.tiny { padding: 2px 6px; }
+/* Tiny blocks (<~40 min): show time + name on one line with ellipsis instead of hiding the name */
+.cal-mblock.tiny { padding: 1px 6px; display: flex; align-items: center; gap: 5px; line-height: 1.15; }
+.cal-mblock.tiny .cal-mblock-time { font-size: 9.5px; flex-shrink: 0; }
+.cal-mblock.tiny .cal-mblock-name { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; flex: 1; font-size: 10px; }
 
 /* ─── Schedule Proposal ─── */
 .sched-overlay {
